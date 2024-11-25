@@ -5,13 +5,21 @@ import { getProfile, getUserTopWType } from "../../utils/spotify"; // Function t
 import { getAccessToken } from "../../utils/accessTokens"; // Function to get the access token
 import { redirect } from "next/navigation"; // For redirecting to the login page if no token
 import Image from "next/image";
-import { Artist, SpotifyUser, TopArtistsResponse } from "@/app/types/spotify";
+import {
+  Artist,
+  SpotifyUser,
+  TopArtistsResponse,
+  TopTracksResponse,
+  Track,
+} from "@/app/types/spotify";
+import { convertDuration } from "@/app/utils/misc";
 
 const ProfilePage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [profile, setProfile] = useState<SpotifyUser | null>(null); // Use the SpotifyUser type
   const [loading, setLoading] = useState<boolean>(false);
   const [topArtists, setTopArtists] = useState<TopArtistsResponse | null>(null); // Use the TopArtistsResponse type
+  const [topSongs, setTopSongs] = useState<TopTracksResponse | null>(null);
 
   // Fetch the access token when the component mounts
   useEffect(() => {
@@ -41,7 +49,15 @@ const ProfilePage = () => {
       try {
         const result = await getUserTopWType(accessToken, "artists", 10);
         setTopArtists(result);
-        console.log("Top artists:", result);
+      } catch (error) {
+        console.error("Error fetching top artists:", error);
+      }
+    };
+    const fetchTopSongs = async () => {
+      try {
+        const result = await getUserTopWType(accessToken, "tracks", 10);
+        setTopSongs(result);
+        console.log("Top Songs:", result);
       } catch (error) {
         console.error("Error fetching top artists:", error);
       }
@@ -49,6 +65,7 @@ const ProfilePage = () => {
 
     fetchProfile();
     fetchTopArtists();
+    fetchTopSongs();
 
     setLoading(false);
   }, [accessToken]);
@@ -56,7 +73,7 @@ const ProfilePage = () => {
   return (
     <div>
       {profile && !loading && (
-        <div className="w-full flex flex-col justify-center items-center h-[500px]">
+        <div className="w-full flex flex-col justify-center items-center h-[500px] text-center">
           <div className="profile-image">
             <Image
               className="rounded-full"
@@ -73,12 +90,12 @@ const ProfilePage = () => {
         </div>
       )}
 
-      <div className="flex gap-20px">
+      <div className="flex md:flex-row flex-col gap-4 w-full">
         {topArtists && (
-          <div>
+          <div className="flex w-full md:w-1/2 flex-col">
             <h3>Top Artists</h3>
             <ul className="flex flex-col gap-4 mt-4">
-              {topArtists.items.map((artist: Artist, index: number) => (
+              {topArtists.items.map((artist: Artist, _: number) => (
                 <li key={artist.id} className="flex items-center gap-4">
                   {/* <a
                   href={artist.external_urls.spotify}
@@ -92,16 +109,49 @@ const ProfilePage = () => {
                     height={50}
                     className="rounded-full"
                   />
-                  <h4>{artist.name}</h4>
+                  <h5>{artist.name}</h5>
                   {/* </a> */}
                 </li>
               ))}
             </ul>
           </div>
         )}
+        {topSongs && (
+          <div className="flex w-full md:w-1/2 flex-col">
+            <h3>Top Songs</h3>
+            <ul className="flex flex-col gap-4 mt-4">
+              {topSongs.items.map((song: Track, _: number) => (
+                <li key={song.id} className="flex gap-4 w-full">
+                  <Image
+                    src={song.album.images[0].url}
+                    alt={song.name}
+                    width={50}
+                    height={50}
+                  />
+                  <div className="flex justify-between gap-2 w-full min-w-0">
+                    <div className="flex flex-col min-w-0">
+                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                        {song.name}
+                      </p>
+                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                        {song.artists.map((artist: Artist, index: number) => (
+                          <>
+                            {artist.name}
+                            {index < song.artists.length - 1 && " ~ "}
+                          </>
+                        ))}
+                      </p>
+                    </div>
+                    <div>
+                      <p>{convertDuration(song.duration_ms)}</p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
-
-      {!profile && !loading && <p>No profile data found.</p>}
     </div>
   );
 };

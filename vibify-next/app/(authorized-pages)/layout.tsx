@@ -8,8 +8,11 @@ export default async function Layout({ children }: PropsWithChildren<unknown>) {
         <Suspense>
             <div className="flex md:flex-col flex-row min-w-screen">
                 <Navbar/>
-                <main className={`w-full md:pl-[100px]`}>
+                <main className={`w-full md:pl-[100px] pb-[100px] md:pb-0`}>
+                    <div className='md:p-10 p-8'>
+
                     {children}
+                    </div>
                 </main>
             </div>
         </Suspense>

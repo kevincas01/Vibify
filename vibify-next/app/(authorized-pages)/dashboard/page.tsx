@@ -1,15 +1,17 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { getProfile, getUserTopWType } from "../../utils/spotify"; // Function to fetch profile from Spotify
 import { getAccessToken } from "../../utils/accessTokens"; // Function to get the access token
 import { redirect } from "next/navigation"; // For redirecting to the login page if no token
 import Image from "next/image";
+import { Artist, SpotifyUser, TopArtistsResponse } from "@/app/types/spotify";
 
-const Page = () => {
+const ProfilePage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [profile, setProfile] = useState<any | null>(null);
-  const [topArtists, setTopArtists] = useState<any[]>([]); // Set type for topArtists
+  const [profile, setProfile] = useState<SpotifyUser | null>(null); // Use the SpotifyUser type
   const [loading, setLoading] = useState<boolean>(false);
+  const [topArtists, setTopArtists] = useState<TopArtistsResponse | null>(null); // Use the TopArtistsResponse type
 
   // Fetch the access token when the component mounts
   useEffect(() => {
@@ -21,87 +23,87 @@ const Page = () => {
       console.log("Token found, setting accessToken");
       setAccessToken(token); // Set the token in state if available
     }
-  }, []); // Run only once on mount
+  }, []);
 
   useEffect(() => {
     if (!accessToken) return;
     setLoading(true);
 
-    // Fetch the profile data
     const fetchProfile = async () => {
       try {
         const result = await getProfile(accessToken);
-        setProfile(result); // Store the profile data
+        setProfile(result);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
     };
-
-    // Fetch top artists
     const fetchTopArtists = async () => {
       try {
-        const result = await getUserTopWType(accessToken, "artists", 5);
-        setTopArtists(result); // Store top artists data
+        const result = await getUserTopWType(accessToken, "artists", 10);
+        setTopArtists(result);
         console.log("Top artists:", result);
       } catch (error) {
         console.error("Error fetching top artists:", error);
       }
     };
 
-    // Run both fetch functions
     fetchProfile();
     fetchTopArtists();
 
-    // Once data is fetched, stop loading
     setLoading(false);
-  }, [accessToken]); // Run only when accessToken changes
+  }, [accessToken]);
 
   return (
     <div>
-      <h2>Spotify Profile Page</h2>
-
-      {/* Loading state */}
-      {loading && <p>Loading profile...</p>}
-
-      {/* Display the profile data if available */}
       {profile && !loading && (
-        <div>
-          <h2>Profile Information</h2>
-          <h1>{profile.display_name}</h1>
+        <div className="w-full flex flex-col justify-center items-center h-[500px]">
           <div className="profile-image">
-            {/* Use next/image for external images (make sure domain is configured) */}
             <Image
               className="rounded-full"
               alt="Profile Picture"
               src={profile.images[0].url}
-              height={profile.images[0].height}
-              width={profile.images[0].width}
+              height={150}
+              width={150}
             />
           </div>
-          <p>
-            <strong>Email:</strong> {profile.email}
-          </p>
+          <h1>{profile.display_name}</h1>
           <p>
             <strong>Followers:</strong> {profile.followers.total}
           </p>
-
-          {/* {topArtists && (
-            <div>
-              <h3>Top Artists</h3>
-              <ul>
-                {topArtists.items.map((artist, index) => (
-                  <li key={index}>{artist.name}</li> // Assuming `name` is a property of `artist`
-                ))}
-              </ul>
-            </div>
-          )} */}
         </div>
       )}
 
-      {/* If there's no profile data and it's not loading */}
+      <div className="flex gap-20px">
+        {topArtists && (
+          <div>
+            <h3>Top Artists</h3>
+            <ul className="flex flex-col gap-4 mt-4">
+              {topArtists.items.map((artist: Artist, index: number) => (
+                <li key={artist.id} className="flex items-center gap-4">
+                  {/* <a
+                  href={artist.external_urls.spotify}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                > */}
+                  <Image
+                    src={artist.images[0].url}
+                    alt={artist.name}
+                    width={50}
+                    height={50}
+                    className="rounded-full"
+                  />
+                  <h4>{artist.name}</h4>
+                  {/* </a> */}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
       {!profile && !loading && <p>No profile data found.</p>}
     </div>
   );
 };
 
-export default Page;
+export default ProfilePage;

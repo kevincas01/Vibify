@@ -6,9 +6,9 @@ export default async function Layout({ children }: PropsWithChildren<unknown>) {
 
     return (
         <Suspense>
-            <div className="flex ">
+            <div className="flex md:flex-col flex-row min-w-screen">
                 <Navbar/>
-                <main className={`md:mt-[var(--nav-height)] h-full`}>
+                <main className={`w-full md:pl-[100px]`}>
                     {children}
                 </main>
             </div>

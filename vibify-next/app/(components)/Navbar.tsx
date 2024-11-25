@@ -19,7 +19,7 @@ const Navbar = () => {
           <li
             className={`flex box py-4 md:py-2 justify-center flex-1 text-sm flex-col items-center ${
               currentPage === "dashboard"
-                ? " border-t-4 md:border-t-0 md:border-l-4 border-main"
+                ? " border-t-4 md:border-t-0 md:border-l-4 border-main bg-grayBg"
                 : ""
             }`}
           >
@@ -31,7 +31,7 @@ const Navbar = () => {
           <li
             className={`flex box py-4 md:py-2 justify-center flex-1 text-sm flex-col items-center ${
               currentPage === "recs"
-                ? " border-t-4 md:border-t-0 md:border-l-4 border-main"
+                ? " border-t-4 md:border-t-0 md:border-l-4 border-main bg-grayBg"
                 : ""
             }`}
           >
@@ -76,10 +76,6 @@ const Navbar = () => {
               <div>Playlists</div>
             </Link>
           </li>
-          {/* <li className={`flex box py-4 md:py-2 justify-center flex-1 text-sm flex-col items-center  py-2 px-4 ${currentPage === "settings" ? " border-t-4 md:border-t-0 md:border-l-4 border-main" : ""}`}>
-            <DashboardIcon />
-            <div>Settings</div>
-          </li> */}
         </ul>
       </div>
     </div>

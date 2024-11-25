@@ -73,7 +73,7 @@ const ProfilePage = () => {
   return (
     <div>
       {profile && !loading && (
-        <div className="w-full flex flex-col justify-center items-center h-[500px] text-center">
+        <div className="w-full flex flex-col justify-center items-center h-[400px] text-center">
           <div className="profile-image">
             <Image
               className="rounded-full"

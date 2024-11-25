@@ -11,6 +11,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        grayBg:"var(--gray-background)",
         main: "rgb(29, 185, 84)", // Main color
       },
 

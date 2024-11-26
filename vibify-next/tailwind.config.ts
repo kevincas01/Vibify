@@ -12,7 +12,8 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         grayBg:"var(--gray-background)",
-        main: "rgb(29, 185, 84)", // Main color
+        main: "var(--main-color)", // Main color
+        lightGray:"var(--light-gray)"
       },
 
       transitionProperty: {

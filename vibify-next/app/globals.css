@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 :root {
+  --main-color:rgb(29, 185, 84);
   --background: #ffffff;
   --foreground: #171717;
   --navbar-width:100px;
   --gray-background:rgb(24, 24, 24);
+  --light-gray:rgb(155, 155, 155);
 }
 
 @media (prefers-color-scheme: dark) {

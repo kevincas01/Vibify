@@ -21,7 +21,6 @@ const ProfilePage = () => {
   const [topArtists, setTopArtists] = useState<TopArtistsResponse | null>(null); // Use the TopArtistsResponse type
   const [topSongs, setTopSongs] = useState<TopTracksResponse | null>(null);
 
-  // Fetch the access token when the component mounts
   useEffect(() => {
     const token = getAccessToken();
     if (!token) {
@@ -47,7 +46,12 @@ const ProfilePage = () => {
     };
     const fetchTopArtists = async () => {
       try {
-        const result = await getUserTopWType(accessToken, "artists", 10);
+        const result = await getUserTopWType(
+          accessToken,
+          "artists",
+          "short_term",
+          10
+        );
         setTopArtists(result);
       } catch (error) {
         console.error("Error fetching top artists:", error);
@@ -55,7 +59,12 @@ const ProfilePage = () => {
     };
     const fetchTopSongs = async () => {
       try {
-        const result = await getUserTopWType(accessToken, "tracks", 10);
+        const result = await getUserTopWType(
+          accessToken,
+          "tracks",
+          "short_term",
+          10
+        );
         setTopSongs(result);
         console.log("Top Songs:", result);
       } catch (error) {

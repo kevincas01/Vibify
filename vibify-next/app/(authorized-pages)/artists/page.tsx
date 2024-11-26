@@ -138,7 +138,7 @@ const Artists = () => {
       ) : (
         <div className="flex w-full flex-col mt-4">
           <h3>Top Artists</h3>
-          <div className="flex flex-wrap gap-2 mt-4 justify-between">
+          <div className="flex flex-wrap gap-2 mt-4 justify-around">
             {topArtists?.items.map((artist: Artist) => (
               <div
                 key={artist.id}

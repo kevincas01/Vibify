@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getProfile, getUserTopWType } from "../../utils/spotify"; // Function to fetch profile from Spotify
-import { getAccessToken } from "../../utils/accessTokens"; // Function to get the access token
-import { redirect } from "next/navigation"; // For redirecting to the login page if no token
+import { getSpotifyUserProfile, getUserTopWType } from "../../utils/spotify"; 
+import { getAccessToken } from "../../utils/accessTokens";
+import { redirect } from "next/navigation"; 
 import Image from "next/image";
 import {
   Artist,
@@ -13,6 +13,7 @@ import {
   Track,
 } from "@/app/types/spotify";
 import { convertDuration } from "@/app/utils/misc";
+import DarkButton from "@/app/(components)/DarkButton";
 
 const ProfilePage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -38,7 +39,7 @@ const ProfilePage = () => {
 
     const fetchProfile = async () => {
       try {
-        const result = await getProfile(accessToken);
+        const result = await getSpotifyUserProfile(accessToken);
         setProfile(result);
       } catch (error) {
         console.error("Error fetching profile:", error);
@@ -79,6 +80,13 @@ const ProfilePage = () => {
     setLoading(false);
   }, [accessToken]);
 
+  const handleLogout = () => {
+   
+    localStorage.clear();
+    // sessionStorage.clear();
+
+    redirect("/"); 
+  };
   return (
     <div>
       {profile && !loading && (
@@ -96,6 +104,7 @@ const ProfilePage = () => {
           <p>
             <strong>Followers:</strong> {profile.followers.total}
           </p>
+          <DarkButton onClick={handleLogout}>Logout</DarkButton>
         </div>
       )}
 

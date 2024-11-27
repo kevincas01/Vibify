@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getSpotifyUserProfile, getUserTopWType } from "../../utils/spotify"; 
+import { getSpotifyUserProfile, getUserTopWType } from "../../utils/spotify";
 import { getAccessToken } from "../../utils/accessTokens";
-import { redirect } from "next/navigation"; 
+import { redirect } from "next/navigation";
 import Image from "next/image";
 import {
   Artist,
@@ -78,11 +78,10 @@ const ProfilePage = () => {
   }, [accessToken]);
 
   const handleLogout = () => {
-   
     localStorage.clear();
     // sessionStorage.clear();
 
-    redirect("/"); 
+    redirect("/");
   };
   return (
     <div>
@@ -148,7 +147,7 @@ const ProfilePage = () => {
                       <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                         {song.name}
                       </p>
-                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                      <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
                         {song.artists.map((artist: Artist, index: number) => (
                           <React.Fragment key={index}>
                             {artist.name}
@@ -158,7 +157,9 @@ const ProfilePage = () => {
                       </p>
                     </div>
                     <div>
-                      <p>{convertDuration(song.duration_ms)}</p>
+                      <p className="text-lightGray">
+                        {convertDuration(song.duration_ms)}
+                      </p>
                     </div>
                   </div>
                 </li>

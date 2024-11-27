@@ -144,10 +144,10 @@ const ProfilePage = () => {
                       </p>
                       <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                         {song.artists.map((artist: Artist, index: number) => (
-                          <>
+                          <React.Fragment key={index}>
                             {artist.name}
                             {index < song.artists.length - 1 && " ~ "}
-                          </>
+                          </React.Fragment>
                         ))}
                       </p>
                     </div>

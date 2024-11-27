@@ -11,8 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     const token = getAccessToken();
-
-    if (token) {
+    if (token!=="undefined") {
       setAccessToken(token);
       return;
     }

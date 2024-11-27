@@ -16,6 +16,7 @@ const getHashParams = (): { [key: string]: string } => {
 const setTokenTimestamp = () =>
   window.localStorage.setItem("spotify_token_timestamp", Date.now().toString());
 const setLocalAccessToken = (token: string) => {
+  if(token=="undefined")return;
   setTokenTimestamp();
   window.localStorage.setItem("spotify_access_token", token);
 };
@@ -43,8 +44,13 @@ const getLocalRefreshToken = () =>
 
 const refreshAccessToken = async () => {
     try {
-      const response = await fetch(`/api/spotify/refresh_token?refresh_token=${getLocalRefreshToken()}`);
-      
+      const response = await fetch(`/api/spotify/refresh`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh_token: getLocalRefreshToken() }),
+      });
       if (!response.ok) {
         throw new Error('Failed to refresh token');
       }

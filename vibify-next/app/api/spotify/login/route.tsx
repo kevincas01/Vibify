@@ -12,7 +12,6 @@ export async function GET(request: NextRequest, response: NextResponse) {
   const clientId = process.env.SPOTIFY_CLIENT_ID || "";
   const redirectUri = process.env.SPOTIFY_REDIRECT_URI || "";
 
-  console.log(redirectUri, clientId);
   // Redirect the user to Spotify authorization URL with the constructed query string
   return NextResponse.redirect(
     `https://accounts.spotify.com/authorize?${querystring.stringify({

@@ -16,14 +16,11 @@ const Tracks = () => {
   const [artistLimit, setArtistLimit] = useState<number>(10);
   const [timeRange, setTimeRange] = useState<string>("short_term"); // Default is "short_term" (last 4 weeks)
 
-  console.log(topTracks);
   useEffect(() => {
     const token = getAccessToken();
     if (!token) {
-      console.log("No token, redirecting to login");
       redirect("/"); // Redirect to login if no access token
     } else {
-      console.log("Token found, setting accessToken");
       setAccessToken(token); // Set the token in state if available
     }
   }, []);

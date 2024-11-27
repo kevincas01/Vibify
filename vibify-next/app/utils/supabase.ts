@@ -21,5 +21,4 @@ export async function createOrUpdateUser(profile: SpotifyUser) {
     return;
   }
 
-  console.log("User successfully created/updated:", data);
 }

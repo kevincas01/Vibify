@@ -1,3 +1,5 @@
+import { getSpotifyUserProfile } from "@/app/utils/spotify";
+import { createOrUpdateUser } from "@/app/utils/supabase";
 import { NextRequest, NextResponse } from "next/server";
 import querystring from "querystring";
 
@@ -17,7 +19,6 @@ export async function GET(request: NextRequest) {
   const redirect_uri = process.env.SPOTIFY_REDIRECT_URI;
   const frontend_redirect_uri = process.env.FRONTEND_REDIRECT_URI;
 
-
   if (!client_id || !client_secret || !redirect_uri || !frontend_redirect_uri) {
     return NextResponse.json(
       { error: "Missing environment variables" },
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
   }
 
   const body = new URLSearchParams({
-    code: code || "", 
+    code: code || "",
     redirect_uri: redirect_uri,
     grant_type: "authorization_code",
   });
@@ -50,6 +51,12 @@ export async function GET(request: NextRequest) {
     // If the request is successful
     if (response.ok) {
       const { access_token, refresh_token } = data;
+
+      const profile = await getSpotifyUserProfile(access_token);
+
+      if (profile) {
+        await createOrUpdateUser(profile);
+      }
 
       // Redirect to frontend with access and refresh tokens
       return NextResponse.redirect(

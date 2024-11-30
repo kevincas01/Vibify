@@ -48,7 +48,7 @@ const ProfilePage = () => {
         const result = await getUserTopWType(
           accessToken,
           "artists",
-          "short_term",
+          "long_term",
           10
         );
         setTopArtists(result);
@@ -61,7 +61,7 @@ const ProfilePage = () => {
         const result = await getUserTopWType(
           accessToken,
           "tracks",
-          "short_term",
+          "long_term",
           10
         );
         setTopSongs(result);
@@ -107,7 +107,7 @@ const ProfilePage = () => {
       <div className="flex md:flex-row flex-col gap-4 w-full">
         {topArtists && (
           <div className="flex w-full md:w-1/2 flex-col">
-            <h3>Top Artists</h3>
+            <h3>Top Artists of all Time</h3>
             <ul className="flex flex-col gap-4 mt-4">
               {topArtists.items.map((artist: Artist, _: number) => (
                 <li key={artist.id} className="flex items-center gap-4">
@@ -132,7 +132,7 @@ const ProfilePage = () => {
         )}
         {topSongs && (
           <div className="flex w-full md:w-1/2 flex-col">
-            <h3>Top Songs</h3>
+            <h3>Top Songs of all Time</h3>
             <ul className="flex flex-col gap-4 mt-4">
               {topSongs.items.map((song: Track, _: number) => (
                 <li key={song.id} className="flex gap-4 w-full">

@@ -45,3 +45,33 @@ body {
 
   /* You can add more heading styles as needed */
 }
+
+input[type="text"] {
+  all: unset; 
+  width: 100%; 
+  padding: 10px; 
+  font-size: 16px; 
+  background-color: #333; 
+  color: white; 
+  border-radius: 8px; 
+  border: 1px solid #555; 
+  transition: all 0.3s ease; 
+}
+
+
+input[type="text"] :focus {
+  outline: none;
+  border: 1px solid #888; 
+  background-color: #444; 
+}
+
+
+input[type="text"] ::placeholder {
+  color: #aaa; 
+  font-style: italic; 
+}
+
+
+input[type="text"] :hover {
+  border: 1px solid #777; 
+}

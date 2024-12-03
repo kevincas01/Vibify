@@ -156,5 +156,32 @@ export interface SpotifySearchResult{
   offset: number;
   previous: string | null;
   total: number;
-  items: Track[] | Artist[];
+  items: Track[] | Artist[] | Album[]| Playlist[];
+}
+
+export interface Playlist {
+  collaborative:boolean;
+  description:string;
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  images: Image[];
+  name: string;
+  owner?:{
+    external_urls: ExternalUrls;
+    followers:Followers;
+    href: string;
+  id: string;
+  type: string;
+  uri: string;
+  display_name:string;
+  }
+  public: boolean;
+  snapshot_id:string;
+  tracks:{
+    href:string;
+    total:number
+  };
+  type: string;
+  uri: string;
 }

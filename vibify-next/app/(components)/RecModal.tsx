@@ -23,7 +23,7 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
   const selectOption = (id: string) => {
     setSelectedOption(id);
   };
-
+  
   interface recommentTypeElementsProps {
     value: string;
     text: string;
@@ -36,6 +36,13 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
     {
       value: "artist",
       text: "Artist",
+    },
+    {
+      value: "album",
+      text: "Album",
+    },{
+      value: "playlist",
+      text: "Playlist",
     },
   ];
   return (
@@ -67,40 +74,40 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
           <h3 className="text-main">Your Top Tracks</h3>
           <div className="flex w-full flex-col mt-4">
             <ul className="flex flex-col gap-4">
-              {topTracks.items.map((song: Track) => (
+              {topTracks.items.map((track: Track) => (
                 <li
-                  key={song.id}
+                  key={track.id}
                   className={`flex gap-4 w-full cursor-pointer ${
-                    selectedOption === song.id ? "text-main" : ""
+                    selectedOption === track.id ? "text-main" : ""
                   }`}
-                  onClick={() => selectOption(song.id)} // Set the selected song ID
+                  onClick={() => selectOption(track.id)} // Set the selected track ID
                   style={{
                     transition: "background-color 0.3s ease", // Smooth transition for highlight
                   }}
                 >
                   <Image
-                    src={song.album.images[0].url}
-                    alt={song.name}
+                    src={track.album.images[0].url}
+                    alt={track.name}
                     width={50}
                     height={50}
                   />
                   <div className="flex justify-between gap-2 w-full min-w-0">
                     <div className="flex flex-col min-w-0">
                       <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {song.name}
+                        {track.name}
                       </p>
                       <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                        {song.artists.map((artist: Artist, index: number) => (
+                        {track.artists.map((artist: Artist, index: number) => (
                           <React.Fragment key={index}>
                             {artist.name}
-                            {index < song.artists.length - 1 && " ~ "}
+                            {index < track.artists.length - 1 && " ~ "}
                           </React.Fragment>
                         ))}
                       </p>
                     </div>
                     <div>
                       <p className="text-lightGray">
-                        {convertDuration(song.duration_ms)}
+                        {convertDuration(track.duration_ms)}
                       </p>
                     </div>
                   </div>

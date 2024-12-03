@@ -55,15 +55,21 @@ export async function GET(request: NextRequest) {
       const profile = await getSpotifyUserProfile(access_token);
 
       if (profile) {
-        await createOrUpdateUser(profile);
+        const { data, error } = await createOrUpdateUser(profile);
+   
+        const { spotify_id } = data;
+
+        return NextResponse.redirect(
+          `${frontend_redirect_uri}/#${querystring.stringify({
+            access_token,
+            refresh_token,
+            spotify_id, 
+          })}`
+        );
       }
 
-      // Redirect to frontend with access and refresh tokens
       return NextResponse.redirect(
-        `${frontend_redirect_uri}/#${querystring.stringify({
-          access_token,
-          refresh_token,
-        })}`
+        `/#${querystring.stringify({ error: "profile_not_found" })}`
       );
     } else {
       // If there is an error (e.g., invalid token)

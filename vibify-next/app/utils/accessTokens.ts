@@ -12,32 +12,40 @@ const getHashParams = (): { [key: string]: string } => {
 };
 
 const EXPIRATION_TIME = 3600 * 1000;
-const setTokenTimestamp = () =>
+
+export const setUserSpotifyId = (spotify_id: string) => {
+  window.localStorage.setItem("user_spotify_id", spotify_id);
+};
+export const getUserSpotifyId = () => {
+  window.localStorage.getItem("user_spotify_id");
+};
+
+export const setTokenTimestamp = () =>
   window.localStorage.setItem("spotify_token_timestamp", Date.now().toString());
-const setLocalAccessToken = (token: string) => {
+export const setLocalAccessToken = (token: string) => {
   if (token == "undefined") return;
   setTokenTimestamp();
   window.localStorage.setItem("spotify_access_token", token);
 };
-const setLocalRefreshToken = (token: string) =>
+export const setLocalRefreshToken = (token: string) =>
   window.localStorage.setItem("spotify_refresh_token", token);
-const getTokenTimestamp = (): number => {
+export const getTokenTimestamp = (): number => {
   const timestamp = window.localStorage.getItem("spotify_token_timestamp");
 
   if (!timestamp) {
-    return Date.now(); 
+    return Date.now();
   }
-  const parsedTimestamp = Number(timestamp); 
+  const parsedTimestamp = Number(timestamp);
 
-  return parsedTimestamp; 
+  return parsedTimestamp;
 };
 
-const getLocalAccessToken = () =>
+export const getLocalAccessToken = () =>
   window.localStorage.getItem("spotify_access_token");
-const getLocalRefreshToken = () =>
+export const getLocalRefreshToken = () =>
   window.localStorage.getItem("spotify_refresh_token");
 
-const refreshAccessToken = async () => {
+export const refreshAccessToken = async () => {
   try {
     const response = await fetch(`/api/spotify/refresh`, {
       method: "POST",
@@ -60,23 +68,24 @@ const refreshAccessToken = async () => {
   }
 };
 export const getAccessToken = () => {
-  const { error, access_token, refresh_token } = getHashParams();
+  const { error, access_token, refresh_token, spotify_id } = getHashParams();
 
   if (error) {
     console.error(error);
     refreshAccessToken();
   }
 
-  let refreshToken:string|null=refresh_token;
-  if(!refresh_token){
-    refreshToken=getLocalRefreshToken()
+  if(spotify_id){
+    setUserSpotifyId(spotify_id)
+  }
+    
+  let refreshToken: string | null = refresh_token;
+  if (!refresh_token) {
+    refreshToken = getLocalRefreshToken();
   }
   // If token has expired
-  const token_timestamp=getTokenTimestamp()
-  if (
-    Date.now() - token_timestamp > EXPIRATION_TIME &&
-    refresh_token != null
-  ) {
+  const token_timestamp = getTokenTimestamp();
+  if (Date.now() - token_timestamp > EXPIRATION_TIME && refresh_token != null) {
     console.warn("Access token has expired, refreshing...");
     refreshAccessToken();
   }

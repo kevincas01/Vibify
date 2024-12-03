@@ -29,3 +29,23 @@ export async function getUserTopWType(
   const data = await response.json();
   return data;
 }
+
+export async function getSearchResultWType(
+  accessToken: string,
+  type: string,
+  input: string,
+  limit: number = 20
+) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/search?q=${input}&type=${type}&limit=${limit}`,
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+
+  const data = await response.json();
+  return data;
+}
+

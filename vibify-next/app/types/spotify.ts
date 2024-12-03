@@ -147,3 +147,14 @@ export interface TopTracksResponse {
   next: string | null;
   previous: string | null;
 }
+
+
+export interface SpotifySearchResult{
+  href:string;
+  limit:number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+  items: Track[] | Artist[];
+}

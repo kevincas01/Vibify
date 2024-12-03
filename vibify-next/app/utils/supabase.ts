@@ -14,11 +14,11 @@ export async function createOrUpdateUser(profile: SpotifyUser) {
       image_url: imageUrl,
     },
     { onConflict: ["spotify_id"] }
-  );
+  ).select().single();
 
   if (error) {
     console.error("Error inserting user into Supabase:", error);
-    return;
+    return { data: null, error: error };
   }
-
+  return { data: data, error: null };
 }

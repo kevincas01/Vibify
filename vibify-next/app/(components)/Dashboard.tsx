@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import DarkButton from "@/app/(components)/DarkButton";
+import DarkButton from "@/app/(components)/Buttons/DarkButton";
 import {
   Artist,
   SpotifyUser,

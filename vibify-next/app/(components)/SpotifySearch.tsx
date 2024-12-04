@@ -1,17 +1,36 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { getAccessToken } from "../utils/accessTokens";
 import { getSearchResultWType } from "../utils/spotify";
-import { SpotifySearchResult, Track, Artist, Album, Playlist } from "../types/spotify";
+import {
+  SpotifySearchResult,
+  Track,
+  Artist,
+  Album,
+  Playlist,
+} from "../types/spotify";
 import Image from "next/image";
 import { convertDuration } from "../utils/misc";
 
 interface SpotifySearchProps {
   accessToken: string;
   recommendType: string;
+  selectedId: string;
+  selectOption: (id: string, item: Artist | Track | Album | Playlist) => void;
 }
 
-const SpotifySearch = ({ accessToken, recommendType }: SpotifySearchProps) => {
+const SpotifySearch = ({
+  accessToken,
+  recommendType,
+  selectedId,
+  selectOption,
+}: SpotifySearchProps) => {
   const [searchType, setSearchType] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
@@ -58,7 +77,16 @@ const SpotifySearch = ({ accessToken, recommendType }: SpotifySearchProps) => {
           {searchResults.items.map((item, index) => {
             const track = item as Track;
             return (
-              <li key={track.id} className={`flex gap-4 w-full cursor-pointer`}>
+              <li
+                key={track.id}
+                className={`flex gap-4 w-full cursor-pointer ${
+                  selectedId === track.id ? "text-main" : ""
+                }`}
+                onClick={() => selectOption(track.id, track)} // Set the selected track ID
+                style={{
+                  transition: "background-color 0.3s ease", // Smooth transition for highlight
+                }}
+              >
                 <Image
                   src={track.album.images[0].url}
                   alt={track.name}
@@ -98,7 +126,13 @@ const SpotifySearch = ({ accessToken, recommendType }: SpotifySearchProps) => {
             return (
               <div
                 key={artist.id}
-                className="flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6"
+                className={`flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6 cursor-pointer ${
+                  selectedId === artist.id ? "text-main" : ""
+                }`}
+                onClick={() => selectOption(artist.id, artist)}
+                style={{
+                  transition: "background-color 0.3s ease", // Smooth transition for highlight
+                }}
               >
                 {artist.images.length > 0 && (
                   <div className="w-full aspect-square relative">
@@ -122,7 +156,16 @@ const SpotifySearch = ({ accessToken, recommendType }: SpotifySearchProps) => {
           {searchResults.items.map((item, index) => {
             const album = item as Album;
             return (
-              <li key={album.id} className={`flex gap-4 w-full cursor-pointer`}>
+              <li
+                key={album.id}
+                className={`flex gap-4 w-full cursor-pointer ${
+                  selectedId === album.id ? "text-main" : ""
+                }`}
+                onClick={() => selectOption(album.id, album)} // Set the selected track ID
+                style={{
+                  transition: "background-color 0.3s ease", // Smooth transition for highlight
+                }}
+              >
                 <Image
                   src={album.images[0].url}
                   alt={album.name}
@@ -144,11 +187,11 @@ const SpotifySearch = ({ accessToken, recommendType }: SpotifySearchProps) => {
                     </p>
                   </div>
                   <div>
-                  <p className="text-lightGray">
-
-                    {album.total_tracks} {album.album_type=="album"?"Tracks":"Track"}
-                  </p>
-                </div>
+                    <p className="text-lightGray">
+                      {album.total_tracks}{" "}
+                      {album.album_type == "album" ? "Tracks" : "Track"}
+                    </p>
+                  </div>
                 </div>
               </li>
             );
@@ -160,36 +203,44 @@ const SpotifySearch = ({ accessToken, recommendType }: SpotifySearchProps) => {
         <ul className="flex flex-col gap-4 mt-4">
           {searchResults.items.map((item, index) => {
             const playlist = item as Playlist;
-            if(!item)return
+            if (!item) return;
             return (
-              <li key={playlist.id} className={`flex gap-4 w-full cursor-pointer`}>
-                
-                {playlist.images&& playlist.images.length > 0 && (<Image
-                  src={playlist.images[0].url}
-                  alt={playlist.name}
-                  width={75}
-                  height={75}
-                />)}
+              <li
+                key={playlist.id}
+                className={`flex gap-4 w-full cursor-pointer ${
+                  selectedId === playlist.id ? "text-main" : ""
+                }`}
+                onClick={() => selectOption(playlist.id, playlist)} // Set the selected track ID
+                style={{
+                  transition: "background-color 0.3s ease", // Smooth transition for highlight
+                }}
+              >
+                {playlist.images && playlist.images.length > 0 && (
+                  <Image
+                    src={playlist.images[0].url}
+                    alt={playlist.name}
+                    width={75}
+                    height={75}
+                  />
+                )}
                 <div className="flex justify-between gap-2 w-full min-w-0">
                   <div className="flex flex-col min-w-0 max-w-[80%]">
                     <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                       {playlist.name}
                     </p>
                     <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                      
                       {playlist.owner?.display_name}
                     </p>
                     <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                      
                       {playlist.description}
                     </p>
                   </div>
                   <div>
-                  <p className="text-lightGray">
-
-                    {playlist.tracks.total} {playlist.tracks.total>1?"Tracks":"Track"}
-                  </p>
-                </div>
+                    <p className="text-lightGray">
+                      {playlist.tracks.total}{" "}
+                      {playlist.tracks.total > 1 ? "Tracks" : "Track"}
+                    </p>
+                  </div>
                 </div>
               </li>
             );

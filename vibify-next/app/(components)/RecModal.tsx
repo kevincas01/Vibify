@@ -5,6 +5,8 @@ import {
   Track,
   TopTracksResponse,
   TopArtistsResponse,
+  Album,
+  Playlist,
 } from "../types/spotify";
 import Image from "next/image";
 import { convertDuration } from "../utils/misc";
@@ -17,13 +19,18 @@ interface RecModalProps {
 }
 
 const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<
+    Artist | Track | Album | Playlist | null
+  >(null);
+
   const [recommendType, setRecommendType] = useState<string>("track");
 
-  const selectOption = (id: string) => {
-    setSelectedOption(id);
+  const selectOption = (id: string, item:Artist | Track | Album | Playlist ) => {
+    setSelectedId(id);
+    setSelectedItem(item)
   };
-  
+
   interface recommentTypeElementsProps {
     value: string;
     text: string;
@@ -40,7 +47,8 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
     {
       value: "album",
       text: "Album",
-    },{
+    },
+    {
       value: "playlist",
       text: "Playlist",
     },
@@ -78,9 +86,9 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
                 <li
                   key={track.id}
                   className={`flex gap-4 w-full cursor-pointer ${
-                    selectedOption === track.id ? "text-main" : ""
+                    selectedId === track.id ? "text-main" : ""
                   }`}
-                  onClick={() => selectOption(track.id)} // Set the selected track ID
+                  onClick={() => selectOption(track.id, track)} // Set the selected track ID
                   style={{
                     transition: "background-color 0.3s ease", // Smooth transition for highlight
                   }}
@@ -125,7 +133,14 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
             {topArtists?.items.map((artist: Artist) => (
               <div
                 key={artist.id}
-                className="flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6"
+
+                className={`flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6 cursor-pointer ${
+                  selectedId === artist.id ? "text-main" : ""
+                }`}
+                onClick={() => selectOption(artist.id, artist)}
+                style={{
+                  transition: "background-color 0.3s ease", // Smooth transition for highlight
+                }}
               >
                 {artist.images.length > 0 && (
                   <div className="w-full aspect-square relative">
@@ -145,7 +160,7 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
         </div>
       )}
 
-      <SpotifySearch accessToken={accessToken} recommendType={recommendType} />
+      <SpotifySearch accessToken={accessToken} recommendType={recommendType} selectedId={selectedId} selectOption={selectOption} />
     </div>
   );
 };

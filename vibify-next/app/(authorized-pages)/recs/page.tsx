@@ -1,8 +1,11 @@
+'use server'
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getSpotifyUserProfile, getUserTopWType } from "@/app/utils/spotify";
-import RecsComponent from "@/app/(components)/RecsComponent";
+import RecsComponent from "@/app/(components)/Recs/RecsComponent";
+import { Suspense } from "react";
+import { getRecommendations } from "@/app/utils/supabase";
 
 const RecsPage = async () => {
   const session = await getServerSession(authOptions);
@@ -26,14 +29,14 @@ const RecsPage = async () => {
   );
 
   return (
-    <div>
+    <Suspense >
       <RecsComponent
         accessToken={accessToken}
         profile={profile}
         topArtists={topArtists}
         topTracks={topTracks}
       />
-    </div>
+    </Suspense>
   );
 };
 

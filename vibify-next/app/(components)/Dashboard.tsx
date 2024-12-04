@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import DarkButton from "@/app/(components)/DarkButton";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@/app/types/spotify";
 import { convertDuration } from "@/app/utils/misc";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 interface DashboardComponentProps {
   profile: SpotifyUser;
@@ -20,6 +22,9 @@ const DashboardComponent = ({
   topArtists,
   topTracks,
 }: DashboardComponentProps) => {
+  const handleLogout = async () => {
+    await signOut();
+  };
   return (
     <>
       {profile && (
@@ -37,7 +42,7 @@ const DashboardComponent = ({
           <p>
             <strong>Followers:</strong> {profile.followers.total}
           </p>
-          <DarkButton>Logout</DarkButton>
+          <DarkButton onClick={handleLogout}>Logout</DarkButton>
         </div>
       )}
 

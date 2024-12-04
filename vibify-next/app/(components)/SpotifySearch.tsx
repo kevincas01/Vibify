@@ -250,7 +250,7 @@ const SpotifySearch = ({
 
   return (
     <div>
-      <h3>Search for {searchType}</h3>
+      <h3 className="text-main">Search for {searchType}</h3>
       <input
         type="text"
         value={searchInput}

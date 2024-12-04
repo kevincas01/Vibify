@@ -54,7 +54,7 @@ const RecModal = ({ accessToken, topTracks, topArtists }: RecModalProps) => {
     },
   ];
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <div className="text-center">
         <h2 className="text-main">Recommend </h2>
         <div className="flex gap-4 mt-4 justify-center">

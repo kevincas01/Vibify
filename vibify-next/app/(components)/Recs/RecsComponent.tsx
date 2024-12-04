@@ -1,10 +1,11 @@
 "use client";
-import RecModal from "@/app/(components)/RecModal";
 import {
   SpotifyUser,
   TopArtistsResponse,
   TopTracksResponse,
 } from "@/app/types/spotify";
+import RecModal from "./RecModal";
+
 interface RecsComponentProps {
   accessToken: string;
   profile: SpotifyUser;
@@ -18,9 +19,11 @@ const RecsComponent = ({
   topArtists,
   topTracks,
 }: RecsComponentProps) => {
+
   return (
-    <div>
+    <div className="h-full relative">
       <RecModal
+        profileId={profile.id}
         accessToken={accessToken || ""}
         topTracks={topTracks}
         topArtists={topArtists}

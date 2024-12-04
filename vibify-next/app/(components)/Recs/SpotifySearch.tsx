@@ -1,19 +1,19 @@
 "use client";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { getSearchResultWType } from "../utils/spotify";
+import { getSearchResultWType } from "../../utils/spotify";
 import {
   SpotifySearchResult,
   Track,
   Artist,
   Album,
   Playlist,
-} from "../types/spotify";
+} from "../../types/spotify";
 import Image from "next/image";
-import { convertDuration } from "../utils/misc";
-import RecsTrackComponent from "./Recs/RecsTrackComponent";
-import RecsArtistComponent from "./Recs/RecsArtistComponent";
-import RecsAlbumComponent from "./Recs/RecsAlbumComponent";
-import RecsPlaylistComponent from "./Recs/RecsPlaylistComponent";
+import { convertDuration } from "../../utils/misc";
+import RecsTrackComponent from "./RecsTrackComponent";
+import RecsArtistComponent from "./RecsArtistComponent";
+import RecsAlbumComponent from "./RecsAlbumComponent";
+import RecsPlaylistComponent from "./RecsPlaylistComponent";
 
 interface SpotifySearchProps {
   accessToken: string;

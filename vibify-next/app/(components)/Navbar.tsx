@@ -14,7 +14,7 @@ const Navbar = () => {
 
   interface NavbarElementProp {
     href: string;
-    icon?:ReactElement;
+    icon?: ReactElement;
     text: string;
     value: string;
   }
@@ -22,26 +22,30 @@ const Navbar = () => {
   const navbarElements: NavbarElementProp[] = [
     {
       href: "/dashboard",
-      icon:<DashboardIcon />,
+      icon: <DashboardIcon />,
       text: "Dashboard",
       value: "dashboard",
-    },{
+    },
+    {
       href: "/recs",
-      icon:<LibraryMusicIcon/>,
+      icon: <LibraryMusicIcon />,
       text: "Recs",
       value: "recs",
-    },{
+    },
+    {
       href: "/tracks",
-      icon:<MusicNoteOutlinedIcon/>,
+      icon: <MusicNoteOutlinedIcon />,
       text: "Tracks",
       value: "tracks",
-    },{
+    },
+    {
       href: "/artists",
-      icon:<PersonIcon/>,
+      icon: <PersonIcon />,
       text: "Artists",
       value: "artists",
-    },{
-      icon:<LibraryMusicIcon/>,
+    },
+    {
+      icon: <LibraryMusicIcon />,
       href: "/playlists",
       text: "Playlists",
       value: "playlists",
@@ -61,12 +65,17 @@ const Navbar = () => {
               }`}
             >
               <Link href={element.href}>
-                {element.icon}
-                <div>{element.text}</div>
+                <div
+                  className={`flex flex-col items-center ${
+                    currentPage === element.value ? "text-main" : ""
+                  }`}
+                >
+                  {element.icon}
+                  {element.text}
+                </div>
               </Link>
             </li>
           ))}
-          
         </ul>
       </div>
     </div>

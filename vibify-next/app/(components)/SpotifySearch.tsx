@@ -1,9 +1,5 @@
 "use client";
-import React, {
-  ChangeEvent,
-  useEffect,
-  useState,
-} from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { getSearchResultWType } from "../utils/spotify";
 import {
   SpotifySearchResult,
@@ -38,7 +34,6 @@ const SpotifySearch = ({
 
   const fetchSearchResults = async (type: string) => {
     if (!accessToken || !searchInput) return;
-
 
     const results = await getSearchResultWType(
       accessToken,
@@ -122,7 +117,7 @@ const SpotifySearch = ({
             return (
               <div
                 key={artist.id}
-                className={`flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6 cursor-pointer ${
+                className={`flex flex-col items-center w-2/5 md:w-1/4 cursor-pointer ${
                   selectedId === artist.id ? "text-main" : ""
                 }`}
                 onClick={() => selectOption(artist.id, artist)}
@@ -169,7 +164,7 @@ const SpotifySearch = ({
                   height={75}
                 />
                 <div className="flex justify-between gap-2 w-full min-w-0">
-                  <div className="flex flex-col min-w-0 max-w-[80%]">
+                  <div className="flex flex-col min-w-0 ">
                     <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                       {album.name}
                     </p>
@@ -183,7 +178,7 @@ const SpotifySearch = ({
                     </p>
                   </div>
                   <div>
-                    <p className="text-lightGray">
+                    <p className="text-lightGray text-nowrap">
                       {album.total_tracks}{" "}
                       {album.album_type == "album" ? "Tracks" : "Track"}
                     </p>
@@ -220,7 +215,7 @@ const SpotifySearch = ({
                   />
                 )}
                 <div className="flex justify-between gap-2 w-full min-w-0">
-                  <div className="flex flex-col min-w-0 max-w-[80%]">
+                  <div className="flex flex-col min-w-0 ">
                     <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                       {playlist.name}
                     </p>
@@ -232,7 +227,7 @@ const SpotifySearch = ({
                     </p>
                   </div>
                   <div>
-                    <p className="text-lightGray">
+                    <p className="text-lightGray text-nowrap">
                       {playlist.tracks.total}{" "}
                       {playlist.tracks.total > 1 ? "Tracks" : "Track"}
                     </p>
@@ -249,8 +244,7 @@ const SpotifySearch = ({
   };
 
   return (
-    <div>
-      <h3 className="text-main">Search for {searchType}</h3>
+    <div className="w-full box-border">
       <input
         type="text"
         value={searchInput}
@@ -259,7 +253,7 @@ const SpotifySearch = ({
         }}
         placeholder="Search for tracks or artists..."
       />
-
+      <h3 className="text-main">Search for {searchType}</h3>
       {searchInput && <div>{renderSearchResults()}</div>}
     </div>
   );

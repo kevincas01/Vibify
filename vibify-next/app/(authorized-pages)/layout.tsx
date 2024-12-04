@@ -9,7 +9,7 @@ export default async function Layout({ children }: PropsWithChildren<unknown>) {
         <main
           className={`w-full md:pl-[100px] pb-[100px] md:pb-0 bg-grayBg min-h-screen`}
         >
-          <div className="md:p-10 p-8 h-full">{children}</div>
+          <div className="md:p-10 p-6 h-full">{children}</div>
         </main>
       </div>
     </Suspense>

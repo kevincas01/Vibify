@@ -1,20 +1,18 @@
 "use client";
-import Button from "@/app/(components)/Button";
 import RecModal from "@/app/(components)/RecModal";
 import {
-  SpotifyUser,
+
   TopArtistsResponse,
   TopTracksResponse,
 } from "@/app/types/spotify";
 
-import { getSpotifyUserProfile, getUserTopWType } from "@/app/utils/spotify";
+import {  getUserTopWType } from "@/app/utils/spotify";
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { getAccessToken } from "@/app/utils/accessTokens";
 const RecsPage = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   
-  const [loading, setLoading] = useState<boolean>(false);
   const [topArtists, setTopArtists] = useState<TopArtistsResponse | null>(null); // Use the TopArtistsResponse type
   const [topTracks, setTopTracks] = useState<TopTracksResponse | null>(null);
 
@@ -26,7 +24,6 @@ const RecsPage = () => {
       setAccessToken(token); // Set the token in state if available
     }
   }, []);
-  console.log('sdd')
   useEffect(() => {
     if (!accessToken) return;
     

@@ -1,12 +1,9 @@
 "use client";
 import React, {
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
   useEffect,
   useState,
 } from "react";
-import { getAccessToken } from "../utils/accessTokens";
 import { getSearchResultWType } from "../utils/spotify";
 import {
   SpotifySearchResult,
@@ -42,7 +39,7 @@ const SpotifySearch = ({
   const fetchSearchResults = async (type: string) => {
     if (!accessToken || !searchInput) return;
 
-    console.log("search", type);
+
     const results = await getSearchResultWType(
       accessToken,
       type,
@@ -52,7 +49,6 @@ const SpotifySearch = ({
     const searchKey = `${type}s`; // "track" -> "tracks", "artist" -> "artists"
 
     setSearchResults(results[searchKey] || { items: [] }); // Ensure we always have an array for `items`
-    console.log(results[searchKey]);
     setLoading(false);
   };
 
@@ -248,7 +244,6 @@ const SpotifySearch = ({
         </ul>
       );
     } else {
-      console.log("l;ollllllllll");
       return null;
     }
   };

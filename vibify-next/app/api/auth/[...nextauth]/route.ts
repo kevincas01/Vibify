@@ -11,28 +11,42 @@ const LOGIN_URL = `https://accounts.spotify.com/authorize?${queryParamString}`;
 
 // The function that calls your API route to refresh the token
 async function refreshAccessToken(token: JWT) {
+  if (!token.refreshToken) {
+    throw new Error("Missing refresh token");
+  }
+
+  const clientId = process.env.SPOTIFY_CLIENT_ID || "";
+
+  const refreshToken = token.refreshToken as string;
+
   try {
-    if (!token.refreshToken) {
-      throw new Error("Missing refresh token");
-    }
+    const clientId = process.env.SPOTIFY_CLIENT_ID; // Your client ID
+    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET; // Your client secret
 
-    // Call the /api/refresh-token endpoint to get a new access token
-    const res = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/refresh-token?refresh_token=${token.refreshToken}`,
-      {
-        method: "POST",
-      }
-    );
+    // Create Basic Authentication header by base64 encoding clientId:clientSecret
+    const authHeader =
+      "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
 
-    // If the response is not OK, throw an error
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error("Error refreshing Spotify token:", errorData);
-      throw new Error("Failed to refresh access token");
-    }
+    // Prepare the URLSearchParams for the body of the request
+    const body = new URLSearchParams({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    });
 
-    // Parse the response from the API
-    const data = await res.json();
+    const url = "https://accounts.spotify.com/api/token";
+
+    const payload = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: authHeader, // Include the Authorization header
+      },
+      body: body,
+    };
+    const response = await fetch(url, payload);
+
+    // Parse the JSON response
+    const data = await response.json();
 
     // Check if the access token is in the response
     if (!data.access_token) {
@@ -80,7 +94,7 @@ export const authOptions: AuthOptions = {
     },
     async jwt({ token, user, account }) {
       if (account && user) {
-        console.log(account, user)
+        console.log(account, user);
         token.accessToken = account.access_token as string;
         token.refreshToken = account.refresh_token;
         token.userId = account.userId;

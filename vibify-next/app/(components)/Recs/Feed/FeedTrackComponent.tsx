@@ -13,7 +13,7 @@ const FeedTrackComponent = ({
     console.log('sfdsd')
   };
   return (
-    <li
+    <div
       key={track.id}
       className={`flex gap-4 w-full cursor-pointer`}
       onClick={handleClick}
@@ -24,8 +24,8 @@ const FeedTrackComponent = ({
       <Image
         src={track.album.images[0].url}
         alt={track.name}
-        width={50}
-        height={50}
+        width={75}
+        height={75}
       />
       <div className="flex justify-between gap-2 w-full min-w-0">
         <div className="flex flex-col min-w-0">
@@ -45,7 +45,7 @@ const FeedTrackComponent = ({
           <p className="text-lightGray">{convertDuration(track.duration_ms)}</p>
         </div>
       </div>
-    </li>
+    </div>
   );
 };
 

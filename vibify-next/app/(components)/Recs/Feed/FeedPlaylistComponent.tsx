@@ -10,7 +10,7 @@ const FeedPlaylistComponent = ({ playlist }: FeedAlbumComponentProps) => {
     console.log("sfdsd");
   };
   return (
-    <li
+    <div
       key={playlist.id}
       className={`flex gap-4 w-full cursor-pointer`}
       onClick={handleClick}
@@ -45,7 +45,7 @@ const FeedPlaylistComponent = ({ playlist }: FeedAlbumComponentProps) => {
           </p>
         </div>
       </div>
-    </li>
+    </div>
   );
 };
 

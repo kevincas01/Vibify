@@ -4,6 +4,12 @@ import { Artist, TopArtistsResponse } from "@/app/types/spotify";
 import { getUserTopWType } from "@/app/utils/spotify";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import {
+  limitElements,
+  timeRangeElements,
+  defaultArtistLimit,
+  defaultArtistTimeRange,
+} from "../types/filters";
 interface ArtistsComponentProps {
   accessToken: string;
   topArtists: TopArtistsResponse;
@@ -12,17 +18,19 @@ const Artists = ({ accessToken, topArtists }: ArtistsComponentProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [newTopArtists, setNewTopArtists] =
     useState<TopArtistsResponse>(topArtists);
-  const [artistLimit, setArtistLimit] = useState<number>(10);
-  const [timeRange, setTimeRange] = useState<string>("short_term");
+  const [artistTimeRange, setArtistTimeRange] = useState<string>(
+    defaultArtistTimeRange
+  );
+  const [artistLimit, setArtistLimit] = useState<number>(defaultArtistLimit);
 
-  const fetchTopArtists = async () => {
+  const fetchTopArtists = async (range: string, limit: number) => {
     setLoading(true);
     try {
       const result = await getUserTopWType(
         accessToken,
         "artists",
-        timeRange,
-        artistLimit
+        range,
+        limit
       );
       setNewTopArtists(result); // Update state with the new tracks
     } catch (error) {
@@ -32,54 +40,14 @@ const Artists = ({ accessToken, topArtists }: ArtistsComponentProps) => {
     }
   };
 
-  useEffect(() => {
-    fetchTopArtists(); // Fetch new top tracks when timeRange or artistLimit changes
-  }, [timeRange, artistLimit]);
-
   const handleArtistLimitChange = (limit: number) => {
     setArtistLimit(limit);
+    fetchTopArtists(artistTimeRange, limit);
   };
   const handleTimeRangeChange = (range: string) => {
-    setTimeRange(range);
+    setArtistTimeRange(range);
+    fetchTopArtists(range, artistLimit);
   };
-  interface TimeRangeProps {
-    text: string;
-    value: string;
-  }
-  interface ArtistLimitProps {
-    value: number;
-  }
-  const timeRangeElements: TimeRangeProps[] = [
-    {
-      text: "All time",
-      value: "long_term",
-    },
-    {
-      text: "Last 6 Months",
-      value: "medium_term",
-    },
-    {
-      text: "Last 4 weeks",
-      value: "short_term",
-    },
-  ];
-  const artistLimitElements: ArtistLimitProps[] = [
-    {
-      value: 3,
-    },
-    {
-      value: 5,
-    },
-    {
-      value: 10,
-    },
-    {
-      value: 20,
-    },
-    {
-      value: 50,
-    },
-  ];
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -89,11 +57,11 @@ const Artists = ({ accessToken, topArtists }: ArtistsComponentProps) => {
             <button
               onClick={() => handleTimeRangeChange(element.value)}
               className={`p-2 ${
-                timeRange === element.value
+                artistTimeRange === element.value
                   ? " text-main border-b-2 border-b-main"
                   : "text-lightGray"
               }`}
-              aria-selected={timeRange === element.value}
+              aria-selected={artistTimeRange === element.value}
             >
               {element.text}
             </button>
@@ -101,7 +69,7 @@ const Artists = ({ accessToken, topArtists }: ArtistsComponentProps) => {
         ))}
       </div>
       <div className="flex gap-4 mt-4">
-        {artistLimitElements.map((element) => (
+        {limitElements.map((element) => (
           <div key={element.value}>
             <button
               onClick={() => handleArtistLimitChange(element.value)}

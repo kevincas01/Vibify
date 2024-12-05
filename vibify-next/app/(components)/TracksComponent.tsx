@@ -5,6 +5,12 @@ import { convertDuration } from "@/app/utils/misc";
 import { getUserTopWType } from "@/app/utils/spotify";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import {
+  defaultTrackLimit,
+  defaultTrackTimeRange,
+  limitElements,
+  timeRangeElements,
+} from "../types/filters";
 
 interface TracksComponentProps {
   accessToken: string;
@@ -15,18 +21,15 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [newTopTracks, setNewTopTracks] =
     useState<TopTracksResponse>(topTracks);
-  const [trackLimit, setTrackLimit] = useState<number>(10);
-  const [timeRange, setTimeRange] = useState<string>("short_term");
+  const [trackTimeRange, setTimeRange] = useState<string>(
+    defaultTrackTimeRange
+  );
+  const [trackLimit, setTrackLimit] = useState<number>(defaultTrackLimit);
 
-  const fetchTopTracks = async () => {
+  const fetchTopTracks = async (range: string, limit: number) => {
     setLoading(true);
     try {
-      const result = await getUserTopWType(
-        accessToken,
-        "tracks",
-        timeRange,
-        trackLimit
-      );
+      const result = await getUserTopWType(accessToken, "tracks", range, limit);
       setNewTopTracks(result); // Update state with the new tracks
     } catch (error) {
       console.error("Error fetching top tracks:", error);
@@ -35,16 +38,14 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
     }
   };
 
-  useEffect(() => {
-    fetchTopTracks(); // Fetch new top tracks when timeRange or trackLimit changes
-  }, [timeRange, trackLimit]);
-
   const handleTrackLimitChange = (limit: number) => {
     setTrackLimit(limit);
+    fetchTopTracks(trackTimeRange, limit);
   };
 
   const handleTimeRangeChange = (range: string) => {
     setTimeRange(range);
+    fetchTopTracks(range, trackLimit);
   };
 
   interface TimeRangeProps {
@@ -56,39 +57,6 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
     value: number;
   }
 
-  const timeRangeElements: TimeRangeProps[] = [
-    {
-      text: "All time",
-      value: "long_term",
-    },
-    {
-      text: "Last 6 Months",
-      value: "medium_term",
-    },
-    {
-      text: "Last 4 weeks",
-      value: "short_term",
-    },
-  ];
-
-  const trackLimitElements: TrackLimitProps[] = [
-    {
-      value: 3,
-    },
-    {
-      value: 5,
-    },
-    {
-      value: 10,
-    },
-    {
-      value: 20,
-    },
-    {
-      value: 50,
-    },
-  ];
-
   return (
     <div className="flex flex-col items-center">
       <div className="flex gap-4 mt-4">
@@ -97,11 +65,11 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
             <button
               onClick={() => handleTimeRangeChange(element.value)}
               className={`p-2 ${
-                timeRange === element.value
+                trackTimeRange === element.value
                   ? " text-main border-b-2 border-b-main"
                   : "text-lightGray"
               }`}
-              aria-selected={timeRange === element.value}
+              aria-selected={trackTimeRange === element.value}
             >
               {element.text}
             </button>
@@ -110,7 +78,7 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
       </div>
 
       <div className="flex gap-4 mt-4">
-        {trackLimitElements.map((element) => (
+        {limitElements.map((element) => (
           <div key={element.value}>
             <button
               onClick={() => handleTrackLimitChange(element.value)}

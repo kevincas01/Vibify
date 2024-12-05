@@ -20,6 +20,7 @@ import RecsTrackComponent from "./RecsTrackComponent";
 import RecsAlbumComponent from "./RecsAlbumComponent";
 import RecsPlaylistComponent from "./RecsPlaylistComponent";
 import SpotifySearch from "./SpotifySearch";
+import { recommentTypeElements } from "@/app/types/filters";
 
 const CloseIcon = dynamic(() => import("@mui/icons-material/Close"), {
   ssr: false,
@@ -59,12 +60,6 @@ const RecModal = ({
     setSelectedItem(null);
   };
 
-  const recommentTypeElements: { value: string; text: string }[] = [
-    { value: "track", text: "Tracks" },
-    { value: "artist", text: "Artist" },
-    { value: "album", text: "Album" },
-    { value: "playlist", text: "Playlist" },
-  ];
 
   const handleRecommendation = async () => {
     await createRecommendation(

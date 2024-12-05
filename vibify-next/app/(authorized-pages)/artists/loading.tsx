@@ -12,7 +12,7 @@ const Loading = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="flex gap-4 mt-4 mb-[2px]">
+      <div className="flex gap-4 mt-4">
         {timeRangeElements.map((element) => (
           <div key={element.value}>
             <button
@@ -27,7 +27,7 @@ const Loading = () => {
           </div>
         ))}
       </div>
-      <div className="flex gap-4 mt-4 mb-[2px]">
+      <div className="flex gap-4 mt-4">
         {limitElements.map((element) => (
           <div key={element.value}>
             <button

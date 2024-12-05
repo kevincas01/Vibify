@@ -1,5 +1,12 @@
 "use client";
-import { Album, Artist, Playlist, TopArtistsResponse, TopTracksResponse, Track } from "@/app/types/spotify";
+import {
+  Album,
+  Artist,
+  Playlist,
+  TopArtistsResponse,
+  TopTracksResponse,
+  Track,
+} from "@/app/types/spotify";
 import { createRecommendation } from "@/app/utils/supabase";
 import React, { useState } from "react";
 import DarkCircleButton from "../Buttons/DarkCircleButton";
@@ -9,35 +16,45 @@ import Button from "../Buttons/Button";
 import dynamic from "next/dynamic";
 import LoadingScreen from "../LoadingScreen";
 
-const CloseIcon = dynamic(() => import('@mui/icons-material/Close'), { ssr: false });
-
+const CloseIcon = dynamic(() => import("@mui/icons-material/Close"), {
+  ssr: false,
+});
 
 const RecsArtistComponent = dynamic(() => import("./RecsArtistComponent"), {
-        loading: () => <LoadingScreen />,
-    });
+  loading: () => <LoadingScreen />,
+});
 const RecsTrackComponent = dynamic(() => import("./RecsTrackComponent"), {
-        loading: () => <LoadingScreen />,
-    });
+  loading: () => <LoadingScreen />,
+});
 const RecsAlbumComponent = dynamic(() => import("./RecsAlbumComponent"), {
-        loading: () => <LoadingScreen />,
-    });
+  loading: () => <LoadingScreen />,
+});
 const RecsPlaylistComponent = dynamic(() => import("./RecsPlaylistComponent"), {
-        loading: () => <LoadingScreen />,
-    });
+  loading: () => <LoadingScreen />,
+});
 const SpotifySearch = dynamic(() => import("./SpotifySearch"), {
-        loading: () => <LoadingScreen />,
-    });
+  loading: () => <LoadingScreen />,
+});
 
 interface RecModalProps {
+  handleModalToggle: () => void;
   profileId: string;
   accessToken: string;
   topTracks: TopTracksResponse | null;
   topArtists: TopArtistsResponse | null;
 }
 
-const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalProps) => {
+const RecModal = ({
+  handleModalToggle,
+  profileId,
+  accessToken,
+  topTracks,
+  topArtists,
+}: RecModalProps) => {
   const [selectedId, setSelectedId] = useState<string>("");
-  const [selectedItem, setSelectedItem] = useState<Artist | Track | Album | Playlist | null>(null);
+  const [selectedItem, setSelectedItem] = useState<
+    Artist | Track | Album | Playlist | null
+  >(null);
   const [recommendType, setRecommendType] = useState<string>("track");
   const [recommendationText, setRecommendationText] = useState<string>("");
 
@@ -51,7 +68,7 @@ const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalPro
     setSelectedItem(null);
   };
 
-  const recommentTypeElements: { value: string, text: string }[] = [
+  const recommentTypeElements: { value: string; text: string }[] = [
     { value: "track", text: "Tracks" },
     { value: "artist", text: "Artist" },
     { value: "album", text: "Album" },
@@ -59,20 +76,50 @@ const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalPro
   ];
 
   const handleRecommendation = async () => {
-    await createRecommendation(recommendType, selectedId, profileId, recommendationText);
+    await createRecommendation(
+      recommendType,
+      selectedItem,
+      selectedId,
+      profileId,
+      recommendationText
+    );
+    handleModalToggle();
     deselectItem();
   };
 
-  const renderSelectedItem = (type: string, item: Artist | Track | Album | Playlist) => {
+  const renderSelectedItem = (
+    type: string,
+    item: Artist | Track | Album | Playlist
+  ) => {
     switch (type) {
       case "artist":
-        return <RecsArtistComponent artist={item as Artist} selected={selectedId === item.id} />;
+        return (
+          <RecsArtistComponent
+            artist={item as Artist}
+            selected={selectedId === item.id}
+          />
+        );
       case "track":
-        return <RecsTrackComponent track={item as Track} selected={selectedId === item.id} />;
+        return (
+          <RecsTrackComponent
+            track={item as Track}
+            selected={selectedId === item.id}
+          />
+        );
       case "album":
-        return <RecsAlbumComponent album={item as Album} selected={selectedId === item.id} />;
+        return (
+          <RecsAlbumComponent
+            album={item as Album}
+            selected={selectedId === item.id}
+          />
+        );
       case "playlist":
-        return <RecsPlaylistComponent playlist={item as Playlist} selected={selectedId === item.id} />;
+        return (
+          <RecsPlaylistComponent
+            playlist={item as Playlist}
+            selected={selectedId === item.id}
+          />
+        );
       default:
         return null;
     }
@@ -86,7 +133,7 @@ const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalPro
   return (
     <div className="flex flex-col gap-4 relative">
       <div className="absolute top-0 right-0">
-        <DarkCircleButton>
+        <DarkCircleButton onClick={() => handleModalToggle()}>
           <CloseIcon />
         </DarkCircleButton>
       </div>
@@ -112,7 +159,9 @@ const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalPro
                 value={recommendationText}
                 onChange={(e) => setRecommendationText(e.target.value)}
               />
-              <Button onClick={handleRecommendation}>Share Recommendation</Button>
+              <Button onClick={handleRecommendation}>
+                Share Recommendation
+              </Button>
             </div>
           </div>
         </div>
@@ -146,7 +195,7 @@ const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalPro
               <div className="flex box-border md:w-[48%]">
                 {recommendType === "track" && topTracks && (
                   <div className="w-full">
-                    <h3 className="text-main mt-[30px]">Your Top Tracks</h3>
+                    <h3 className="text-main md:mt-[30px]">Your Top Tracks</h3>
                     <div className="flex w-full flex-col mt-4">
                       <ul className="flex flex-col gap-4">
                         {topTracks.items.map((track: Track) => (
@@ -164,7 +213,7 @@ const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalPro
 
                 {recommendType === "artist" && topArtists && (
                   <div>
-                    <h3 className="text-main mt-[30px]">Your Top Artist</h3>
+                    <h3 className="text-main md:mt-[30px]">Your Top Artist</h3>
                     <div className="flex flex-wrap gap-2 mt-4 justify-around">
                       {topArtists?.items.map((artist: Artist) => (
                         <RecsArtistComponent
@@ -200,5 +249,13 @@ const RecModal = ({ profileId, accessToken, topTracks, topArtists }: RecModalPro
     </div>
   );
 };
+{/* TODO comments table
 
+we store the id pof the recommendations as a foreign key referencing recommendations table
+store the user spotify_id of the commentor as a foreign key referencing user table
+store the text they want to save 
+created_at
+
+
+*/}
 export default RecModal;

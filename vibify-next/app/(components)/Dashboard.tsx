@@ -28,7 +28,7 @@ const DashboardComponent = ({
   return (
     <>
       {profile && (
-        <div className="w-full flex flex-col justify-center items-center h-[400px] text-center">
+        <div className="w-full flex flex-col justify-center items-center h-[400px] text-center gap-2">
           <div className="profile-image">
             <Image
               className="rounded-full"
@@ -53,13 +53,15 @@ const DashboardComponent = ({
             <ul className="flex flex-col gap-4 mt-4">
               {topArtists.items.map((artist: Artist, _: number) => (
                 <li key={artist.id} className="flex items-center gap-4">
-                  <Image
-                    src={artist.images[0].url}
-                    alt={artist.name}
-                    width={50}
-                    height={50}
-                    className="rounded-full"
-                  />
+                  <div>
+                    <Image
+                      src={artist.images[0].url}
+                      alt={artist.name}
+                      width={50}
+                      height={50}
+                      className="rounded-full aspect-square object-cover"
+                    />
+                  </div>
                   <h5>{artist.name}</h5>
                 </li>
               ))}
@@ -70,31 +72,31 @@ const DashboardComponent = ({
           <div className="flex w-full md:w-1/2 flex-col">
             <h3>Top Songs of all Time</h3>
             <ul className="flex flex-col gap-4 mt-4">
-              {topTracks.items.map((Track: Track, _: number) => (
-                <li key={Track.id} className="flex gap-4 w-full">
+              {topTracks.items.map((track: Track, _: number) => (
+                <li key={track.id} className="flex gap-4 w-full">
                   <Image
-                    src={Track.album.images[0].url}
-                    alt={Track.name}
+                    src={track.album.images[0].url}
+                    alt={track.name}
                     width={50}
                     height={50}
                   />
                   <div className="flex justify-between gap-2 w-full min-w-0">
                     <div className="flex flex-col min-w-0">
                       <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {Track.name}
+                        {track.name}
                       </p>
                       <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                        {Track.artists.map((artist: Artist, index: number) => (
+                        {track.artists.map((artist: Artist, index: number) => (
                           <React.Fragment key={index}>
                             {artist.name}
-                            {index < Track.artists.length - 1 && " ~ "}
+                            {index < track.artists.length - 1 && " ~ "}
                           </React.Fragment>
                         ))}
                       </p>
                     </div>
                     <div>
                       <p className="text-lightGray">
-                        {convertDuration(Track.duration_ms)}
+                        {convertDuration(track.duration_ms)}
                       </p>
                     </div>
                   </div>

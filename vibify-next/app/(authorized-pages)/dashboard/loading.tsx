@@ -17,12 +17,16 @@ const Loading = () => {
           sx={{ fontSize: "3.75rem", lineHeight: "1" }}
         />
 
-        <Skeleton variant="text" width="15%" sx={{ fontSize: "1rem", lineHeight: "1.5rem" }} />
+        <Skeleton
+          variant="text"
+          width="15%"
+          sx={{ fontSize: "1rem", lineHeight: "1.5rem" }}
+        />
 
         <DarkButton> Logout </DarkButton>
       </div>
 
-      <div className="grid grid-cols-2 gap-8 w-full">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full">
         <div className="flex w-full flex-col">
           <Skeleton
             variant="text"
@@ -72,7 +76,10 @@ const Loading = () => {
                     />
                   </div>
                   <div className="w-[10%]">
-                    <Skeleton variant="text" sx={{ fontSize: "1rem", lineHeight: "1.5rem" }} />
+                    <Skeleton
+                      variant="text"
+                      sx={{ fontSize: "1rem", lineHeight: "1.5rem" }}
+                    />
                   </div>
                 </div>
               </li>

@@ -105,7 +105,7 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
           <h3 className="mb-4">Top Tracks</h3>
 
           {newTopTracks && (
-            <div className="grid grid-cols-2 gap-8 w-full">
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full">
               {newTopTracks.items.map((song: Track, _: number) => (
                 <div key={song.id} className="flex gap-4 w-full">
                   <Image

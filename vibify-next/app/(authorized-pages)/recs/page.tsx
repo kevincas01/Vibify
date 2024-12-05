@@ -28,6 +28,7 @@ const RecsPage = async () => {
     10
   );
 
+  const recommendations= await getRecommendations()
   return (
     <Suspense >
       <RecsComponent
@@ -35,6 +36,7 @@ const RecsPage = async () => {
         profile={profile}
         topArtists={topArtists}
         topTracks={topTracks}
+        recommendations={recommendations}
       />
     </Suspense>
   );

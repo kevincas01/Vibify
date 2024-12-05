@@ -1,4 +1,5 @@
-import { SpotifyUser } from "../types/spotify";
+import { Recommendations } from "../types/recommendations";
+import { Album, Artist, Playlist, SpotifyUser, Track } from "../types/spotify";
 import { createSupabaseClient } from "./clients/supabaseClient";
 
 export async function createOrUpdateUser(profile: SpotifyUser) {
@@ -29,6 +30,7 @@ export async function createOrUpdateUser(profile: SpotifyUser) {
 
 export async function createRecommendation(
   type: string,
+  recommended_item: Artist | Track | Album | Playlist | null,
   spotify_id: string,
   user_spotify_id: string,
   text: string
@@ -38,6 +40,7 @@ export async function createRecommendation(
     .from("recommendations")
     .insert({
       recommendation_type: type,
+      recommended_item,
       spotify_id,
       user_spotify_id,
       text,
@@ -50,18 +53,21 @@ export async function createRecommendation(
   }
   return { data: data, error: null };
 }
-
-export async function getRecommendations() {
+export async function getRecommendations(): Promise<Recommendations[]> {
   const supabase = createSupabaseClient();
 
-  // Perform a JOIN to fetch data from both 'recommendations' and 'users'
-  const { data, error } = await supabase
-    .from("recommendations")
-    .select("*, users(*)") 
-  if (error) {
-    console.error("Error fetching recommendations and users:", error);
-    return { data: null, error: error };
-  }
+  try {
+    const { data, error } = await supabase
+      .from("recommendations")
+      .select("*, users(*)");
 
-  return { data, error: null };
+    if (error) {
+      throw new Error(error.message); // Throw error when something goes wrong
+    }
+
+    return data; // Just return the data if there's no error
+  } catch (error) {
+    console.error("Error fetching recommendations:", error);
+    throw error; // Re-throw the error to be handled at the call site
+  }
 }

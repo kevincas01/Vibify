@@ -1,8 +1,9 @@
 import TracksComponent from "@/app/(components)/TracksComponent";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import {getUserTopWType } from "@/app/utils/spotify";
+import { getUserTopWType } from "@/app/utils/spotify";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const Tracks = async () => {
   const session = await getServerSession(authOptions);
@@ -20,9 +21,9 @@ const Tracks = async () => {
   );
 
   return (
-    <div className="flex flex-col items-center">
+    <Suspense>
       <TracksComponent accessToken={accessToken} topTracks={topTracks} />
-    </div>
+    </Suspense>
   );
 };
 

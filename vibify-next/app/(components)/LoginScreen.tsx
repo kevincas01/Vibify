@@ -4,9 +4,10 @@ import Button from "./Buttons/Button";
 import { signIn } from "next-auth/react";
 
 const LoginScreen = () => {
+  const loginUrl=`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}`
 
   const handleLoginClick = async () => {
-    await signIn("spotify", { callbackUrl: `${process.env.NEXTAUTH_URL}/dashboard` });
+    await signIn("spotify", { callbackUrl: `${loginUrl}/dashboard` });
 
   };
 

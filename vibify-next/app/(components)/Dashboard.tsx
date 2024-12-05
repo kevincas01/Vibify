@@ -46,9 +46,9 @@ const DashboardComponent = ({
         </div>
       )}
 
-      <div className="flex md:flex-row flex-col gap-4 w-full">
+      <div className="grid grid-cols-2 gap-8 w-full">
         {topArtists && (
-          <div className="flex w-full md:w-1/2 flex-col">
+          <div className="flex w-full flex-col">
             <h3>Top Artists of all Time</h3>
             <ul className="flex flex-col gap-4 mt-4">
               {topArtists.items.map((artist: Artist, _: number) => (
@@ -69,7 +69,7 @@ const DashboardComponent = ({
           </div>
         )}
         {topTracks && (
-          <div className="flex w-full md:w-1/2 flex-col">
+          <div className="flex w-full flex-col">
             <h3>Top Songs of all Time</h3>
             <ul className="flex flex-col gap-4 mt-4">
               {topTracks.items.map((track: Track, _: number) => (

@@ -58,7 +58,8 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
+      {/*  Time Range Elements Selector */}
       <div className="flex gap-4 mt-4">
         {timeRangeElements.map((element) => (
           <div key={element.value}>
@@ -76,7 +77,7 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
           </div>
         ))}
       </div>
-
+      {/*  Limit Elements Selector */}
       <div className="flex gap-4 mt-4">
         {limitElements.map((element) => (
           <div key={element.value}>
@@ -101,47 +102,42 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
         </div>
       ) : (
         <div className="flex w-full flex-col mt-4">
-          <h3>Top Tracks</h3>
-          <div className="flex flex-wrap gap-2 mt-4 justify-between">
-            {newTopTracks && (
-              <div className="flex w-full  flex-col">
-                <div className="flex gap-6 mt-4 flex-wrap justify-around">
-                  {newTopTracks.items.map((song: Track, _: number) => (
-                    <div key={song.id} className="flex gap-4 w-full md:w-[45%]">
-                      <Image
-                        src={song.album.images[0].url}
-                        alt={song.name}
-                        width={75}
-                        height={75}
-                      />
-                      <div className="flex justify-between gap-2 w-full min-w-0">
-                        <div className="flex flex-col min-w-0">
-                          <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                            {song.name}
-                          </p>
-                          <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                            {song.artists.map(
-                              (artist: Artist, index: number) => (
-                                <React.Fragment key={index}>
-                                  {artist.name}
-                                  {index < song.artists.length - 1 && " ~ "}
-                                </React.Fragment>
-                              )
-                            )}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-lightGray">
-                            {convertDuration(song.duration_ms)}
-                          </p>
-                        </div>
-                      </div>
+          <h3 className="mb-4">Top Tracks</h3>
+
+          {newTopTracks && (
+            <div className="grid grid-cols-2 gap-8 w-full">
+              {newTopTracks.items.map((song: Track, _: number) => (
+                <div key={song.id} className="flex gap-4 w-full">
+                  <Image
+                    src={song.album.images[0].url}
+                    alt={song.name}
+                    width={75}
+                    height={75}
+                  />
+                  <div className="flex justify-between gap-2 w-full min-w-0">
+                    <div className="flex flex-col min-w-0">
+                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                        {song.name}
+                      </p>
+                      <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
+                        {song.artists.map((artist: Artist, index: number) => (
+                          <React.Fragment key={index}>
+                            {artist.name}
+                            {index < song.artists.length - 1 && " ~ "}
+                          </React.Fragment>
+                        ))}
+                      </p>
                     </div>
-                  ))}
+                    <div>
+                      <p className="text-lightGray">
+                        {convertDuration(song.duration_ms)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -22,8 +22,8 @@ const Loading = () => {
         <DarkButton> Logout </DarkButton>
       </div>
 
-      <div className="flex md:flex-row flex-col gap-4 w-full">
-        <div className="flex w-full md:w-1/2 flex-col">
+      <div className="grid grid-cols-2 gap-8 w-full">
+        <div className="flex w-full flex-col">
           <Skeleton
             variant="text"
             width="35%"
@@ -45,7 +45,7 @@ const Loading = () => {
           </ul>
         </div>
 
-        <div className="flex w-full md:w-1/2 flex-col">
+        <div className="flex w-full flex-col">
           <Skeleton
             variant="text"
             width="35%"
@@ -62,7 +62,7 @@ const Loading = () => {
                   <div className="flex flex-col flex-1">
                     <Skeleton
                       variant="text"
-                      width="35%"
+                      width="55%"
                       sx={{ fontSize: "1rem", lineHeight: "1.5rem" }}
                     />
                     <Skeleton

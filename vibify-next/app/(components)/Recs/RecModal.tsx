@@ -15,26 +15,17 @@ import Button from "../Buttons/Button";
 // Use Next.js dynamic imports with suspense
 import dynamic from "next/dynamic";
 import LoadingScreen from "../LoadingScreen";
+import RecsArtistComponent from "./RecsArtistComponent";
+import RecsTrackComponent from "./RecsTrackComponent";
+import RecsAlbumComponent from "./RecsAlbumComponent";
+import RecsPlaylistComponent from "./RecsPlaylistComponent";
+import SpotifySearch from "./SpotifySearch";
 
 const CloseIcon = dynamic(() => import("@mui/icons-material/Close"), {
   ssr: false,
 });
 
-const RecsArtistComponent = dynamic(() => import("./RecsArtistComponent"), {
-  loading: () => <LoadingScreen />,
-});
-const RecsTrackComponent = dynamic(() => import("./RecsTrackComponent"), {
-  loading: () => <LoadingScreen />,
-});
-const RecsAlbumComponent = dynamic(() => import("./RecsAlbumComponent"), {
-  loading: () => <LoadingScreen />,
-});
-const RecsPlaylistComponent = dynamic(() => import("./RecsPlaylistComponent"), {
-  loading: () => <LoadingScreen />,
-});
-const SpotifySearch = dynamic(() => import("./SpotifySearch"), {
-  loading: () => <LoadingScreen />,
-});
+
 
 interface RecModalProps {
   handleModalToggle: () => void;

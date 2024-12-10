@@ -105,34 +105,37 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
           <h3 className="mb-4">Top Tracks</h3>
 
           {newTopTracks && (
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full">
-              {newTopTracks.items.map((song: Track, _: number) => (
-                <div key={song.id} className="flex gap-4 w-full">
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-4 w-full">
+              {newTopTracks.items.map((track: Track, _: number) => (
+                <div
+                  key={track.id}
+                  className="grid grid-cols-[75px_1fr_auto] gap-4 w-full"
+                >
                   <Image
-                    src={song.album.images[0].url}
-                    alt={song.name}
+                    src={track.album.images[0].url}
+                    alt={track.name}
                     width={75}
                     height={75}
                   />
                   <div className="flex justify-between gap-2 w-full min-w-0">
                     <div className="flex flex-col min-w-0">
                       <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {song.name}
+                        {track.name}
                       </p>
                       <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                        {song.artists.map((artist: Artist, index: number) => (
+                        {track.artists.map((artist: Artist, index: number) => (
                           <React.Fragment key={index}>
                             {artist.name}
-                            {index < song.artists.length - 1 && " ~ "}
+                            {index < track.artists.length - 1 && " ~ "}
                           </React.Fragment>
                         ))}
                       </p>
                     </div>
-                    <div>
-                      <p className="text-lightGray">
-                        {convertDuration(song.duration_ms)}
-                      </p>
-                    </div>
+                  </div>
+                  <div>
+                    <p className="text-lightGray">
+                      {convertDuration(track.duration_ms)}
+                    </p>
                   </div>
                 </div>
               ))}

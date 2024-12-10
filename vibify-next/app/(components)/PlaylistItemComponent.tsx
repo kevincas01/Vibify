@@ -18,21 +18,23 @@ const PlaylistItemComponent = ({
           return (
           <div key={playlistItem.track.id} className="flex gap-4 w-full">
             {playlistItem.track.album.images && playlistItem.track.album.images.length > 0 ? (
-                  <div className="relative w-[75px] aspect-square">
+                   <div className="relative w-[50px] md:w-[75px] aspect-square">
                     <Image
                       src={playlistItem.track.album.images[0].url}
                       alt={playlistItem.track.name}
                       fill
                       style={{ objectFit: "cover" }}
+                      sizes="(max-width: 768px) 50px, 75px"
                     />
                   </div>
                 ) : (
-                  <div className="relative w-[75px] aspect-square">
+                   <div className="relative w-[50px] md:w-[75px] aspect-square">
                     <Image
                       src={"/NoImage.png"}
                       alt={playlistItem.track.name}
                       fill
                       style={{ objectFit: "cover" }}
+                      sizes="(max-width: 768px) 50px, 75px"
                     />
                   </div>
                 )}

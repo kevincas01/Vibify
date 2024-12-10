@@ -23,28 +23,30 @@ const PlaylistsComponent = ({ playlists }: PlaylistsComponentProps) => {
             return (
               <div
                 key={playlist.id}
-                className={`grid grid-cols-[75px_1fr_75px] gap-4 w-full cursor-pointer`}
+                className={`grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full cursor-pointer`}
                 onClick={() => handleClick(playlist.id)}
                 style={{
                   transition: "background-color 0.3s ease", // Smooth transition for highlight
                 }}
               >
                 {playlist.images && playlist.images.length > 0 ? (
-                  <div className="relative w-[75px] aspect-square">
+                  <div className="relative w-[50px] md:w-[75px] aspect-square">
                     <Image
                       src={playlist.images[0].url}
                       alt={playlist.name}
                       fill
                       style={{ objectFit: "cover" }}
+                      sizes="(max-width: 768px) 50px, 75px" // 50px on small screens, 75px on larger screens
                     />
                   </div>
                 ) : (
-                  <div className="relative w-[75px] aspect-square">
+                  <div className="relative w-[50px] md:w-[75px] aspect-square">
                     <Image
                       src={"/NoImage.png"}
                       alt={playlist.name}
                       fill
                       style={{ objectFit: "cover" }}
+                      sizes="(max-width: 768px) 50px, 75px"
                     />
                   </div>
                 )}
@@ -56,9 +58,9 @@ const PlaylistsComponent = ({ playlists }: PlaylistsComponentProps) => {
                     <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
                       {playlist.owner?.display_name}
                     </p>
-                    <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
+                    {/* <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
                       {playlist.description}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
                 <div>

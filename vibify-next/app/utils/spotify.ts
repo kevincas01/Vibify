@@ -30,6 +30,36 @@ export async function getUserTopWType(
   return data;
 }
 
+export async function getUserPlaylists(accessToken: string, userId: string) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/users/${userId}/playlists`,
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+
+  const data = await response.json();
+  return data;
+}
+export async function getPlaylistsItems(
+  accessToken: string,
+  playlistId: string
+) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+
+  const data = await response.json();
+  return data;
+}
+
 export async function getSearchResultWType(
   accessToken: string,
   type: string,
@@ -109,7 +139,7 @@ export async function startResumeTrackPlayback(
       Authorization: "Bearer " + accessToken,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify( body ),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -118,19 +148,16 @@ export async function startResumeTrackPlayback(
   }
 }
 
-export async function pausePlayback(
-  accessToken: string,
-  deviceId?: string
-) {
+export async function pausePlayback(accessToken: string, deviceId?: string) {
   const body: any = {};
- 
+
   const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
     method: "PUT",
     headers: {
       Authorization: "Bearer " + accessToken,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify( body ),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {

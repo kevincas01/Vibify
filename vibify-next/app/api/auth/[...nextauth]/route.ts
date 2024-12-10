@@ -95,10 +95,9 @@ export const authOptions: AuthOptions = {
     },
     async jwt({ token, user, account }) {
       if (account && user) {
-        console.log(account, user);
         token.accessToken = account.access_token as string;
         token.refreshToken = account.refresh_token;
-        token.userId = account.userId;
+        token.userId = user.id;
         token.accessTokenExpires = (account.expires_at! * 1000) as number;
         return token;
       }

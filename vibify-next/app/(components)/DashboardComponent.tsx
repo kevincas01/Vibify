@@ -11,6 +11,7 @@ import {
 import { convertDuration } from "@/app/utils/misc";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 interface DashboardComponentProps {
   profile: SpotifyUser;
@@ -24,6 +25,7 @@ const DashboardComponent = ({
 }: DashboardComponentProps) => {
   const handleLogout = async () => {
     await signOut();
+    redirect("/")
   };
   return (
     <>

@@ -44,10 +44,11 @@ export const defaultArtistTimeRange = "short_term";
 export const defaultTrackLimit = 10;
 export const defaultTrackTimeRange = "short_term";
 
-export const recommendationsFeed: { value: string; text: string }[] = [
-  { value: "followed", text: "Followed Recommendations" },
-  { value: "all", text: "All Recommendations" },
-];
+export const recommendationsFeedSelections: { value: string; text: string }[] =
+  [
+    { value: "followed", text: "Followed Recommendations" },
+    { value: "all", text: "All Recommendations" },
+  ];
 export const defaultFeedType = "all";
 export const recommentTypeElements: { value: string; text: string }[] = [
   { value: "track", text: "Tracks" },

@@ -1,4 +1,7 @@
-import { defaultFeedType, recommendationsFeed } from "@/app/types/filters";
+import {
+  defaultFeedType,
+  recommendationsFeedSelections,
+} from "@/app/types/filters";
 import { RecommendationType } from "@/app/types/recommendations";
 import { Skeleton } from "@mui/material";
 import dynamic from "next/dynamic";
@@ -127,7 +130,7 @@ const Loading = () => {
       <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
         <div className="text-center w-full">
           <div className="flex gap-4 justify-around">
-            {recommendationsFeed.map((element) => (
+            {recommendationsFeedSelections.map((element) => (
               <div key={element.value}>
                 <button
                   className={`p-2 ${

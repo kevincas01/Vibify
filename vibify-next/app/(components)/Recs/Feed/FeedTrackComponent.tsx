@@ -6,16 +6,14 @@ import React from "react";
 interface FeedTrackComponentProps {
   track: Track;
 }
-const FeedTrackComponent = ({
-  track,
-}: FeedTrackComponentProps) => {
+const FeedTrackComponent = ({ track }: FeedTrackComponentProps) => {
   const handleClick = () => {
-    console.log('sfdsd')
+    console.log("sfdsd");
   };
   return (
     <div
       key={track.id}
-      className={`flex gap-4 w-full cursor-pointer`}
+      className={`grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full cursor-pointer`}
       onClick={handleClick}
       style={{
         transition: "background-color 0.3s ease", // Smooth transition for highlight
@@ -27,7 +25,7 @@ const FeedTrackComponent = ({
         width={75}
         height={75}
       />
-      <div className="flex justify-between gap-2 w-full min-w-0">
+      <div className=" w-full min-w-0">
         <div className="flex flex-col min-w-0">
           <p className="text-ellipsis overflow-hidden whitespace-nowrap">
             {track.name}
@@ -41,9 +39,9 @@ const FeedTrackComponent = ({
             ))}
           </p>
         </div>
-        <div>
-          <p className="text-lightGray">{convertDuration(track.duration_ms)}</p>
-        </div>
+      </div>
+      <div>
+        <p className="text-lightGray">{convertDuration(track.duration_ms)}</p>
       </div>
     </div>
   );

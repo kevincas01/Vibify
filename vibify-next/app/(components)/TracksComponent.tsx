@@ -117,7 +117,7 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
                     width={75}
                     height={75}
                   />
-                  <div className="flex justify-between gap-2 w-full min-w-0">
+                  <div className="w-full min-w-0">
                     <div className="flex flex-col min-w-0">
                       <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                         {track.name}

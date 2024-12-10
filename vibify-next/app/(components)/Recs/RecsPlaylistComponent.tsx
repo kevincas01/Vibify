@@ -20,7 +20,7 @@ const RecsPlaylistComponent = ({
   return (
     <li
       key={playlist.id}
-      className={`grid grid-cols-[75px_1fr_auto] gap-4 w-full  ${
+      className={`grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full  ${
         selected ? "text-main" : "cursor-pointer"
       }`}
       onClick={onClick ? handleClick : undefined} // Set the selected track ID
@@ -29,25 +29,27 @@ const RecsPlaylistComponent = ({
       }}
     >
       {playlist.images && playlist.images.length > 0 ? (
-        <div className="relative w-[75px] aspect-square">
+        <div className="relative w-[50px] md:w-[75px] aspect-square">
           <Image
             src={playlist.images[0].url}
             alt={playlist.name}
             fill
             style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 50px, 75px"
           />
         </div>
       ) : (
-        <div className="relative w-[75px] aspect-square">
+        <div className="relative w-[50px] md:w-[75px] aspect-square">
           <Image
             src={"/NoImage.png"}
             alt={playlist.name}
             fill
             style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 50px, 75px"
           />
         </div>
       )}
-      <div className="flex justify-between gap-2 w-full min-w-0">
+      <div className="w-full min-w-0">
         <div className="flex flex-col min-w-0 ">
           <p className="text-ellipsis overflow-hidden whitespace-nowrap">
             {playlist.name}

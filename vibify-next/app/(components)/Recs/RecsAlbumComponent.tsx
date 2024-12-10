@@ -20,7 +20,7 @@ const RecsAlbumComponent = ({
   return (
     <li
       key={album.id}
-      className={`flex gap-4 w-full ${
+      className={`grid grid-cols-[75px_1fr_auto] gap-4 w-full ${
         selected ? "text-main" : "cursor-pointer"
       }`}
       onClick={onClick ? handleClick : undefined}
@@ -34,7 +34,7 @@ const RecsAlbumComponent = ({
         width={75}
         height={75}
       />
-      <div className="flex justify-between gap-2 w-full min-w-0">
+      <div className="w-full min-w-0">
         <div className="flex flex-col min-w-0 ">
           <p className="text-ellipsis overflow-hidden whitespace-nowrap">
             {album.name}
@@ -48,12 +48,12 @@ const RecsAlbumComponent = ({
             ))}
           </p>
         </div>
-        <div>
-          <p className="text-lightGray text-nowrap">
-            {album.total_tracks}{" "}
-            {album.album_type == "album" ? "Tracks" : "Track"}
-          </p>
-        </div>
+      </div>
+      <div>
+        <p className="text-lightGray text-nowrap">
+          {album.total_tracks}{" "}
+          {album.album_type == "album" ? "Tracks" : "Track"}
+        </p>
       </div>
     </li>
   );

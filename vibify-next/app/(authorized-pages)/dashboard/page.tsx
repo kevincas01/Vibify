@@ -1,4 +1,4 @@
-import DashboardComponent from "@/app/(components)/Dashboard";
+import DashboardComponent from "@/app/(components)/DashboardComponent";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getSpotifyUserProfile, getUserTopWType } from "@/app/utils/spotify";
 import { getServerSession } from "next-auth";

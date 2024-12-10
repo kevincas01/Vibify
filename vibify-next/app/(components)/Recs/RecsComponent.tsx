@@ -22,6 +22,10 @@ import FeedArtistComponent from "./Feed/FeedArtistComponent";
 import FeedAlbumComponent from "./Feed/FeedAlbumComponent";
 import FeedPlaylistComponent from "./Feed/FeedPlaylistComponent";
 import { defaultFeedType } from "@/app/types/filters";
+import SpotifyPlayer from "../SpotifyPlayer";
+import { getSession } from "next-auth/react";
+import { startResumeTrackPlayback } from "@/app/utils/spotify";
+import { SpotifyAPI } from "@/app/utils/clients/spotify";
 
 const PlayCircleOutlinedIcon = dynamic(
   () => import("@mui/icons-material/PlayCircleOutlined"),
@@ -65,14 +69,15 @@ const RecsComponent = ({
   topTracks,
   recommendations,
 }: RecsComponentProps) => {
-  const [recommendModal, setRecommenModal] = useState(false);
+  const [recommendModal, setRecommendModal] = useState(false);
 
   const [feedType, setFeedType] = useState(defaultFeedType);
 
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const handleModalToggle = () => {
-    setRecommenModal((prev) => !prev);
+    setRecommendModal((prev) => !prev);
   };
-  const recommendationsFeed: { value: string; text: string }[] = [
+  const recommendationsFeedSelections: { value: string; text: string }[] = [
     { value: "followed", text: "Followed Recommendations" },
     { value: "all", text: "All Recommendations" },
   ];
@@ -83,7 +88,6 @@ const RecsComponent = ({
   ) => {
     switch (type) {
       case RecommendationType.artist:
-        console.log("skjsddd");
         return <FeedArtistComponent artist={item as Artist} />;
       case RecommendationType.track:
         return <FeedTrackComponent track={item as Track} />;
@@ -92,11 +96,28 @@ const RecsComponent = ({
       case RecommendationType.playlist:
         return <FeedPlaylistComponent playlist={item as Playlist} />;
       default:
-        console.log("sdfsjdfjsddddddd");
         return null;
     }
   };
   const iconButtonSize = 25;
+
+  const handleTrackPlay = async(track: Track) => {
+    setSelectedTrack(track);
+    
+      const session = await getSession();
+      const accessToken = session?.user.accessToken as string;
+
+      // await startResumeTrackPlayback(accessToken,undefined,[track.uri],undefined)
+      
+  };
+
+  const handleLike = () => {
+    console.log("liking");
+  };
+  const handleAdd = () => {
+    console.log("liking");
+  };
+  
   return (
     <div className="h-full relative">
       {recommendModal ? (
@@ -114,7 +135,7 @@ const RecsComponent = ({
           <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
             <div className="text-center w-full">
               <div className="flex gap-4 justify-around">
-                {recommendationsFeed.map((element) => (
+                {recommendationsFeedSelections.map((element) => (
                   <div key={element.value}>
                     <button
                       onClick={() => setFeedType(element.value)}
@@ -182,6 +203,9 @@ const RecsComponent = ({
                     </div>
                     {item.recommendation_type == "track" ? (
                       <PlayCircleOutlinedIcon
+                        onClick={() => {
+                          handleTrackPlay(item.recommended_item as Track);
+                        }}
                         style={{
                           width: iconButtonSize,
                           height: iconButtonSize,
@@ -218,6 +242,8 @@ const RecsComponent = ({
                 </div>
               ))}
             </div>
+            {selectedTrack && <SpotifyPlayer track={selectedTrack} />}
+
             <div className="fixed md:bottom-[20px] bottom-[100px] right-[20px] ">
               <CircleButton onClick={() => handleModalToggle()} size={60}>
                 <AddIcon fontSize="large" />

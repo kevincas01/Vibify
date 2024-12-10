@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { getSearchResultWType } from "../../utils/spotify";
 import {
-  SpotifySearchResult,
+  SpotifySearchResponse,
   Track,
   Artist,
   Album,
@@ -32,7 +32,7 @@ const SpotifySearch = ({
   const [searchInput, setSearchInput] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
   const [searchResults, setSearchResults] =
-    useState<SpotifySearchResult | null>(null);
+    useState<SpotifySearchResponse | null>(null);
 
   const [loading, setLoading] = useState(false);
 

@@ -15,18 +15,16 @@ import Button from "../Buttons/Button";
 // Use Next.js dynamic imports with suspense
 import dynamic from "next/dynamic";
 import LoadingScreen from "../LoadingScreen";
-import RecsArtistComponent from "./RecsArtistComponent";
-import RecsTrackComponent from "./RecsTrackComponent";
-import RecsAlbumComponent from "./RecsAlbumComponent";
-import RecsPlaylistComponent from "./RecsPlaylistComponent";
+import RecsArtistComponent from "./RecModal/RecsArtistComponent";
+import RecsTrackComponent from "./RecModal/RecsTrackComponent";
+import RecsAlbumComponent from "./RecModal/RecsAlbumComponent";
+import RecsPlaylistComponent from "./RecModal/RecsPlaylistComponent";
 import SpotifySearch from "./SpotifySearch";
 import { recommentTypeElements } from "@/app/types/filters";
 
 const CloseIcon = dynamic(() => import("@mui/icons-material/Close"), {
   ssr: false,
 });
-
-
 
 interface RecModalProps {
   handleModalToggle: () => void;
@@ -59,7 +57,6 @@ const RecModal = ({
     setSelectedId("");
     setSelectedItem(null);
   };
-
 
   const handleRecommendation = async () => {
     await createRecommendation(
@@ -235,7 +232,8 @@ const RecModal = ({
     </div>
   );
 };
-{/* TODO comments table
+{
+  /* TODO comments table
 
 we store the id pof the recommendations as a foreign key referencing recommendations table
 store the user spotify_id of the commentor as a foreign key referencing user table
@@ -243,5 +241,6 @@ store the text they want to save
 created_at
 
 
-*/}
+*/
+}
 export default RecModal;

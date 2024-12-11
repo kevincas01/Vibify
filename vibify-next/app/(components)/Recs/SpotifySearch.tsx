@@ -10,10 +10,10 @@ import {
 } from "../../types/spotify";
 import Image from "next/image";
 import { convertDuration } from "../../utils/misc";
-import RecsTrackComponent from "./RecsTrackComponent";
-import RecsArtistComponent from "./RecsArtistComponent";
-import RecsAlbumComponent from "./RecsAlbumComponent";
-import RecsPlaylistComponent from "./RecsPlaylistComponent";
+import RecsTrackComponent from "./RecModal/RecsTrackComponent";
+import RecsArtistComponent from "./RecModal/RecsArtistComponent";
+import RecsAlbumComponent from "./RecModal/RecsAlbumComponent";
+import RecsPlaylistComponent from "./RecModal/RecsPlaylistComponent";
 
 interface SpotifySearchProps {
   accessToken: string;

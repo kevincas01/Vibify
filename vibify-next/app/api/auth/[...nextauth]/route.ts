@@ -1,4 +1,4 @@
-import { SpotifyAPI } from "@/app/utils/clients/spotify";
+
 import NextAuth, { AuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import Spotify from "next-auth/providers/spotify";

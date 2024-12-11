@@ -112,3 +112,13 @@ input[type="text"] ::placeholder {
 input[type="text"] :hover {
   border: 1px solid #777; 
 }
+.Toastify__toast-container {
+  position: absolute;
+  margin-top: 20px;
+  margin:auto;
+  left: 50%;
+  width: fit-content;
+  transform: translateX(-50%);
+z-index: 100;
+  border-radius: 20px;
+}

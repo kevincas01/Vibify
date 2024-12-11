@@ -14,16 +14,16 @@ import RecsTrackComponent from "./RecModal/RecsTrackComponent";
 import RecsArtistComponent from "./RecModal/RecsArtistComponent";
 import RecsAlbumComponent from "./RecModal/RecsAlbumComponent";
 import RecsPlaylistComponent from "./RecModal/RecsPlaylistComponent";
+import { getSession } from "next-auth/react";
 
 interface SpotifySearchProps {
-  accessToken: string;
   recommendType: string;
   selectedId: string;
   selectItem: (id: string, item: Artist | Track | Album | Playlist) => void;
 }
 
 const SpotifySearch = ({
-  accessToken,
+
   recommendType,
   selectedId,
   selectItem,
@@ -37,6 +37,8 @@ const SpotifySearch = ({
   const [loading, setLoading] = useState(false);
 
   const fetchSearchResults = async (type: string) => {
+    const session = await getSession();
+    const accessToken = session?.user.accessToken as string;
     if (!accessToken || !searchInput) return;
 
     const results = await getSearchResultWType(

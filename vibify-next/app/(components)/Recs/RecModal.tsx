@@ -28,16 +28,14 @@ const CloseIcon = dynamic(() => import("@mui/icons-material/Close"), {
 
 interface RecModalProps {
   handleModalToggle: () => void;
-  profileId: string;
-  accessToken: string;
+  userId: string;
   topTracks: TopTracksResponse | null;
   topArtists: TopArtistsResponse | null;
 }
 
 const RecModal = ({
   handleModalToggle,
-  profileId,
-  accessToken,
+  userId,
   topTracks,
   topArtists,
 }: RecModalProps) => {
@@ -63,7 +61,7 @@ const RecModal = ({
       recommendType,
       selectedItem,
       selectedId,
-      profileId,
+      userId,
       recommendationText
     );
     handleModalToggle();
@@ -220,7 +218,6 @@ const RecModal = ({
               }`}
             >
               <SpotifySearch
-                accessToken={accessToken}
                 recommendType={recommendType}
                 selectedId={selectedId}
                 selectItem={selectItem}

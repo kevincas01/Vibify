@@ -14,7 +14,7 @@ const RecsPage = async () => {
   }
 
   const accessToken = session.user.accessToken as string;
-  const profile = await getSpotifyUserProfile(accessToken);
+  const userId=session.user.userId as string
   const topArtists = await getUserTopWType(
     accessToken,
     "artists",
@@ -33,7 +33,7 @@ const RecsPage = async () => {
     <Suspense >
       <RecsComponent
         accessToken={accessToken}
-        profile={profile}
+        userId={userId}
         topArtists={topArtists}
         topTracks={topTracks}
         recommendations={recommendations}

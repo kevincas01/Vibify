@@ -11,51 +11,39 @@ import {
   limitElements,
   timeRangeElements,
 } from "../types/filters";
+import useSWR from "swr";
+import LoadingBars from "./LoadingBars";
+import LoadingTracks from "./Loading/LoadingTracks";
 
 interface TracksComponentProps {
   accessToken: string;
-  topTracks: TopTracksResponse;
 }
 
-const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [newTopTracks, setNewTopTracks] =
-    useState<TopTracksResponse>(topTracks);
+const TracksComponent = ({ accessToken }: TracksComponentProps) => {
   const [trackTimeRange, setTimeRange] = useState<string>(
     defaultTrackTimeRange
   );
   const [trackLimit, setTrackLimit] = useState<number>(defaultTrackLimit);
 
-  const fetchTopTracks = async (range: string, limit: number) => {
-    setLoading(true);
-    try {
-      const result = await getUserTopWType(accessToken, "tracks", range, limit);
-      setNewTopTracks(result); // Update state with the new tracks
-    } catch (error) {
-      console.error("Error fetching top tracks:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const trackKey = `tracks ` + trackTimeRange + " " + trackLimit;
+  const {
+    data: tracksData,
+    error: tracksDataError,
+    isLoading: tracksDataLoading,
+    mutate,
+  } = useSWR(trackKey, () =>
+    getUserTopWType(accessToken, "tracks", trackTimeRange, trackLimit)
+  );
 
   const handleTrackLimitChange = (limit: number) => {
     setTrackLimit(limit);
-    fetchTopTracks(trackTimeRange, limit);
+    mutate();
   };
 
   const handleTimeRangeChange = (range: string) => {
     setTimeRange(range);
-    fetchTopTracks(range, trackLimit);
+    mutate();
   };
-
-  interface TimeRangeProps {
-    text: string;
-    value: string;
-  }
-
-  interface TrackLimitProps {
-    value: number;
-  }
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -96,53 +84,56 @@ const TracksComponent = ({ accessToken, topTracks }: TracksComponentProps) => {
         ))}
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center mt-4 h-full">
-          <div className="spinner">Loading...</div>
-        </div>
-      ) : (
-        <div className="flex w-full flex-col mt-4">
-          <h3 className="mb-4">Top Tracks</h3>
-
-          {newTopTracks && (
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-4 w-full">
-              {newTopTracks.items.map((track: Track, _: number) => (
-                <div
-                  key={track.id}
-                  className="grid grid-cols-[75px_1fr_auto] gap-4 w-full"
-                >
-                  <Image
-                    src={track.album.images[0].url}
-                    alt={track.name}
-                    width={75}
-                    height={75}
-                  />
-                  <div className="w-full min-w-0">
-                    <div className="flex flex-col min-w-0">
-                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {track.name}
-                      </p>
-                      <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                        {track.artists.map((artist: Artist, index: number) => (
-                          <React.Fragment key={index}>
-                            {artist.name}
-                            {index < track.artists.length - 1 && " ~ "}
-                          </React.Fragment>
-                        ))}
+      <div className="flex w-full flex-col mt-4">
+        <h3 className="mb-4">Top Tracks</h3>
+        {tracksDataLoading ? (
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4 w-full">
+            <LoadingTracks count={trackLimit} />
+          </div>
+        ) : (
+          <>
+            {tracksData && (
+              <div className="grid md:grid-cols-2 grid-cols-1 gap-4 w-full">
+                {tracksData.items.map((track: Track, _: number) => (
+                  <div
+                    key={track.id}
+                    className="grid grid-cols-[75px_1fr_auto] gap-4 w-full"
+                  >
+                    <Image
+                      src={track.album.images[0].url}
+                      alt={track.name}
+                      width={75}
+                      height={75}
+                    />
+                    <div className="w-full min-w-0">
+                      <div className="flex flex-col min-w-0">
+                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                          {track.name}
+                        </p>
+                        <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
+                          {track.artists.map(
+                            (artist: Artist, index: number) => (
+                              <React.Fragment key={index}>
+                                {artist.name}
+                                {index < track.artists.length - 1 && " ~ "}
+                              </React.Fragment>
+                            )
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-lightGray">
+                        {convertDuration(track.duration_ms)}
                       </p>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-lightGray">
-                      {convertDuration(track.duration_ms)}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+                ))}
+              </div>
+            )}
+          </>
+        )}{" "}
+      </div>
     </div>
   );
 };

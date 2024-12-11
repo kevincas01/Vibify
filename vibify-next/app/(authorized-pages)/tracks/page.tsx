@@ -4,6 +4,7 @@ import { getUserTopWType } from "@/app/utils/spotify";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import Loading from "./loading";
 
 const Tracks = async () => {
   const session = await getServerSession(authOptions);
@@ -13,16 +14,11 @@ const Tracks = async () => {
 
   const accessToken = session.user.accessToken as string;
 
-  const topTracks = await getUserTopWType(
-    accessToken,
-    "tracks",
-    "long_term",
-    10
-  );
+
 
   return (
-    <Suspense>
-      <TracksComponent accessToken={accessToken} topTracks={topTracks} />
+    <Suspense fallback={<Loading/>}>
+      <TracksComponent accessToken={accessToken}/>
     </Suspense>
   );
 };

@@ -10,43 +10,35 @@ import {
   defaultArtistLimit,
   defaultArtistTimeRange,
 } from "../types/filters";
+import useSWR from "swr";
+import LoadingArtists from "./Loading/LoadingArtists";
 interface ArtistsComponentProps {
   accessToken: string;
-  topArtists: TopArtistsResponse;
 }
-const Artists = ({ accessToken, topArtists }: ArtistsComponentProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [newTopArtists, setNewTopArtists] =
-    useState<TopArtistsResponse>(topArtists);
+const Artists = ({ accessToken }: ArtistsComponentProps) => {
   const [artistTimeRange, setArtistTimeRange] = useState<string>(
     defaultArtistTimeRange
   );
   const [artistLimit, setArtistLimit] = useState<number>(defaultArtistLimit);
 
-  const fetchTopArtists = async (range: string, limit: number) => {
-    setLoading(true);
-    try {
-      const result = await getUserTopWType(
-        accessToken,
-        "artists",
-        range,
-        limit
-      );
-      setNewTopArtists(result); // Update state with the new tracks
-    } catch (error) {
-      console.error("Error fetching top tracks:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const artistKey = `artists ` + artistTimeRange + " " + artistLimit;
+  const {
+    data: artistsData,
+    error: artistsDataError,
+    isLoading: artistsDataLoading,
+    mutate,
+  } = useSWR(artistKey, () =>
+    getUserTopWType(accessToken, "artists", artistTimeRange, artistLimit)
+  );
 
   const handleArtistLimitChange = (limit: number) => {
     setArtistLimit(limit);
-    fetchTopArtists(artistTimeRange, limit);
+    mutate();
   };
+
   const handleTimeRangeChange = (range: string) => {
     setArtistTimeRange(range);
-    fetchTopArtists(range, artistLimit);
+    mutate();
   };
 
   return (
@@ -85,34 +77,35 @@ const Artists = ({ accessToken, topArtists }: ArtistsComponentProps) => {
           </div>
         ))}
       </div>
-
-      {loading ? (
-        <div className="flex justify-center items-center mt-4 h-full">
-          <div className="spinner">Loading...</div>{" "}
-        </div>
-      ) : (
-        <div className="flex w-full flex-col mt-4">
-          <h3>Top Artists</h3>
+      <div className="flex w-full flex-col mt-4">
+        <h3>Top Artists</h3>
+        {artistsDataLoading ? (
           <div className="flex flex-wrap gap-2 mt-4 justify-around">
-            {newTopArtists?.items.map((artist: Artist) => (
-              <div
-                key={artist.id}
-                className="flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6"
-              >
-                <div className="w-full aspect-square relative">
-                  <Image
-                    src={artist.images[0]?.url || ""}
-                    alt={artist.name}
-                    fill
-                    className="rounded-full object-cover"
-                  />
-                </div>
-                <h5 className="text-center mt-2">{artist.name}</h5>
-              </div>
-            ))}
+            <LoadingArtists count={artistLimit}/>
           </div>
-        </div>
-      )}
+        ) : (
+          <>
+            <div className="flex flex-wrap gap-2 mt-4 justify-around">
+              {artistsData?.items.map((artist: Artist) => (
+                <div
+                  key={artist.id}
+                  className="flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6"
+                >
+                  <div className="w-full aspect-square relative">
+                    <Image
+                      src={artist.images[0]?.url || ""}
+                      alt={artist.name}
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                  <h5 className="text-center mt-2">{artist.name}</h5>
+                </div>
+              ))}
+            </div>
+          </>
+        )}{" "}
+      </div>
     </div>
   );
 };

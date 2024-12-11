@@ -48,14 +48,15 @@ const Loading = () => {
       <div className="flex w-full flex-col mt-4">
         <h3 className="mb-4">Top Tracks</h3>
 
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4 w-full">
           {array.map((_, index: number) => (
-            <div key={index} className="flex gap-4 w-full">
-              <div>
-                <Skeleton variant="rectangular" width={75} height={75} />
-              </div>
-              <div className="flex  w-full">
-                <div className="flex flex-col flex-1">
+            <div
+              key={index}
+              className="grid grid-cols-[75px_1fr_50px] gap-4 w-full"
+            >
+              <Skeleton variant="rectangular" width={75} height={75} />
+              <div className="w-full min-w-0">
+                <div className="flex flex-col min-w-0">
                   <Skeleton
                     variant="text"
                     width="55%"
@@ -67,12 +68,12 @@ const Loading = () => {
                     sx={{ fontSize: "1rem", lineHeight: "1.5rem" }}
                   />
                 </div>
-                <div className="w-[10%]">
-                  <Skeleton
-                    variant="text"
-                    sx={{ fontSize: "1rem", lineHeight: "1.5rem" }}
-                  />
-                </div>
+              </div>
+              <div>
+                <Skeleton
+                  variant="text"
+                  sx={{ fontSize: "1rem", lineHeight: "1.5rem" }}
+                />
               </div>
             </div>
           ))}

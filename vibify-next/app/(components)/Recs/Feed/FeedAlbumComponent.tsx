@@ -12,7 +12,7 @@ const FeedAlbumComponent = ({ album }: FeedAlbumComponentProps) => {
   return (
     <div
       key={album.id}
-      className={`flex gap-4 w-full cursor-pointer`}
+      className={`grid grid-cols-[75px_1fr_75px] gap-4 w-full cursor-pointer`}
       onClick={handleClick}
       style={{
         transition: "background-color 0.3s ease", // Smooth transition for highlight
@@ -24,7 +24,7 @@ const FeedAlbumComponent = ({ album }: FeedAlbumComponentProps) => {
         width={75}
         height={75}
       />
-      <div className="flex gap-2 w-full min-w-0">
+      <div className="w-full min-w-0">
         <div className="flex flex-col min-w-0 ">
           <p className="text-ellipsis overflow-hidden whitespace-nowrap">
             {album.name}
@@ -38,13 +38,13 @@ const FeedAlbumComponent = ({ album }: FeedAlbumComponentProps) => {
             ))}
           </p>
         </div>
+      </div>
         <div>
           <p className="text-lightGray text-nowrap">
             {album.total_tracks}{" "}
             {album.album_type == "album" ? "Tracks" : "Track"}
           </p>
         </div>
-      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { getSpotifyUserProfile, getUserTopWType } from "@/app/utils/spotify";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import Loading from "./loading";
 
 const ProfilePage = async () => {
   const session = await getServerSession(authOptions);
@@ -28,7 +29,7 @@ const ProfilePage = async () => {
   );
 
   return (
-    <Suspense>
+    <Suspense fallback={<Loading/>}>
       <DashboardComponent
         profile={profile}
         topArtists={topArtists}

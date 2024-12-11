@@ -156,6 +156,18 @@ export interface SpotifySearchResponse {
   items: Track[] | Artist[] | Album[] | Playlist[];
 }
 
+
+
+export interface PlaylistsResponse {
+  href: string;
+  limit: number;
+  next: string;
+  offset: number;
+  previous: string;
+  total: number;
+  items: Playlist[];
+}
+
 export interface PlaylistItemsResponse {
   href: string;
   limit: number;
@@ -172,4 +184,5 @@ export interface PlaylistItem {
   is_local: boolean;
   track: Track;
 }
+
 

@@ -59,7 +59,8 @@ export async function getRecommendations(): Promise<Recommendations[]> {
   try {
     const { data, error } = await supabase
       .from("recommendations")
-      .select("*, users(*)");
+      .select("*, users(*)")
+      .order("created_at", { ascending: false }); // Newest first
 
     if (error) {
       throw new Error(error.message); // Throw error when something goes wrong

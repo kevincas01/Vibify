@@ -30,6 +30,36 @@ export async function getUserTopWType(
   return data;
 }
 
+export async function fetchNextPageOfItems(
+  accessToken: string,
+  nextString: string
+) {
+  const response = await fetch(`nextString`, {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+}
+export async function getCurrentUserPlaylists(
+  accessToken: string,
+  userId: string
+) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/users/me}/playlists`,
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+
+  const data = await response.json();
+  return data;
+}
+
 export async function getUserPlaylists(accessToken: string, userId: string) {
   const response = await fetch(
     `https://api.spotify.com/v1/users/${userId}/playlists`,
@@ -90,6 +120,7 @@ export async function getPlaybackState(accessToken: string) {
 
   if (!response.ok) {
     const errorData = await response.json();
+
     throw new Error(`Error starting playback: ${errorData.error.message}`);
   }
 

@@ -44,12 +44,16 @@ export const defaultArtistTimeRange = "short_term";
 export const defaultTrackLimit = 10;
 export const defaultTrackTimeRange = "short_term";
 
-export const recommendationsFeedSelections: { value: string; text: string }[] =
-  [
-    { value: "followed", text: "Followed Recommendations" },
-    { value: "all", text: "All Recommendations" },
-  ];
+export const recommendationsFeedFilters: { value: string; text: string }[] = [
+  { value: "all", text: "All" },
+  { value: "album", text: "Album" },
+  { value: "artist", text: "Artist" },
+  { value: "track", text: "Track" },
+  { value: "playlist", text: "Playlist" },
+
+];
 export const defaultFeedType = "all";
+
 export const recommentTypeElements: { value: string; text: string }[] = [
   { value: "track", text: "Tracks" },
   { value: "artist", text: "Artist" },

@@ -28,7 +28,6 @@ export default async function Layout({ children }: PropsWithChildren<unknown>) {
         </Suspense>
       </ClientThemeWrapper>
 
-      {/* Ensure ToastContainer is rendered outside Suspense */}
     </div>
   );
 }

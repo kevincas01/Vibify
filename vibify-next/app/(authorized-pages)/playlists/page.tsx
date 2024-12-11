@@ -3,7 +3,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getUserPlaylists } from "@/app/utils/spotify";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
+import Loading from "./loading";
 
 const PlaylistsPage = async () => {
   const session = await getServerSession(authOptions);
@@ -16,11 +17,11 @@ const PlaylistsPage = async () => {
 
   const userPlaylistsResponse = await getUserPlaylists(accessToken, userId);
 
-  console.log(userPlaylistsResponse)
+  console.log(userPlaylistsResponse);
   return (
-    <div>
-      <PlaylistsComponent playlists={userPlaylistsResponse.items}/>
-    </div>
+    <Suspense fallback={<Loading />}>
+      <PlaylistsComponent playlists={userPlaylistsResponse.items} />
+    </Suspense>
   );
 };
 

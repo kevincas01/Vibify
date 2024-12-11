@@ -6,6 +6,7 @@ import { getSpotifyUserProfile, getUserTopWType } from "@/app/utils/spotify";
 import RecsComponent from "@/app/(components)/Recs/RecsComponent";
 import { Suspense } from "react";
 import { getRecommendations } from "@/app/utils/supabase";
+import Loading from "./loading";
 
 const RecsPage = async () => {
   const session = await getServerSession(authOptions);
@@ -30,7 +31,7 @@ const RecsPage = async () => {
 
   const recommendations= await getRecommendations()
   return (
-    <Suspense >
+    <Suspense fallback={<Loading/>}>
       <RecsComponent
         accessToken={accessToken}
         userId={userId}

@@ -21,11 +21,15 @@ import FeedTrackComponent from "./Feed/FeedTrackComponent";
 import FeedArtistComponent from "./Feed/FeedArtistComponent";
 import FeedAlbumComponent from "./Feed/FeedAlbumComponent";
 import FeedPlaylistComponent from "./Feed/FeedPlaylistComponent";
-import { defaultFeedType } from "@/app/types/filters";
-import SpotifyPlayer from "../SpotifyPlayer";
+import {
+  defaultFeedType,
+  recommendationsFeedFilters,
+} from "@/app/types/filters";
+
+import { useTrackInfo } from "@/app/context/player";
+import { Drawer } from "@mui/material";
+import DrawerItem from "./Drawer/DrawerItem";
 import { getSession } from "next-auth/react";
-import { startResumeTrackPlayback } from "@/app/utils/spotify";
-import { SpotifyAPI } from "@/app/utils/clients/spotify";
 
 const PlayCircleOutlinedIcon = dynamic(
   () => import("@mui/icons-material/PlayCircleOutlined"),
@@ -57,31 +61,73 @@ const VisibilityOutlinedIcon = dynamic(
 
 interface RecsComponentProps {
   accessToken: string;
-  profile: SpotifyUser;
+  userId: string;
   topArtists: TopArtistsResponse;
   topTracks: TopTracksResponse;
   recommendations: Recommendations[];
 }
 const RecsComponent = ({
   accessToken,
-  profile,
+  userId,
   topArtists,
   topTracks,
   recommendations,
 }: RecsComponentProps) => {
   const [recommendModal, setRecommendModal] = useState(false);
 
-  const [feedType, setFeedType] = useState(defaultFeedType);
+  const [feedType, setFeedType] = useState<string[]>([defaultFeedType]);
 
-  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+  const { handleStartPlay } = useTrackInfo();
+
   const handleModalToggle = () => {
     setRecommendModal((prev) => !prev);
   };
-  const recommendationsFeedSelections: { value: string; text: string }[] = [
-    { value: "followed", text: "Followed Recommendations" },
-    { value: "all", text: "All Recommendations" },
-  ];
 
+  const [addDrawerSelectedID, setAddDrawerSelectedID] = useState("");
+  const [isOpenAddDrawer, setIsOpenAddDrawer] = useState(false);
+
+  const handleAddDrawerToggle = () => {
+    setIsOpenAddDrawer(!isOpenAddDrawer);
+  };
+
+  const handleFollowToggle = (item: any) => {
+    // Your logic to follow the item goes here
+    console.log("Following", item);
+  };
+
+  const handleAddClick = async (
+    type: string,
+    item: Album | Artist | Track | Playlist
+  ) => {
+    if (type === "track") {
+      handleAddDrawerToggle();
+      setAddDrawerSelectedID(item.id);
+    } else {
+      handleFollowToggle(item);
+    }
+  };
+
+  const handleFeedFilterChange = (value: string) => {
+    setFeedType((prevFeedType) => {
+      if (value === "all") {
+        // If "All" is selected, it should exclude all others
+        return prevFeedType.includes("all") ? [] : ["all"];
+      }
+
+      if (prevFeedType.includes("all")) {
+        // If "All" is already selected, deselect "All" when choosing other filters
+        return [value];
+      }
+      //TODO Handle filtering api calls to supabase. only have ui right now 
+
+      // Toggle the selected filter (add if not selected, remove if selected)
+      if (prevFeedType.includes(value)) {
+        return prevFeedType.filter((item) => item !== value);
+      } else {
+        return [...prevFeedType, value];
+      }
+    });
+  };
   const renderRecomendationItem = (
     type: RecommendationType, // Use RecommendationType directly
     item: Artist | Track | Album | Playlist
@@ -101,14 +147,8 @@ const RecsComponent = ({
   };
   const iconButtonSize = 25;
 
-  const handleTrackPlay = async(track: Track) => {
-    setSelectedTrack(track);
-    
-      const session = await getSession();
-      const accessToken = session?.user.accessToken as string;
-
-      // await startResumeTrackPlayback(accessToken,undefined,[track.uri],undefined)
-      
+  const handleTrackPlay = async (track: Track) => {
+    handleStartPlay(track);
   };
 
   const handleLike = () => {
@@ -117,15 +157,13 @@ const RecsComponent = ({
   const handleAdd = () => {
     console.log("liking");
   };
-  
   return (
     <div className="h-full relative">
       {recommendModal ? (
         <>
           <RecModal
             handleModalToggle={handleModalToggle}
-            profileId={profile.id}
-            accessToken={accessToken || ""}
+            userId={userId}
             topTracks={topTracks}
             topArtists={topArtists}
           />
@@ -135,16 +173,16 @@ const RecsComponent = ({
           <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
             <div className="text-center w-full">
               <div className="flex gap-4 justify-around">
-                {recommendationsFeedSelections.map((element) => (
+                {recommendationsFeedFilters.map((element) => (
                   <div key={element.value}>
                     <button
-                      onClick={() => setFeedType(element.value)}
+                      onClick={() => handleFeedFilterChange(element.value)}
                       className={`p-2 ${
-                        feedType === element.value
+                        feedType.includes(element.value)
                           ? "text-main border-b-2 border-b-main"
                           : "text-lightGray"
                       }`}
-                      aria-selected={feedType === element.value}
+                      aria-selected={feedType.includes(element.value)}
                     >
                       {element.text}
                     </button>
@@ -186,6 +224,7 @@ const RecsComponent = ({
                         style={{
                           width: iconButtonSize,
                           height: iconButtonSize,
+                          cursor: "pointer",
                         }}
                       />
                       <span style={{ marginLeft: 4 }}>123</span>{" "}
@@ -196,36 +235,65 @@ const RecsComponent = ({
                         style={{
                           width: iconButtonSize,
                           height: iconButtonSize,
+                          cursor: "pointer",
                         }}
                       />
                       <span style={{ marginLeft: 4 }}>456</span>{" "}
                       {/* Dummy number */}
                     </div>
                     {item.recommendation_type == "track" ? (
-                      <PlayCircleOutlinedIcon
+                      <span
                         onClick={() => {
                           handleTrackPlay(item.recommended_item as Track);
                         }}
                         style={{
-                          width: iconButtonSize,
-                          height: iconButtonSize,
+                          display: "inline-block",
+                          cursor: "pointer",
+                          textAlign: "center",
                         }}
-                      />
+                        aria-label="Play"
+                      >
+                        <PlayCircleOutlinedIcon
+                          style={{
+                            width: iconButtonSize,
+                            height: iconButtonSize,
+                            cursor: "pointer",
+                          }}
+                        />
+                      </span>
                     ) : (
                       <VisibilityOutlinedIcon
                         style={{
                           width: iconButtonSize,
                           height: iconButtonSize,
+                          cursor: "pointer",
                         }}
                       />
                     )}
 
-                    <AddIcon
-                      style={{
-                        width: iconButtonSize,
-                        height: iconButtonSize,
+                    <span
+                      onClick={() => {
+                        handleAddClick(
+                          item.recommendation_type,
+                          item.recommended_item
+                        );
                       }}
-                    />
+                      style={{
+                        display: "inline-block",
+                        cursor: "pointer",
+
+                        textAlign: "center",
+                      }}
+                      aria-label="Add"
+                    >
+                      <AddIcon
+                        style={{
+                          width: iconButtonSize,
+                          height: iconButtonSize,
+                          cursor: "pointer",
+                        }}
+                      />
+                    </span>
                   </div>
 
                   <div className="flex justify-between gap-2 w-full">
@@ -242,7 +310,20 @@ const RecsComponent = ({
                 </div>
               ))}
             </div>
-            {selectedTrack && <SpotifyPlayer track={selectedTrack} />}
+            {isOpenAddDrawer && (
+              <Drawer
+                anchor={"bottom"}
+                open={isOpenAddDrawer}
+                onClose={handleAddDrawerToggle}
+              >
+                <DrawerItem
+                  id={addDrawerSelectedID}
+                  userId={userId}
+                  accessToken={accessToken}
+                  onClose={handleAddDrawerToggle}
+                />
+              </Drawer>
+            )}
 
             <div className="fixed md:bottom-[20px] bottom-[100px] right-[20px] ">
               <CircleButton onClick={() => handleModalToggle()} size={60}>

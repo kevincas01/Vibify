@@ -1,5 +1,8 @@
 // Get Profile data off of access token
 
+import { PLAYBACKNOTACTIVESTATUS } from "../types/errors";
+import { Playlist, PlaylistsResponse } from "../types/spotify";
+
 export async function getSpotifyUserProfile(accessToken: string) {
   const response = await fetch("https://api.spotify.com/v1/me", {
     headers: {
@@ -32,29 +35,42 @@ export async function getUserTopWType(
 
 export async function fetchNextPageOfItems(
   accessToken: string,
-  nextString: string
+  nextUrl: string | null,
+  accumulatedItems: Playlist[] = [] // Accumulate results across recursive calls
 ) {
-  const response = await fetch(`nextString`, {
+  // Base case: If no next URL, return accumulated items
+  if (!nextUrl) {
+    return accumulatedItems;
+  }
+
+  // Fetch the current page of playlists
+  const response = await fetch(nextUrl, {
     headers: {
       Authorization: "Bearer " + accessToken,
     },
   });
 
   const data = await response.json();
-  return data;
+
+  const updatedItems = [...accumulatedItems, ...data.items];
+
+  // If there is a next page, recursively call the function to get more items
+  if (data.next) {
+    return fetchNextPageOfItems(accessToken, data.next, updatedItems);
+  }
+
+  // Return the accumulated items once there's no more next URL
+  return updatedItems;
 }
+
 export async function getCurrentUserPlaylists(
-  accessToken: string,
-  userId: string
-) {
-  const response = await fetch(
-    `https://api.spotify.com/v1/users/me}/playlists`,
-    {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    }
-  );
+  accessToken: string
+): Promise<PlaylistsResponse> {
+  const response = await fetch(`https://api.spotify.com/v1/me/playlists`, {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
 
   const data = await response.json();
   return data;
@@ -118,10 +134,9 @@ export async function getPlaybackState(accessToken: string) {
     },
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
 
-    throw new Error(`Error starting playback: ${errorData.error.message}`);
+  if (response.status == PLAYBACKNOTACTIVESTATUS) {
+    return null;
   }
 
   const data = await response.json();

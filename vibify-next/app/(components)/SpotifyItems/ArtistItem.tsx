@@ -15,7 +15,7 @@ const ArtistItem = ({ artist }: ArtistItemProps) => {
             fill
             className="rounded-full"
             style={{ objectFit: "cover" }}
-            sizes="75px"
+            sizes="50vw"
           />
         ) : (
           <div className="relative w-[50px] md:w-[75px] aspect-square">
@@ -25,7 +25,7 @@ const ArtistItem = ({ artist }: ArtistItemProps) => {
               fill
               className="rounded-full"
               style={{ objectFit: "cover" }}
-              sizes="75px"
+              sizes="50vw"
             />
           </div>
         )}

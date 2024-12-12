@@ -8,6 +8,7 @@
   --foreground: #171717;
   --navbar-width:100px;
   --gray-background:rgb(24, 24, 24);
+  --light-gray-background:rgb(40, 40, 40);
   --light-gray:rgb(155, 155, 155);
 }
 
@@ -46,9 +47,12 @@ body {
     @apply text-lg font-semibold ; 
   }
   p{
-    @apply text-base
+    @apply md:text-base text-sm
   }
 
+  button{
+    @apply md:text-base text-sm
+  }
   /* You can add more heading styles as needed */
 }
 

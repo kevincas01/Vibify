@@ -66,7 +66,7 @@ const Navbar = () => {
             >
               <Link href={element.href}>
                 <div
-                  className={`flex flex-col items-center ${
+                  className={`flex flex-col items-center md:text-sm text-xs ${
                     currentPage === element.value ? "text-main" : ""
                   }`}
                 >

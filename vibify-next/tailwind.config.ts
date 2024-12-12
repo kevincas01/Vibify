@@ -13,7 +13,8 @@ export default {
         foreground: "var(--foreground)",
         grayBg: "var(--gray-background)",
         lightGrayBg:"var(--light-gray-background)",
-        main: "var(--main-color)", // Main color
+        main: "var(--main-color)", 
+        darkMain:"var(--dark-main-color)",
         lightGray: "var(--light-gray)",
       },
       animation: {

@@ -326,7 +326,7 @@ const RecsComponent = ({
               </Drawer>
             )}
 
-            <div className="fixed md:bottom-[80px] top-[20px] right-[20px] ">
+            <div className="fixed top-[20px] right-[20px] ">
               <CircleButton onClick={() => handleModalToggle()} size={40}>
                 <AddIcon fontSize="medium" />
               </CircleButton>

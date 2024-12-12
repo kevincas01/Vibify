@@ -4,16 +4,24 @@ interface CircleButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
   size?: number; // Optional size prop to control the size of the button
+  dark?: boolean; // Optional dark mode flag to switch button styles
 }
 
-const CircleButton = ({ onClick, children, size = 50 }: CircleButtonProps) => {
+const CircleButton = ({
+  onClick,
+  children,
+  size = 50,
+  dark = false,
+}: CircleButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="
-        bg-main 
-        hover:bg-main/80 
-        text-white 
+      className={`
+        ${
+          dark
+            ? " bg-black hover:bg-gray-200 hover:text-black text-main  border-white "
+            : "bg-main text-black hover:bg-darkMain hover:text-white "
+        }
         rounded-full
         flex 
         items-center 
@@ -27,7 +35,7 @@ const CircleButton = ({ onClick, children, size = 50 }: CircleButtonProps) => {
         focus:ring-2 
         focus:ring-main 
         focus:ring-opacity-50
-      "
+      `}
       style={{
         width: size,
         height: size,

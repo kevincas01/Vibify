@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --main-color:rgb(29, 185, 84);
   --background: #ffffff;
   --foreground: #171717;
+  --main-color:rgb(29, 185, 84);
+  --dark-main-color: rgb(23, 148, 67);
   --navbar-width:100px;
   --gray-background:rgb(24, 24, 24);
   --light-gray-background:rgb(40, 40, 40);
@@ -44,7 +45,7 @@ body {
     @apply text-xl font-semibold ; 
   }
   h5{
-    @apply text-lg font-semibold ; 
+    @apply text-base font-semibold ; 
   }
   p{
     @apply md:text-base text-sm

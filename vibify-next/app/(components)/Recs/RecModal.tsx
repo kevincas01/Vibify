@@ -9,7 +9,7 @@ import {
 } from "@/app/types/spotify";
 import { createRecommendation } from "@/app/utils/supabase";
 import React, { useState } from "react";
-import DarkCircleButton from "../Buttons/DarkCircleButton";
+import CircleButton from "../Buttons/CircleButton";
 import Button from "../Buttons/Button";
 
 // Use Next.js dynamic imports with suspense
@@ -113,19 +113,19 @@ const RecModal = ({
 
   return (
     <div className="flex flex-col gap-4 relative">
-      <div className="absolute top-0 right-0">
-        <DarkCircleButton onClick={() => handleModalToggle()}>
+      <div className="fixed top-[20px] right-[20px] ">
+        <CircleButton onClick={() => handleModalToggle()} size={40} dark={true}>
           <CloseIcon />
-        </DarkCircleButton>
+        </CircleButton>
       </div>
 
       {selectedItem ? (
         // An item is selected to be recommended
         <div className="relative h-full">
-          <div className="absolute top-0 right-0">
-            <DarkCircleButton onClick={deselectItem}>
+          <div className="fixed top-[20px] right-[20px] ">
+            <CircleButton onClick={deselectItem}  size={40}  dark={true}>
               <CloseIcon />
-            </DarkCircleButton>
+            </CircleButton>
           </div>
           <h2 className="text-main text-center">Recommend {recommendType} </h2>
 

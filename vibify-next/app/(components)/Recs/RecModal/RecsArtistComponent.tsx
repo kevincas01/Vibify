@@ -1,6 +1,7 @@
 import React from "react";
 import { Album, Artist, Playlist, Track } from "@/app/types/spotify";
-import Image from "next/image";
+
+import ArtistItem from "../../SpotifyItems/ArtistItem";
 
 interface RecsArtistComponentProps {
   artist: Artist;
@@ -28,18 +29,7 @@ const RecsArtistComponent = ({
         transition: "background-color 0.3s ease", // Smooth transition for highlight
       }}
     >
-      {artist.images.length > 0 && (
-        <div className="w-full aspect-square relative">
-          <Image
-            src={artist.images[0]?.url || ""}
-            alt={artist.name}
-            fill
-            className="rounded-full object-cover"
-          />
-        </div>
-      )}
-
-      <h5 className="text-center mt-2">{artist.name}</h5>
+      <ArtistItem artist={artist}/>
     </div>
   );
 };

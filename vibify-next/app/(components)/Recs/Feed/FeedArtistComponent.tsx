@@ -1,6 +1,7 @@
 import React from "react";
-import { Album, Artist, Playlist, Track } from "@/app/types/spotify";
-import Image from "next/image";
+import { Artist } from "@/app/types/spotify";
+
+import ArtistItem from "../../SpotifyItems/ArtistItem";
 
 interface FeedArtistComponentProps {
   artist: Artist;
@@ -12,24 +13,13 @@ const FeedArtistComponent = ({ artist }: FeedArtistComponentProps) => {
   return (
     <div
       key={artist.id}
-      className={`flex flex-col items-center w-2/5 md:w-1/4 cursor-pointer`}
+      className={`flex flex-col items-center w-2/5 md:w-1/4 cursor-pointer relative`}
       onClick={handleClick}
       style={{
         transition: "background-color 0.3s ease", // Smooth transition for highlight
       }}
     >
-      {artist.images.length > 0 && (
-        <div className="w-full aspect-square relative">
-          <Image
-            src={artist.images[0]?.url || ""}
-            alt={artist.name}
-            fill
-            className="rounded-full object-cover"
-          />
-        </div>
-      )}
-
-      <h5 className="text-center mt-2">{artist.name}</h5>
+      <ArtistItem artist={artist}/>
     </div>
   );
 };

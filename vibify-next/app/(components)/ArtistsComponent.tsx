@@ -12,6 +12,7 @@ import {
 } from "../types/filters";
 import useSWR from "swr";
 import LoadingArtists from "./Loading/LoadingArtists";
+import ArtistItem from "./SpotifyItems/ArtistItem";
 interface ArtistsComponentProps {
   accessToken: string;
 }
@@ -81,7 +82,7 @@ const Artists = ({ accessToken }: ArtistsComponentProps) => {
         <h3>Top Artists</h3>
         {artistsDataLoading ? (
           <div className="flex flex-wrap gap-2 mt-4 justify-around">
-            <LoadingArtists count={artistLimit}/>
+            <LoadingArtists count={artistLimit} />
           </div>
         ) : (
           <>
@@ -91,15 +92,7 @@ const Artists = ({ accessToken }: ArtistsComponentProps) => {
                   key={artist.id}
                   className="flex flex-col items-center w-2/5 md:w-1/4 lg:w-1/6"
                 >
-                  <div className="w-full aspect-square relative">
-                    <Image
-                      src={artist.images[0]?.url || ""}
-                      alt={artist.name}
-                      fill
-                      className="rounded-full object-cover"
-                    />
-                  </div>
-                  <h5 className="text-center mt-2">{artist.name}</h5>
+                  <ArtistItem artist={artist}/>
                 </div>
               ))}
             </div>

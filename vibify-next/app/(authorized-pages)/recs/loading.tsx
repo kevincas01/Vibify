@@ -127,6 +127,7 @@ const Loading = () => {
   };
   return (
     <div className="h-full relative">
+      <h3 className="text-center mb-4">Recommendations</h3>
       <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
         <div className="text-center w-full">
           <div className="flex gap-4 justify-around">

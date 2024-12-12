@@ -9,12 +9,13 @@ import {
   Playlist,
 } from "../../types/spotify";
 import Image from "next/image";
-import { convertDuration } from "../../utils/misc";
 import RecsTrackComponent from "./RecModal/RecsTrackComponent";
 import RecsArtistComponent from "./RecModal/RecsArtistComponent";
 import RecsAlbumComponent from "./RecModal/RecsAlbumComponent";
 import RecsPlaylistComponent from "./RecModal/RecsPlaylistComponent";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
+import useSWR from "swr";
+import LoadingBars from "../LoadingBars";
 
 interface SpotifySearchProps {
   recommendType: string;
@@ -23,55 +24,52 @@ interface SpotifySearchProps {
 }
 
 const SpotifySearch = ({
-
   recommendType,
   selectedId,
   selectItem,
 }: SpotifySearchProps) => {
-  const [searchType, setSearchType] = useState<string>("");
+  const { data: session, status } = useSession();
+
+  if (!session) {
+    return null;
+  }
   const [searchInput, setSearchInput] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
-  const [searchResults, setSearchResults] =
-    useState<SpotifySearchResponse | null>(null);
 
-  const [loading, setLoading] = useState(false);
-
-  const fetchSearchResults = async (type: string) => {
-    const session = await getSession();
-    const accessToken = session?.user.accessToken as string;
-    if (!accessToken || !searchInput) return;
-
-    const results = await getSearchResultWType(
-      accessToken,
-      type,
+  const searchKey = `search ` + searchInput + " " + recommendType;
+  console.log(searchKey);
+  const {
+    data: SearchData,
+    error: SearchDataError,
+    isLoading: SearchDataLoading,
+  } = useSWR(searchInput ? searchKey : null, () =>
+    getSearchResultWType(
+      session?.user.accessToken as string,
+      recommendType,
       searchInput,
       limit
-    );
-    const searchKey = `${type}s`; // "track" -> "tracks", "artist" -> "artists"
-
-    setSearchResults(results[searchKey] || { items: [] }); // Ensure we always have an array for `items`
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    setSearchType(recommendType);
-    setSearchResults(null);
-    fetchSearchResults(recommendType);
-  }, [searchInput, recommendType]);
+    )
+  );
 
   const renderSearchResults = () => {
-    if (loading) {
-      return <p>loading...</p>;
+    if (SearchDataLoading) {
+      return <LoadingBars />;
     }
-    if (!searchResults || !searchResults.items) {
+
+    if (!SearchData) {
+      return <p>No results found.</p>;
+    }
+    const searchKey = `${recommendType}s`; // "track" -> "tracks", "artist" -> "artists"
+    const searchResult = SearchData[searchKey as keyof SpotifySearchResponse];
+
+    if (!searchResult) {
       return <p>No results found.</p>;
     }
 
-    if (searchType === "track") {
+    if (recommendType === "track") {
       return (
         <ul className="flex flex-col gap-4 mt-4">
-          {searchResults.items.map((item, index) => {
+          {searchResult.items.map((item, index) => {
             const track = item as Track;
             return (
               <RecsTrackComponent
@@ -84,10 +82,10 @@ const SpotifySearch = ({
           })}
         </ul>
       );
-    } else if (searchType === "artist") {
+    } else if (recommendType === "artist") {
       return (
         <div className="flex flex-wrap gap-2 mt-4 justify-around">
-          {searchResults.items.map((item) => {
+          {searchResult.items.map((item) => {
             const artist = item as Artist;
             return (
               <RecsArtistComponent
@@ -100,10 +98,10 @@ const SpotifySearch = ({
           })}
         </div>
       );
-    } else if (searchType === "album") {
+    } else if (recommendType === "album") {
       return (
         <ul className="flex flex-col gap-4 mt-4">
-          {searchResults.items.map((item, index) => {
+          {searchResult.items.map((item) => {
             const album = item as Album;
             return (
               <RecsAlbumComponent
@@ -116,10 +114,10 @@ const SpotifySearch = ({
           })}
         </ul>
       );
-    } else if (searchType === "playlist") {
+    } else if (recommendType === "playlist") {
       return (
         <ul className="flex flex-col gap-4 mt-4">
-          {searchResults.items.map((item, index) => {
+          {searchResult.items.map((item) => {
             const playlist = item as Playlist;
             if (!item) return;
             return (
@@ -148,7 +146,7 @@ const SpotifySearch = ({
         }}
         placeholder={`Search for your favorite`}
       />
-      <h3 className="text-main">Search for {searchType}</h3>
+      <h3 className="text-main">Search for {recommendType}</h3>
       {searchInput && <div>{renderSearchResults()}</div>}
     </div>
   );

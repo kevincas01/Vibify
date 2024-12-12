@@ -1,10 +1,9 @@
 "use client";
 
-import { Artist, TopTracksResponse, Track } from "@/app/types/spotify";
-import { convertDuration } from "@/app/utils/misc";
+import { Track } from "@/app/types/spotify";
 import { getUserTopWType } from "@/app/utils/spotify";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+
+import React, {  useState } from "react";
 import {
   defaultTrackLimit,
   defaultTrackTimeRange,
@@ -12,7 +11,6 @@ import {
   timeRangeElements,
 } from "../types/filters";
 import useSWR from "swr";
-import LoadingBars from "./LoadingBars";
 import LoadingTracks from "./Loading/LoadingTracks";
 import { useTrackInfo } from "../context/player";
 import TrackItem from "./SpotifyItems/TrackItem";

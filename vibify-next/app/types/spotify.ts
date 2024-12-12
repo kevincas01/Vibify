@@ -14,7 +14,6 @@ export interface Followers {
   total: number;
 }
 
-
 interface ExplicitContent {
   filter_enabled: boolean;
   filter_locked: boolean;
@@ -25,10 +24,9 @@ interface User {
   followers: Followers;
   href: string;
   id: string;
-  type: 'user';
+  type: "user";
   uri: string;
 }
-
 
 export interface SpotifyUser {
   country: string;
@@ -147,6 +145,14 @@ export interface TopTracksResponse {
 }
 
 export interface SpotifySearchResponse {
+  tracks?: TypeResponse;
+  albums?: TypeResponse;
+  artists?: TypeResponse;
+  playlists?: TypeResponse;
+  // Add other possible search types here, if needed (e.g., playlists, shows, etc.)
+}
+
+export interface TypeResponse {
   href: string;
   limit: number;
   next: string | null;
@@ -155,8 +161,6 @@ export interface SpotifySearchResponse {
   total: number;
   items: Track[] | Artist[] | Album[] | Playlist[];
 }
-
-
 
 export interface PlaylistsResponse {
   href: string;
@@ -184,5 +188,3 @@ export interface PlaylistItem {
   is_local: boolean;
   track: Track;
 }
-
-

@@ -29,7 +29,6 @@ const RecsPage = async () => {
     10
   );
 
-  const recommendations= await getRecommendations()
   return (
     <Suspense fallback={<Loading/>}>
       <RecsComponent
@@ -37,7 +36,6 @@ const RecsPage = async () => {
         userId={userId}
         topArtists={topArtists}
         topTracks={topTracks}
-        recommendations={recommendations}
       />
     </Suspense>
   );

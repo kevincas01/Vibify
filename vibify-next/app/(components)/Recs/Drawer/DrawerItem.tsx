@@ -1,4 +1,4 @@
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Button from "../../Buttons/Button";
@@ -12,11 +12,15 @@ import {
 interface DrawerItemProps {
   id: string; // The song ID you want to add to a playlist
   userId: string;
-  accessToken: string;
   onClose: () => void;
 }
 
-const DrawerItem = ({ id, userId, accessToken, onClose }: DrawerItemProps) => {
+const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
+  const { data: session, status } = useSession();
+
+  if (!session) {
+    return null;
+  }
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<string[]>([]); // State for selected playlists (multiple)
 
@@ -26,12 +30,8 @@ const DrawerItem = ({ id, userId, accessToken, onClose }: DrawerItemProps) => {
     error: playlistInitialDataError,
     isLoading: playlistInitialDataLoading,
   } = useSWR(playlistKey, () =>
-    fetchNextPageOfItems(
-      accessToken,
-      "https://api.spotify.com/v1/me/playlists"
-    )
+    fetchNextPageOfItems(session.user.accessToken as string, "https://api.spotify.com/v1/me/playlists")
   );
-
 
   // Filter playlists based on the given criteria
   const filteredPlaylists = React.useMemo(() => {

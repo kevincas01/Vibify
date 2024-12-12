@@ -1,7 +1,7 @@
 // Get Profile data off of access token
 
 import { PLAYBACKNOTACTIVESTATUS } from "../types/errors";
-import { Playlist, PlaylistsResponse } from "../types/spotify";
+import { Album, Artist, Playlist, PlaylistsResponse, SpotifySearchResponse, Track } from "../types/spotify";
 
 export async function getSpotifyUserProfile(accessToken: string) {
   const response = await fetch("https://api.spotify.com/v1/me", {
@@ -111,7 +111,7 @@ export async function getSearchResultWType(
   type: string,
   input: string,
   limit: number = 20
-) {
+) :Promise<SpotifySearchResponse>{
   const response = await fetch(
     `https://api.spotify.com/v1/search?q=${input}&type=${type}&limit=${limit}`,
     {

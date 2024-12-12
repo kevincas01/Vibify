@@ -170,9 +170,10 @@ const RecsComponent = ({
         </>
       ) : (
         <>
+        <h3 className="text-center mb-4">Recommendations</h3>
           <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
             <div className="text-center w-full">
-              <div className="flex gap-4 justify-around">
+              <div className="flex justify-around">
                 {recommendationsFeedFilters.map((element) => (
                   <div key={element.value}>
                     <button
@@ -325,9 +326,9 @@ const RecsComponent = ({
               </Drawer>
             )}
 
-            <div className="fixed md:bottom-[20px] bottom-[100px] right-[20px] ">
-              <CircleButton onClick={() => handleModalToggle()} size={60}>
-                <AddIcon fontSize="large" />
+            <div className="fixed md:bottom-[80px] top-[20px] right-[20px] ">
+              <CircleButton onClick={() => handleModalToggle()} size={40}>
+                <AddIcon fontSize="medium" />
               </CircleButton>
             </div>
           </div>

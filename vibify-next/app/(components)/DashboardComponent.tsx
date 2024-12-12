@@ -48,7 +48,7 @@ const DashboardComponent = ({
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full md:mb-[50px]">
         {topArtists && (
           <div className="flex w-full flex-col">
             <h3>Top Artists of all Time</h3>

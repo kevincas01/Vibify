@@ -26,6 +26,7 @@ const Button = ({ onClick, children }: ButtonProps) => {
         focus:ring-2 
         focus:ring-main 
         focus:ring-opacity-50
+        md:text-base text-sm
       "
     >
       {children}

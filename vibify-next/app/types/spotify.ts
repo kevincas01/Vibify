@@ -188,3 +188,50 @@ export interface PlaylistItem {
   is_local: boolean;
   track: Track;
 }
+
+export interface PlaybackStateResponse {
+  device: Device;
+  repeat_state: string;
+  shuffle_state: boolean;
+  context: Context;
+  timestamp: number;
+  progress_ms: number;
+  is_playing: boolean;
+  item: Track;
+  currently_playing_type: string;
+  actions: PlaybackActions;
+}
+
+export interface Device {
+  id: string;
+  is_active: boolean;
+  is_private_session: boolean;
+  is_restricted: boolean;
+  name: string;
+  type: "computer" | "tablet" | "smartphone" | "speaker" | "tv" | "stereo" | "unknown"; // You can extend this type with more device types
+  volume_percent: number;
+  supports_volume: boolean;
+}
+
+export interface Context {
+  type: string;
+  href: string;
+  external_urls: {
+    spotify: string;
+  };
+  uri: string;
+}
+
+
+export interface PlaybackActions {
+  interrupting_playback: boolean;
+  pausing: boolean;
+  resuming: boolean;
+  seeking: boolean;
+  skipping_next: boolean;
+  skipping_prev: boolean;
+  toggling_repeat_context: boolean;
+  toggling_shuffle: boolean;
+  toggling_repeat_track: boolean;
+  transferring_playback: boolean;
+}

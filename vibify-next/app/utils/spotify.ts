@@ -1,7 +1,15 @@
 // Get Profile data off of access token
 
 import { PLAYBACKNOTACTIVESTATUS } from "../types/errors";
-import { Album, Artist, Playlist, PlaylistsResponse, SpotifySearchResponse, Track } from "../types/spotify";
+import {
+  Album,
+  Artist,
+  PlaybackStateResponse,
+  Playlist,
+  PlaylistsResponse,
+  SpotifySearchResponse,
+  Track,
+} from "../types/spotify";
 
 export async function getSpotifyUserProfile(accessToken: string) {
   const response = await fetch("https://api.spotify.com/v1/me", {
@@ -111,7 +119,7 @@ export async function getSearchResultWType(
   type: string,
   input: string,
   limit: number = 20
-) :Promise<SpotifySearchResponse>{
+): Promise<SpotifySearchResponse> {
   const response = await fetch(
     `https://api.spotify.com/v1/search?q=${input}&type=${type}&limit=${limit}`,
     {
@@ -125,6 +133,8 @@ export async function getSearchResultWType(
   return data;
 }
 
+// Player Requests
+
 export async function getPlaybackState(accessToken: string) {
   const response = await fetch(`https://api.spotify.com/v1/me/player `, {
     method: "GET",
@@ -133,7 +143,6 @@ export async function getPlaybackState(accessToken: string) {
       "Content-Type": "application/json",
     },
   });
-
 
   if (response.status == PLAYBACKNOTACTIVESTATUS) {
     return null;
@@ -205,6 +214,47 @@ export async function pausePlayback(accessToken: string, deviceId?: string) {
     },
     body: JSON.stringify(body),
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Error starting playback: ${errorData.error.message}`);
+  }
+}
+
+export async function skipNextPlayback(accessToken: string, deviceId?: string) {
+  const body: any = {};
+
+  const response = await fetch(`https://api.spotify.com/v1/me/player/next`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + accessToken,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Error starting playback: ${errorData.error.message}`);
+  }
+}
+export async function skipPreviousPlayback(
+  accessToken: string,
+  deviceId?: string
+) {
+  const body: any = {};
+
+  const response = await fetch(
+    `https://api.spotify.com/v1/me/player/previous`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
 
   if (!response.ok) {
     const errorData = await response.json();

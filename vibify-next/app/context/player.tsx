@@ -7,22 +7,26 @@ import React, {
   useEffect,
 } from "react";
 import { Track } from "../types/spotify";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   getPlaybackState,
   pausePlayback,
+  skipNextPlayback,
+  skipPreviousPlayback,
   startResumeTrackPlayback,
 } from "../utils/spotify";
-import { toast } from "react-toastify";
+import { showToast } from "../(components)/Providers/ToastProvider";
 
 interface TrackContextProps {
   currentTrack: Track | null;
+  currentPositionMs: number;
   isPlaying: boolean;
   play: () => void;
   pause: () => void;
-  updateCurrentTrack: (track: Track) => void;
   handleStartPlay: (track: Track) => void;
   handlePlayPause: () => void;
+  handleSkipNext: () => void;
+  handleSkipPrevious: () => void;
 }
 
 // Create the TrackContext with default values
@@ -34,8 +38,12 @@ interface TrackProviderProps {
 
 // The provider component that wraps the app and provides state and actions
 export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
+  const { data: session, status } = useSession();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [currentPositionMs, setCurrentPositionMs] = useState(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  const accessToken = session?.user?.accessToken as string;
 
   const play = () => {
     if (currentTrack) {
@@ -49,15 +57,13 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
 
   const handleStartPlay = async (track: Track) => {
     try {
-      const session = await getSession();
-      const accessToken = session?.user.accessToken as string;
+      if (!accessToken) {
+        showToast("warning", "You need to log in.");
+        return;
+      }
 
-      const playbackState = await getPlaybackState(accessToken);
-      if (playbackState === null) {
-        setCurrentTrack(null);
-        setIsPlaying(false);
-        console.log("you need to connect your app first before playing");
-        // TODO Handle toastify message to open and play on the app first
+      const playbackState = await handleGetPlaybackState();
+      if (!playbackState) {
         return null;
       }
 
@@ -67,32 +73,25 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
         [track.uri],
         undefined
       );
-
       setCurrentTrack(track);
       setIsPlaying(true);
     } catch (error: any) {
-      console.log("skhdksjd toastingg");
-      // Handle the error (e.g., display a message to the user, log the error, etc.)
-      toast(error.message, {
-        position: "top-center",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        closeButton: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "dark",
-      });
+      showToast("error", error.message);
     }
   };
 
   const handlePlayPause = async () => {
     try {
-      const session = await getSession();
-      const accessToken = session?.user.accessToken as string;
+      if (!accessToken) {
+        showToast("warning", "You need to log in.");
+        return;
+      }
 
-      const playbackState = await getPlaybackState(accessToken);
+      const playbackState = await handleGetPlaybackState();
+      if (!playbackState) {
+        return null;
+      }
+
       if (!playbackState.is_playing) {
         play();
         await startResumeTrackPlayback(
@@ -103,43 +102,100 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
         );
       } else {
         pause();
-        pausePlayback(accessToken);
+        await pausePlayback(accessToken);
       }
     } catch (error: any) {
-      console.log("ffff toastingg");
-      // Handle the error (e.g., display a message to the user, log the error, etc.)
-      toast(error.message);
+      showToast("error", error.message);
     }
   };
 
-  const updateCurrentTrack = (track: Track) => {
-    handleStartPlay(track);
+  const handleSkipNext = async () => {
+    try {
+      if (!accessToken) {
+        showToast("warning", "You need to log in.");
+        return;
+      }
+  
+      const playbackState = await handleGetPlaybackState();
+      if (!playbackState) {
+        showToast("warning", "No active playback. Play a song to connect a device.");
+        return;
+      }
+  
+      await skipNextPlayback(accessToken);
+      await handleGetPlaybackState(); // Sync state after skipping
+    } catch (error: any) {
+      showToast("error", "Failed to skip to the next track.");
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    const fetchPlayback = async () => {
-      const session = await getSession();
-      const accessToken = session?.user.accessToken as string;
+  const handleSkipPrevious = async () => {
+    try {
+      if (!accessToken) {
+        //handle no access token
+        //redirect the user to login?
+      }
+      const playbackState = handleGetPlaybackState();
+      if (!playbackState) {
+        return null;
+      }
+      await skipPreviousPlayback(accessToken);
+      await handleGetPlaybackState(); 
+    } catch (error) {}
+  };
 
+  const handleGetPlaybackState = async () => {
+    try {
       const playbackState = await getPlaybackState(accessToken);
-      if (!playbackState) return null;
+      if (!playbackState) {
+        setCurrentTrack(null);
+        setIsPlaying(false);
+        showToast("warning", "Play a song on Spotify to connect a device.");
+        return null;
+      }
 
+      console.log(playbackState)
       setIsPlaying(playbackState.is_playing);
       setCurrentTrack(playbackState.item);
-    };
-    fetchPlayback();
-  }, []);
+      setCurrentPositionMs(playbackState.progress_ms);
+      return playbackState;
+    } catch (error) {
+      console.error("Failed to fetch playback state", error);
+      showToast("error", "Unable to fetch playback state.");
+      return null;
+    }
+  };
+
+  // useEffect(() => {
+  //   const fetchPlayback = async () => {
+  //     if (!accessToken) return;
+
+  //     try {
+  //       const playbackState = await handleGetPlaybackState();
+  //       if (!playbackState) {
+  //         return null;
+  //       }
+  //     } catch (error: any) {
+  //       console.error("Failed to fetch playback state", error);
+  //     }
+  //   };
+
+  //   fetchPlayback();
+  // }, [accessToken]);
 
   return (
     <TrackContext.Provider
       value={{
         currentTrack,
+        currentPositionMs,
         isPlaying,
         play,
         pause,
-        updateCurrentTrack,
         handleStartPlay,
         handlePlayPause,
+        handleSkipNext,
+        handleSkipPrevious,
       }}
     >
       {children}
@@ -151,7 +207,7 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
 export const useTrackInfo = (): TrackContextProps => {
   const context = useContext(TrackContext);
   if (!context) {
-    throw new Error("usePlayer must be used within a TrackProvider");
+    throw new Error("useTrackInfo must be used within a TrackProvider");
   }
   return context;
 };

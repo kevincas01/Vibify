@@ -32,7 +32,6 @@ const RecsPage = async () => {
   return (
     <Suspense fallback={<Loading/>}>
       <RecsComponent
-        accessToken={accessToken}
         userId={userId}
         topArtists={topArtists}
         topTracks={topTracks}

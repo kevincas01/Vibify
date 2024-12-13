@@ -1,10 +1,20 @@
 import { Album, Artist } from "@/app/types/spotify";
 import Image from "next/image";
 import React from "react";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useRecommendItem } from "../Providers/RecommendItemProvider";
 interface AlbumItemProps {
   album: Album;
+  recommend?: boolean;
 }
-const AlbumItem = ({ album }: AlbumItemProps) => {
+const AlbumItem = ({ album, recommend = true }: AlbumItemProps) => {
+  const { selectItem } = useRecommendItem();
+
+  const handleAlbumSelect = async (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent event bubbling
+    console.log("track.iutemmmmm");
+    selectItem(album.id, album);
+  };
   return (
     <>
       <div className="relative w-full aspect-square">
@@ -41,11 +51,16 @@ const AlbumItem = ({ album }: AlbumItemProps) => {
           </p>
         </div>
       </div>
-      <div>
+      <div className="flex flex-col items-end">
         <p className="text-lightGray text-nowrap">
           {album.total_tracks}{" "}
           {album.album_type == "album" ? "Tracks" : "Track"}
         </p>
+        {recommend && (
+          <span className="cursor-pointer" onClick={handleAlbumSelect}>
+            <GroupAddIcon />
+          </span>
+        )}
       </div>
     </>
   );

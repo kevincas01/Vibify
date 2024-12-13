@@ -19,7 +19,7 @@ const FeedPlaylistComponent = ({ playlist }: FeedAlbumComponentProps) => {
         transition: "background-color 0.3s ease", // Smooth transition for highlight
       }}
     >
-      <PlaylistItem playlist={playlist}/>
+      <PlaylistItem playlist={playlist} recommend={false}/>
     </div>
   );
 };

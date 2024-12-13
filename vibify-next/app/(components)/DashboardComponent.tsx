@@ -12,7 +12,9 @@ import { convertDuration } from "@/app/utils/misc";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
-
+import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
+import { useTrackInfo } from "../context/player";
+import TrackItem from "./SpotifyItems/TrackItem";
 interface DashboardComponentProps {
   profile: SpotifyUser;
   topArtists: TopArtistsResponse;
@@ -23,9 +25,14 @@ const DashboardComponent = ({
   topArtists,
   topTracks,
 }: DashboardComponentProps) => {
+  const { handleStartPlay } = useTrackInfo();
+
   const handleLogout = async () => {
     await signOut();
     redirect("/");
+  };
+  const handleTrackPlay = async (track: Track) => {
+    handleStartPlay(track);
   };
   return (
     <>
@@ -79,32 +86,7 @@ const DashboardComponent = ({
                   key={track.id}
                   className="grid grid-cols-[50px_1fr_auto] gap-4 w-full"
                 >
-                  <Image
-                    src={track.album.images[0].url}
-                    alt={track.name}
-                    width={50}
-                    height={50}
-                  />
-                  <div className="w-full min-w-0">
-                    <div className="flex flex-col min-w-0">
-                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {track.name}
-                      </p>
-                      <p className="text-lightGray text-ellipsis overflow-hidden whitespace-nowrap">
-                        {track.artists.map((artist: Artist, index: number) => (
-                          <React.Fragment key={index}>
-                            {artist.name}
-                            {index < track.artists.length - 1 && " ~ "}
-                          </React.Fragment>
-                        ))}
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-lightGray">
-                      {convertDuration(track.duration_ms)}
-                    </p>
-                  </div>
+                  <TrackItem track={track} />
                 </li>
               ))}
             </ul>

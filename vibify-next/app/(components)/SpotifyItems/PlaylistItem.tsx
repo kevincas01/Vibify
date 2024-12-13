@@ -1,12 +1,21 @@
-import { Album, Artist, Playlist, Track } from "@/app/types/spotify";
-import { convertDuration } from "@/app/utils/misc";
+import { Playlist } from "@/app/types/spotify";
 import Image from "next/image";
 import React from "react";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useRecommendItem } from "../Providers/RecommendItemProvider";
 
 interface PlaylistItemProps {
   playlist: Playlist;
+  recommend?: boolean;
 }
-const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
+const PlaylistItem = ({ playlist, recommend = true }: PlaylistItemProps) => {
+  const { selectItem } = useRecommendItem();
+
+  const handlePlaylistSelect = async (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent event bubbling
+    console.log("track.iutemmmmm");
+    selectItem(playlist.id, playlist);
+  };
   return (
     <>
       <div className="relative w-full aspect-square">
@@ -41,11 +50,16 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
           </p> */}
         </div>
       </div>
-      <div>
+      <div className="flex flex-col items-end">
         <p className="text-lightGray text-nowrap">
           {playlist.tracks.total}{" "}
           {playlist.tracks.total > 1 ? "Tracks" : "Track"}
         </p>
+        {recommend && (
+          <span className="cursor-pointer" onClick={handlePlaylistSelect}>
+            <GroupAddIcon />
+          </span>
+        )}
       </div>
     </>
   );

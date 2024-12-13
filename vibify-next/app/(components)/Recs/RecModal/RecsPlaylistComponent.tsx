@@ -29,7 +29,7 @@ const RecsPlaylistComponent = ({
         transition: "background-color 0.3s ease", // Smooth transition for highlight
       }}
     >
-      <PlaylistItem playlist={playlist} />
+      <PlaylistItem playlist={playlist} recommend={selectedId !== playlist.id}/>
     </li>
   );
 };

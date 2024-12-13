@@ -26,7 +26,7 @@ const RecsAlbumComponent = ({ album, onClick }: RecsAlbumComponentProps) => {
         transition: "background-color 0.3s ease",
       }}
     >
-      <AlbumItem album={album} />
+      <AlbumItem album={album} recommend={selectedId !== album.id}/>
     </li>
   );
 };

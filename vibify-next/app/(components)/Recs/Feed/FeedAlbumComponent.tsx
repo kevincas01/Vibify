@@ -19,7 +19,7 @@ const FeedAlbumComponent = ({ album }: FeedAlbumComponentProps) => {
         transition: "background-color 0.3s ease", // Smooth transition for highlight
       }}
     >
-      <AlbumItem album={album}/>
+      <AlbumItem album={album} recommend={false}/>
     </div>
   );
 };

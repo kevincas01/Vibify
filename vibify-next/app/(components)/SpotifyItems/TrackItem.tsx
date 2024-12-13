@@ -1,12 +1,22 @@
-import { Album, Artist, Playlist, Track } from "@/app/types/spotify";
+"use client";
+import { Artist, Track } from "@/app/types/spotify";
 import { convertDuration } from "@/app/utils/misc";
 import Image from "next/image";
 import React from "react";
-
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useRecommendItem } from "../Providers/RecommendItemProvider";
 interface TrackItemProps {
   track: Track;
+  recommend?: boolean;
 }
-const TrackItem = ({ track }: TrackItemProps) => {
+const TrackItem = ({ track, recommend = true }: TrackItemProps) => {
+  const { selectItem } = useRecommendItem();
+
+  const handleTrackSelect = async (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent event bubbling
+    console.log("track.iutemmmmm");
+    selectItem(track.id, track);
+  };
   return (
     <>
       <div className="relative w-full aspect-square">
@@ -43,8 +53,13 @@ const TrackItem = ({ track }: TrackItemProps) => {
           </p>
         </div>
       </div>
-      <div>
+
+      <div className="flex flex-col items-center">
         <p className="text-lightGray">{convertDuration(track.duration_ms)}</p>
+        {recommend && <span className="cursor-pointer" onClick={handleTrackSelect}>
+          <GroupAddIcon />
+        </span>}
+        
       </div>
     </>
   );

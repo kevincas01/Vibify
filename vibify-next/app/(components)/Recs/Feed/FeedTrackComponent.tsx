@@ -20,7 +20,7 @@ const FeedTrackComponent = ({ track }: FeedTrackComponentProps) => {
         transition: "background-color 0.3s ease", // Smooth transition for highlight
       }}
     >
-      <TrackItem track={track}/>
+      <TrackItem track={track} recommend={false}/>
     </div>
   );
 };

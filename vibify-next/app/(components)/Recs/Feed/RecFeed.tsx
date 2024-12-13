@@ -28,33 +28,12 @@ import { getRecommendations } from "@/app/utils/supabase";
 import CircleButton from "../../Buttons/CircleButton";
 import { showToast } from "../../Providers/ToastProvider";
 
-const PlayCircleOutlinedIcon = dynamic(
-  () => import("@mui/icons-material/PlayCircleOutlined"),
-  {
-    ssr: false,
-  }
-);
-const ChatBubbleOutlineIcon = dynamic(
-  () => import("@mui/icons-material/ChatBubbleOutline"),
-  {
-    ssr: false,
-  }
-);
-const FavoriteBorderIcon = dynamic(
-  () => import("@mui/icons-material/FavoriteBorder"),
-  {
-    ssr: false,
-  }
-);
-const AddIcon = dynamic(() => import("@mui/icons-material/Add"), {
-  ssr: false,
-});
-const VisibilityOutlinedIcon = dynamic(
-  () => import("@mui/icons-material/VisibilityOutlined"),
-  {
-    ssr: false,
-  }
-);
+import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
+
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import AddIcon from "@mui/icons-material/Add";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 interface RecFeedProps {
   handleModalToggle: () => void;
@@ -94,17 +73,15 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
   };
 
   function isTrack(item: any): item is Track {
-    return item && item.type === "track";  
+    return item && item.type === "track";
   }
-  
-  const handleAddClick = async (
-    item: Album | Artist | Track | Playlist
-  ) => {
-    if (isTrack(item)) { 
+
+  const handleAddClick = async (item: Album | Artist | Track | Playlist) => {
+    if (isTrack(item)) {
       handleAddDrawerToggle();
-      setAddDrawerSelectedID(item.id); 
+      setAddDrawerSelectedID(item.id);
     } else {
-      handleFollowToggle(item);  
+      handleFollowToggle(item);
     }
   };
 
@@ -277,9 +254,7 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
 
                   <span
                     onClick={() => {
-                      handleAddClick(
-                        item.recommended_item
-                      );
+                      handleAddClick(item.recommended_item);
                     }}
                     style={{
                       display: "inline-block",

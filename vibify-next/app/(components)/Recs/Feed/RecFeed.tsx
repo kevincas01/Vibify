@@ -25,6 +25,8 @@ import DrawerItem from "../Drawer/DrawerItem";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { getRecommendations } from "@/app/utils/supabase";
+import CircleButton from "../../Buttons/CircleButton";
+import { showToast } from "../../Providers/ToastProvider";
 
 const PlayCircleOutlinedIcon = dynamic(
   () => import("@mui/icons-material/PlayCircleOutlined"),
@@ -54,7 +56,10 @@ const VisibilityOutlinedIcon = dynamic(
   }
 );
 
-const RecFeed = () => {
+interface RecFeedProps {
+  handleModalToggle: () => void;
+}
+const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
   const { data: session, status } = useSession();
 
   if (!session) {
@@ -82,52 +87,54 @@ const RecFeed = () => {
     setIsOpenAddDrawer(!isOpenAddDrawer);
   };
 
-  const handleFollowToggle = (item: any) => {
+  const handleFollowToggle = (item: Album | Artist | Playlist) => {
     // Your logic to follow the item goes here
     console.log("Following", item);
+    showToast("success", "Followed the " + item.type);
   };
 
+  function isTrack(item: any): item is Track {
+    return item && item.type === "track";  
+  }
+  
   const handleAddClick = async (
-    type: string,
     item: Album | Artist | Track | Playlist
   ) => {
-    if (type === "track") {
+    if (isTrack(item)) { 
       handleAddDrawerToggle();
-      setAddDrawerSelectedID(item.id);
+      setAddDrawerSelectedID(item.id); 
     } else {
-      handleFollowToggle(item);
+      handleFollowToggle(item);  
     }
   };
 
+  //   TODO filter by many filters
+  //   const handleFeedFilterChange = (value: string) => {
+  //     setFeedType((prevFeedType) => {
+  //       if (value === "all") {
+  //         // If "All" is selected, it should exclude all others
+  //         return prevFeedType.includes("all") ? [] : ["all"];
+  //       }
 
-//   TODO filter by many filters
-//   const handleFeedFilterChange = (value: string) => {
-//     setFeedType((prevFeedType) => {
-//       if (value === "all") {
-//         // If "All" is selected, it should exclude all others
-//         return prevFeedType.includes("all") ? [] : ["all"];
-//       }
+  //       if (prevFeedType.includes("all")) {
+  //         // If "All" is already selected, deselect "All" when choosing other filters
+  //         return [value];
+  //       }
 
-//       if (prevFeedType.includes("all")) {
-//         // If "All" is already selected, deselect "All" when choosing other filters
-//         return [value];
-//       }
-
-
-//       // Toggle the selected filter (add if not selected, remove if selected)
-//       if (prevFeedType.includes(value)) {
-//         if(prevFeedType.length===1){
-//             return [...prevFeedType]
-//         }else
-//         return prevFeedType.filter((item) => item !== value);
-//       } else {
-//         if(prevFeedType.length===3){
-//             return ["all"]
-//         }else
-//         return [...prevFeedType, value];
-//       }
-//     });
-//   };
+  //       // Toggle the selected filter (add if not selected, remove if selected)
+  //       if (prevFeedType.includes(value)) {
+  //         if(prevFeedType.length===1){
+  //             return [...prevFeedType]
+  //         }else
+  //         return prevFeedType.filter((item) => item !== value);
+  //       } else {
+  //         if(prevFeedType.length===3){
+  //             return ["all"]
+  //         }else
+  //         return [...prevFeedType, value];
+  //       }
+  //     });
+  //   };
   const renderRecomendationItem = (
     type: RecommendationType, // Use RecommendationType directly
     item: Artist | Track | Album | Playlist
@@ -159,6 +166,11 @@ const RecFeed = () => {
   };
   return (
     <>
+      <div className="fixed top-[20px] right-[20px] ">
+        <CircleButton onClick={() => handleModalToggle()} size={40}>
+          <AddIcon fontSize="medium" />
+        </CircleButton>
+      </div>
       <h3 className="text-center mb-4">Recommendations</h3>
       <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
         <div className="text-center w-full">
@@ -266,7 +278,6 @@ const RecFeed = () => {
                   <span
                     onClick={() => {
                       handleAddClick(
-                        item.recommendation_type,
                         item.recommended_item
                       );
                     }}

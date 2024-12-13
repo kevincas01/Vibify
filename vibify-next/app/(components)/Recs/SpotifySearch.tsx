@@ -16,18 +16,14 @@ import RecsPlaylistComponent from "./RecModal/RecsPlaylistComponent";
 import { getSession, useSession } from "next-auth/react";
 import useSWR from "swr";
 import LoadingBars from "../LoadingBars";
+import { useRecommendItem } from "../Providers/RecommendItemProvider";
 
 interface SpotifySearchProps {
   recommendType: string;
-  selectedId: string;
-  selectItem: (id: string, item: Artist | Track | Album | Playlist) => void;
 }
 
-const SpotifySearch = ({
-  recommendType,
-  selectedId,
-  selectItem,
-}: SpotifySearchProps) => {
+const SpotifySearch = ({ recommendType }: SpotifySearchProps) => {
+  const { selectItem, selectedItem } = useRecommendItem();
   const { data: session, status } = useSession();
 
   if (!session) {
@@ -75,7 +71,6 @@ const SpotifySearch = ({
               <RecsTrackComponent
                 key={track.id}
                 track={track}
-                selected={selectedId === track.id}
                 onClick={selectItem}
               />
             );
@@ -91,7 +86,6 @@ const SpotifySearch = ({
               <RecsArtistComponent
                 key={artist.id}
                 artist={artist}
-                selected={selectedId === artist.id}
                 onClick={selectItem}
               />
             );
@@ -107,7 +101,6 @@ const SpotifySearch = ({
               <RecsAlbumComponent
                 key={album.id}
                 album={album}
-                selected={selectedId === album.id}
                 onClick={selectItem}
               />
             );
@@ -124,7 +117,6 @@ const SpotifySearch = ({
               <RecsPlaylistComponent
                 key={playlist.id}
                 playlist={playlist}
-                selected={selectedId === playlist.id}
                 onClick={selectItem}
               />
             );

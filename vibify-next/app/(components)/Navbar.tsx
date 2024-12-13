@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import MusicNoteOutlinedIcon from "@mui/icons-material/MusicNoteOutlined";
+import GroupsIcon from '@mui/icons-material/Groups';
 import Link from "next/link";
 const Navbar = () => {
   const pathname = usePathname();
@@ -28,7 +30,7 @@ const Navbar = () => {
     },
     {
       href: "/recs",
-      icon: <LibraryMusicIcon />,
+      icon: <GroupsIcon />,
       text: "Recs",
       value: "recs",
     },
@@ -45,7 +47,7 @@ const Navbar = () => {
       value: "artists",
     },
     {
-      icon: <LibraryMusicIcon />,
+      icon: <QueueMusicIcon />,
       href: "/playlists",
       text: "Playlists",
       value: "playlists",

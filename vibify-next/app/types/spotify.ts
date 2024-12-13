@@ -172,6 +172,30 @@ export interface PlaylistsResponse {
   items: Playlist[];
 }
 
+export interface PlaylistResponse {
+  collaborative: boolean;
+  description: string;
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  images: Image[];
+  name: string;
+  owner?: {
+    external_urls: ExternalUrls;
+    followers: Followers;
+    href: string;
+    id: string;
+    type: string;
+    uri: string;
+    display_name: string;
+  };
+  public: boolean;
+  snapshot_id: string;
+  tracks: PlaylistItemsResponse;
+  type: string;
+  uri: string;
+}
+
 export interface PlaylistItemsResponse {
   href: string;
   limit: number;
@@ -179,10 +203,10 @@ export interface PlaylistItemsResponse {
   offset: number;
   previous: string;
   total: number;
-  items: PlaylistItem[];
+  items: PlaylistTrack[];
 }
 
-export interface PlaylistItem {
+export interface PlaylistTrack {
   added_at: string;
   added_by: User;
   is_local: boolean;

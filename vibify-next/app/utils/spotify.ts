@@ -6,6 +6,7 @@ import {
   Artist,
   PlaybackStateResponse,
   Playlist,
+  PlaylistResponse,
   PlaylistsResponse,
   SpotifySearchResponse,
   Track,
@@ -41,6 +42,8 @@ export async function getUserTopWType(
   return data;
 }
 
+// PLAYLIST REQUESTS
+
 export async function fetchNextPageOfItems(
   accessToken: string,
   nextUrl: string | null,
@@ -69,6 +72,20 @@ export async function fetchNextPageOfItems(
 
   // Return the accumulated items once there's no more next URL
   return updatedItems;
+}
+
+export async function getPlaylistById(
+  accessToken: string,
+  id: string
+): Promise<PlaylistResponse> {
+  const response = await fetch(`https://api.spotify.com/v1/playlists/${id}`, {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+
+  const data = await response.json();
+  return data;
 }
 
 export async function getCurrentUserPlaylists(
@@ -109,6 +126,17 @@ export async function getPlaylistsItems(
       },
     }
   );
+
+  const data = await response.json();
+  return data;
+}
+
+export async function fetchNextPlaylistItems(accessToken: string, url: string) {
+  const response = await fetch(url, {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
 
   const data = await response.json();
   return data;

@@ -20,7 +20,7 @@ const PlaylistsPage = async () => {
   console.log(userPlaylistsResponse);
   return (
     <Suspense fallback={<Loading />}>
-      <PlaylistsComponent playlists={userPlaylistsResponse.items} />
+      <PlaylistsComponent accessToken={accessToken} playlists={userPlaylistsResponse.items} />
     </Suspense>
   );
 };

@@ -8,7 +8,6 @@ import {
 import { useState } from "react";
 
 import Image from "next/image";
-import dynamic from "next/dynamic";
 
 import {
   defaultFeedType,
@@ -31,7 +30,7 @@ import { showToast } from "../../Providers/ToastProvider";
 import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
@@ -44,7 +43,6 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
   if (!session) {
     return null;
   }
-  const accessToken = session.user.accessToken as string;
   const userId = session.user.userId as string;
 
   const [feedType, setFeedType] = useState<string>(defaultFeedType);
@@ -59,7 +57,7 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
     data: recommendationsData,
     error: recommendationsDataError,
     isLoading: recommendationsDataLoading,
-    mutate,
+    mutate
   } = useSWR(feedKey, () => getRecommendations(feedType));
 
   const handleAddDrawerToggle = () => {
@@ -84,34 +82,6 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
       handleFollowToggle(item);
     }
   };
-
-  //   TODO filter by many filters
-  //   const handleFeedFilterChange = (value: string) => {
-  //     setFeedType((prevFeedType) => {
-  //       if (value === "all") {
-  //         // If "All" is selected, it should exclude all others
-  //         return prevFeedType.includes("all") ? [] : ["all"];
-  //       }
-
-  //       if (prevFeedType.includes("all")) {
-  //         // If "All" is already selected, deselect "All" when choosing other filters
-  //         return [value];
-  //       }
-
-  //       // Toggle the selected filter (add if not selected, remove if selected)
-  //       if (prevFeedType.includes(value)) {
-  //         if(prevFeedType.length===1){
-  //             return [...prevFeedType]
-  //         }else
-  //         return prevFeedType.filter((item) => item !== value);
-  //       } else {
-  //         if(prevFeedType.length===3){
-  //             return ["all"]
-  //         }else
-  //         return [...prevFeedType, value];
-  //       }
-  //     });
-  //   };
   const renderRecomendationItem = (
     type: RecommendationType, // Use RecommendationType directly
     item: Artist | Track | Album | Playlist
@@ -135,12 +105,12 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
     handleStartPlay(track);
   };
 
-  const handleLike = () => {
-    console.log("liking");
-  };
-  const handleAdd = () => {
-    console.log("liking");
-  };
+  // const handleLike = () => {
+  //   console.log("liking");
+  // };
+  // const handleAdd = () => {
+  //   console.log("liking");
+  // };
   return (
     <>
       <div className="fixed top-[20px] right-[20px] ">
@@ -187,20 +157,14 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
                     style={{ alignSelf: "flex-start" }} // Prevent the image from stretching
                   />
 
-                  <div className="flex w-full">
+                  <div className="flex w-full justify-between">
                     <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                       {item.users?.email}
                     </p>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center py-4 ">
-                  {renderRecomendationItem(
-                    item.recommendation_type,
-                    item.recommended_item
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div className="flex gap-2">
+                      {/* Like and comment buttons if I need to implement them */}
+
+                      {/* <div style={{ display: "flex", alignItems: "center" }}>
                     <FavoriteBorderIcon
                       style={{
                         width: iconButtonSize,
@@ -209,7 +173,6 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
                       }}
                     />
                     <span style={{ marginLeft: 4 }}>123</span>{" "}
-                    {/* Dummy number */}
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <ChatBubbleOutlineIcon
@@ -220,58 +183,64 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
                       }}
                     />
                     <span style={{ marginLeft: 4 }}>456</span>{" "}
-                    {/* Dummy number */}
-                  </div>
-                  {item.recommendation_type == "track" ? (
-                    <span
-                      onClick={() => {
-                        handleTrackPlay(item.recommended_item as Track);
-                      }}
-                      style={{
-                        display: "inline-block",
-                        cursor: "pointer",
-                        textAlign: "center",
-                      }}
-                      aria-label="Play"
-                    >
-                      <PlayCircleOutlinedIcon
-                        style={{
-                          width: iconButtonSize,
-                          height: iconButtonSize,
-                          cursor: "pointer",
+                  </div> */}
+                      {item.recommendation_type == "track" ? (
+                        <span
+                          onClick={() => {
+                            handleTrackPlay(item.recommended_item as Track);
+                          }}
+                          style={{
+                            display: "inline-block",
+                            cursor: "pointer",
+                            textAlign: "center",
+                          }}
+                          aria-label="Play"
+                        >
+                          <PlayCircleOutlinedIcon
+                            style={{
+                              width: iconButtonSize,
+                              height: iconButtonSize,
+                              cursor: "pointer",
+                            }}
+                          />
+                        </span>
+                      ) : (
+                        <VisibilityOutlinedIcon
+                          style={{
+                            width: iconButtonSize,
+                            height: iconButtonSize,
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
+                      <span
+                        onClick={() => {
+                          handleAddClick(item.recommended_item);
                         }}
-                      />
-                    </span>
-                  ) : (
-                    <VisibilityOutlinedIcon
-                      style={{
-                        width: iconButtonSize,
-                        height: iconButtonSize,
-                        cursor: "pointer",
-                      }}
-                    />
+                        style={{
+                          display: "inline-block",
+                          cursor: "pointer",
+
+                          textAlign: "center",
+                        }}
+                        aria-label="Add"
+                      >
+                        <AddIcon
+                          style={{
+                            width: iconButtonSize,
+                            height: iconButtonSize,
+                            cursor: "pointer",
+                          }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center py-4 ">
+                  {renderRecomendationItem(
+                    item.recommendation_type,
+                    item.recommended_item
                   )}
-
-                  <span
-                    onClick={() => {
-                      handleAddClick(item.recommended_item);
-                    }}
-                    style={{
-                      display: "inline-block",
-                      cursor: "pointer",
-
-                      textAlign: "center",
-                    }}
-                    aria-label="Add"
-                  >
-                    <AddIcon
-                      style={{
-                        width: iconButtonSize,
-                        height: iconButtonSize,
-                        cursor: "pointer",
-                      }}
-                    />
-                  </span>
                 </div>
 
                 <div className="flex justify-between gap-2 w-full">

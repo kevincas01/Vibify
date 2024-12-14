@@ -40,7 +40,11 @@ const RecItemModal = () => {
         return null;
     }
   };
- 
+
+  const handleCreateRecommendation = () => {
+    deselectItem();
+    handleRecommendation();
+  };
   if (!selectedItem) return null;
   return (
     <div className="w-full md:pl-[100px] pb-[80px] md:pb-0 bg-grayBg min-h-screen fixed top-0 box-border">
@@ -63,7 +67,9 @@ const RecItemModal = () => {
               value={recommendationText}
               onChange={(e) => setRecommendationText(e.target.value)}
             />
-            <Button onClick={handleRecommendation}>Recommend</Button>
+            <Button onClick={() => handleCreateRecommendation()}>
+              Recommend
+            </Button>
           </div>
         </div>
       </div>

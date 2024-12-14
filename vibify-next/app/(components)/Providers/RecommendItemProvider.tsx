@@ -42,6 +42,8 @@ interface RecommendItemProviderProps {
 export const RecommendItemProvider: React.FC<RecommendItemProviderProps> = ({
   children,
 }) => {
+  const { data: session, status } = useSession();
+  const accessToken = session?.user?.accessToken as string;
   const [selectedId, setSelectedId] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<
     Artist | Track | Album | Playlist | null
@@ -61,7 +63,6 @@ export const RecommendItemProvider: React.FC<RecommendItemProviderProps> = ({
   };
 
   const handleRecommendation = async () => {
-    const { data: session, status } = useSession();
     if (selectedItem && selectedItem == null) return;
 
     await createRecommendation(

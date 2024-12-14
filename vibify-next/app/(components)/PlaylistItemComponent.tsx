@@ -67,7 +67,6 @@ const PlaylistItemComponent = ({
     return null;
   }
 
-
   return (
     <div className="flex flex-col gap-4 w-full">
       {/* Display selected playlist */}
@@ -94,7 +93,9 @@ const PlaylistItemComponent = ({
 
       {/* Load More Button */}
       {isLoading && <LoadingBars />}
-      {playlistItems.length > 0 && nextUrl && <DarkButton onClick={handleLoadMore}>Load More</DarkButton>}
+      {!isLoading && playlistItems.length > 0 && nextUrl && (
+        <DarkButton onClick={handleLoadMore}>Load More</DarkButton>
+      )}
     </div>
   );
 };

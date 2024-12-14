@@ -83,8 +83,11 @@ const DashboardComponent = ({
             <ul className="flex flex-col gap-4 mt-4">
               {topTracks.items.map((track: Track, _: number) => (
                 <li
+                onClick={() => {
+                  handleStartPlay(track);
+                }}
                   key={track.id}
-                  className="grid grid-cols-[50px_1fr_auto] gap-4 w-full"
+                  className="grid grid-cols-[50px_1fr_auto] gap-4 w-full  cursor-pointer hover:text-main hover:bg-lightGrayBg"
                 >
                   <TrackItem track={track} />
                 </li>

@@ -7,6 +7,7 @@ import PlaylistItem from "./SpotifyItems/PlaylistItem";
 import DarkButton from "./Buttons/DarkButton";
 import { fetchNextPlaylistItems } from "../utils/spotify";
 import LoadingBars from "./LoadingBars";
+import { useTrackInfo } from "../context/player";
 
 interface PlaylistItemComponentProps {
   accessToken: string;
@@ -17,6 +18,7 @@ const PlaylistItemComponent = ({
   accessToken,
   playlist,
 }: PlaylistItemComponentProps) => {
+  const { handleStartPlay } = useTrackInfo();
   const [playlistItems, setPlaylistItems] = useState<PlaylistTrack[]>([]);
   const [nextUrl, setNextUrl] = useState<string>("");
   const [loadNext, setLoadNext] = useState(false);
@@ -83,8 +85,11 @@ const PlaylistItemComponent = ({
         {playlistItems.length > 0 &&
           playlistItems.map((playlistItem) => (
             <div
+              onClick={() => {
+                handleStartPlay(playlistItem.track);
+              }}
               key={playlistItem.track.id}
-              className=" pplaylist-itemmmm grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full"
+              className=" pplaylist-itemmmm grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full cursor-pointer hover:text-main hover:bg-lightGrayBg"
             >
               <TrackItem track={playlistItem.track} />
             </div>

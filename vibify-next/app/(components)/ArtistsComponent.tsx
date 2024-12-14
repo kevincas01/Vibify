@@ -43,7 +43,7 @@ const Artists = ({ accessToken }: ArtistsComponentProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full  mb-[50px]">
       <div className="flex gap-4 mt-4">
         {timeRangeElements.map((element) => (
           <div key={element.value}>

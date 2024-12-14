@@ -15,7 +15,6 @@ import RecsTrackComponent from "./RecModal/RecsTrackComponent";
 
 import SpotifySearch from "./SpotifySearch";
 import { recommentTypeElements } from "@/app/types/filters";
-import RecItemModal from "../RecItemModal";
 import { useRecommendItem } from "../Providers/RecommendItemProvider";
 
 const CloseIcon = dynamic(() => import("@mui/icons-material/Close"), {
@@ -31,11 +30,10 @@ interface RecModalProps {
 
 const RecModal = ({
   handleModalToggle,
-  userId,
   topTracks,
   topArtists,
 }: RecModalProps) => {
-  const { selectItem, selectedItem } = useRecommendItem();
+  const { selectItem } = useRecommendItem();
   const [recommendType, setRecommendType] = useState<string>("track");
 
   // Show nothing until topTracks or topArtists are available
@@ -44,7 +42,7 @@ const RecModal = ({
   }
 
   return (
-    <div className="flex flex-col gap-4 relative">
+    <div className="flex flex-col gap-4 relative md:mb-[50px]">
       <div className="fixed top-[20px] right-[20px] ">
         <CircleButton onClick={() => handleModalToggle()} size={40} dark={true}>
           <CloseIcon />

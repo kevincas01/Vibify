@@ -48,7 +48,7 @@ const TracksComponent = ({ accessToken }: TracksComponentProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full mb-[50px]">
       {/*  Time Range Elements Selector */}
       <div className="flex gap-4 mt-4">
         {timeRangeElements.map((element) => (

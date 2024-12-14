@@ -24,9 +24,8 @@ const PlaylistsComponent = ({
     setPlaylistSelected(null);
   };
 
-
   return (
-    <div className="flex flex-col gap-4 relative">
+    <div className="flex flex-col gap-4 relative  mb-[50px]">
       {!playlistSelected ? (
         <h3>My playlists</h3>
       ) : (

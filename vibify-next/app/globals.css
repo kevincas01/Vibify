@@ -22,8 +22,8 @@
 /* globals.css */
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color:white;
+  background: var( --gray-background);
   /* font-family: "Circular Std", system, -apple-system, BlinkMacSystemFont, sans-serif; */
 }
 

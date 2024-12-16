@@ -106,7 +106,7 @@ const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
               <CloseFullscreenIcon fontSize="inherit" />
             </span>
             <div className="flex flex-1 w-full h-[60vh] ">
-              <div className="relative w-full aspect-square rounded-lg overflow-hidden m-auto">
+              <div className="relative w-full aspect-square rounded-lg overflow-hidden m-auto max-w-[500px]">
                 <Image
                   src={currentTrack.album.images[0].url}
                   alt={currentTrack.name}
@@ -132,20 +132,25 @@ const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
             </div>
             <div className="flex w-full justify-around text-6xl">
               <SkipPreviousIcon fontSize="inherit" />
+
               {!isPlaying ? (
-                <PlayArrowIcon
-                  fontSize="inherit"
-                  onClick={() => {
-                    handlePlayPause();
-                  }}
-                />
+                <span className=" cursor-pointer">
+                  <PlayArrowIcon
+                    fontSize="inherit"
+                    onClick={() => {
+                      handlePlayPause();
+                    }}
+                  />
+                </span>
               ) : (
-                <PauseIcon
-                  fontSize="inherit"
-                  onClick={() => {
-                    handlePlayPause();
-                  }}
-                />
+                <span className=" cursor-pointer">
+                  <PauseIcon
+                    fontSize="inherit"
+                    onClick={() => {
+                      handlePlayPause();
+                    }}
+                  />
+                </span>
               )}
               <SkipNextIcon fontSize="inherit" />
             </div>

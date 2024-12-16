@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { getSearchResultWType } from "../../utils/spotify";
 import {
   SpotifySearchResponse,
@@ -8,12 +8,11 @@ import {
   Album,
   Playlist,
 } from "../../types/spotify";
-import Image from "next/image";
 import RecsTrackComponent from "./RecModal/RecsTrackComponent";
 import RecsArtistComponent from "./RecModal/RecsArtistComponent";
 import RecsAlbumComponent from "./RecModal/RecsAlbumComponent";
 import RecsPlaylistComponent from "./RecModal/RecsPlaylistComponent";
-import { getSession, useSession } from "next-auth/react";
+import {  useSession } from "next-auth/react";
 import useSWR from "swr";
 import LoadingBars from "../LoadingBars";
 import { useRecommendItem } from "../Providers/RecommendItemProvider";

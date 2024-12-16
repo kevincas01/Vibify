@@ -181,7 +181,7 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
       if (!accessToken) return;
 
       try {
-        const playbackState = await handleGetPlaybackState();
+        const playbackState = await getPlaybackState(accessToken);
         if (!playbackState) {
           return null;
         }

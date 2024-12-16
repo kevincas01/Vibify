@@ -2,6 +2,7 @@
 import SpotifyProvider from "next-auth/providers/spotify";
 import { JWT } from "next-auth/jwt";
 import { AuthOptions } from "next-auth";
+import { createOrUpdateUser } from "../supabase";
 
 // Scope for Spotify API permissions
 const scope =
@@ -68,6 +69,8 @@ export const authOptions:AuthOptions = {
         token.refreshToken = account.refresh_token;
         token.accessTokenExpires = (account.expires_at as number) * 1000;
         token.userId = user.id;
+        
+        await createOrUpdateUser(user,account.access_token as string)
         return token;
       }
 

@@ -1,35 +1,58 @@
+import { User } from "next-auth";
 import { Recommendations } from "../types/recommendations";
 import { Album, Artist, Playlist, SpotifyUser, Track } from "../types/spotify";
 import { createSupabaseClient } from "./clients/supabaseClient";
 
+
 const supabase = createSupabaseClient();
-export async function createOrUpdateUser(profile: SpotifyUser) {
-  const { email, id, images } = profile;
+export async function createOrUpdateUser(profile: User,access_token:string) {
+  const { email, id, name,  } = profile;
 
-  const imageUrl = images && images.length > 0 ? images[0].url : null;
+  // Make a request to the Spotify API to fetch the user's profile information (including images)
+  const spotifyApiUrl = `https://api.spotify.com/v1/users/${id}`;
+  
+  // Fetch the user's profile from Spotify
+  const response = await fetch(spotifyApiUrl, {
+    headers: {
+      Authorization: `Bearer ${access_token}`, // Use the access token for authorization
+    },
+  });
 
-  // Ensure you pass an object to upsert
-  const { data, error } = await supabase
-    .from("users")
-    .upsert(
-      {
-        email: email,
-        spotify_id: id,
-        image_url: imageUrl,
-      },
-      {
-        onConflict: "spotify_id", 
-      }
-    )
-    .select()
-    .single();
+  const spotifyProfile = await response.json();
 
-  if (error) {
-    console.error("Error inserting user into Supabase:", error);
-    return { data: null, error: error };
+  if (response.ok && spotifyProfile) {
+    // Extract the image URL if available
+    const imageUrl = spotifyProfile.images && spotifyProfile.images.length > 0 
+      ? spotifyProfile.images[0].url 
+      : null;
+
+    // Ensure you pass an object to upsert
+    const { data, error } = await supabase
+      .from("users")
+      .upsert(
+        {
+          email: email,
+          spotify_id: id,
+          display_name: name,
+          image_url: imageUrl, // Save the image URL
+        },
+        {
+          onConflict: "spotify_id",
+        }
+      )
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error inserting user into Supabase:", error);
+      return { data: null, error: error };
+    }
+
+    return { data, error: null };
+  } else {
+    console.error("Failed to fetch user profile from Spotify:", spotifyProfile);
+    return { data: null, error: "Failed to fetch user profile from Spotify" };
   }
-
-  return { data: data, error: null };
 }
 
 export async function createRecommendation(

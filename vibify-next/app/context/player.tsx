@@ -167,22 +167,22 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchPlayback = async () => {
-  //     if (!accessToken) return;
+  useEffect(() => {
+    const fetchPlayback = async () => {
+      if (!accessToken) return;
 
-  //     try {
-  //       const playbackState = await handleGetPlaybackState();
-  //       if (!playbackState) {
-  //         return null;
-  //       }
-  //     } catch (error: any) {
-  //       console.error("Failed to fetch playback state", error);
-  //     }
-  //   };
+      try {
+        const playbackState = await handleGetPlaybackState();
+        if (!playbackState) {
+          return null;
+        }
+      } catch (error: any) {
+        console.error("Failed to fetch playback state", error);
+      }
+    };
 
-  //   fetchPlayback();
-  // }, [accessToken]);
+    fetchPlayback();
+  }, [accessToken]);
 
   return (
     <TrackContext.Provider

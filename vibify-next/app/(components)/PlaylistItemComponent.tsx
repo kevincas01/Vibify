@@ -37,7 +37,7 @@ const PlaylistItemComponent = ({
 
   // Update playlist items when new data is fetched
   useEffect(() => {
-    if (playlist) {
+    if (playlist && playlist.type=="playlist") {
       const initialUrl = `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`;
       setNextUrl(initialUrl);
       setPlaylistItems([]); // Reset playlist items when a new playlist is selected
@@ -65,7 +65,7 @@ const PlaylistItemComponent = ({
   }
 
   // If no playlist is selected, show a message
-  if (!playlist) {
+  if (!playlist ||  playlist.type !== "playlist") {
     return null;
   }
 

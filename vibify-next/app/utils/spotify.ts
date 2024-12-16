@@ -3,6 +3,7 @@
 import { PLAYBACKNOTACTIVESTATUS } from "../types/errors";
 import {
   Album,
+  AlbumResponse,
   Artist,
   PlaybackStateResponse,
   Playlist,
@@ -142,6 +143,16 @@ export async function fetchNextPlaylistItems(accessToken: string, url: string) {
   return data;
 }
 
+export async function fetchNextAlbumTracks(accessToken: string, url: string):Promise<AlbumResponse> {
+  const response = await fetch(url, {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+}
 export async function getSearchResultWType(
   accessToken: string,
   type: string,

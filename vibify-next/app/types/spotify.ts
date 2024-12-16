@@ -93,6 +93,7 @@ export interface Track {
   track_number: number;
   type: string;
   uri: string;
+  images?:Image[];
 }
 
 export interface Playlist {
@@ -160,6 +161,16 @@ export interface TypeResponse {
   previous: string | null;
   total: number;
   items: Track[] | Artist[] | Album[] | Playlist[];
+}
+
+export interface AlbumResponse {
+  href: string;
+  limit: number;
+  next: string;
+  offset: number;
+  previous: string;
+  total: number;
+  items: Track[];
 }
 
 export interface PlaylistsResponse {

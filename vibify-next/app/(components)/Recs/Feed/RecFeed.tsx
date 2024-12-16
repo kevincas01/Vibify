@@ -119,7 +119,7 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
     <>
       {itemSelected && (
         <>
-          <h3> View Playlist</h3>
+          <h3> Viewing</h3>
           <span
             className=" cursor-pointer absolute right-0 top-0"
             onClick={() => closeSelectedPlaylist()}
@@ -137,6 +137,7 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
           <AlbumItemComponent
             accessToken={session.user.accessToken as string}
             album={itemSelected as Album}
+            recommend={false}
           />
         </div>
 
@@ -149,6 +150,7 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
           <PlaylistItemComponent
             accessToken={session.user.accessToken as string}
             playlist={itemSelected as Playlist}
+            recommend={false}
           />
         </div>
       </div>
@@ -162,7 +164,7 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
           </div>
           <h3 className="text-center mb-4">Recommendations</h3>
           <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
-            <div className="text-center w-full">
+            {/* <div className="text-center w-full">
               <div className="flex justify-around">
                 {recommendationsFeedFilters.map((element) => (
                   <div key={element.value}>
@@ -180,7 +182,7 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             <div className="w-full flex flex-col">
               {recommendationsData &&

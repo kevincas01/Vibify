@@ -12,11 +12,13 @@ import { useTrackInfo } from "../context/player";
 interface PlaylistItemComponentProps {
   accessToken: string;
   playlist: Playlist | null;
+  recommend?: boolean;
 }
 
 const PlaylistItemComponent = ({
   accessToken,
   playlist,
+  recommend = true,
 }: PlaylistItemComponentProps) => {
   const { handleStartPlay } = useTrackInfo();
   const [playlistItems, setPlaylistItems] = useState<PlaylistTrack[]>([]);
@@ -37,7 +39,7 @@ const PlaylistItemComponent = ({
 
   // Update playlist items when new data is fetched
   useEffect(() => {
-    if (playlist && playlist.type=="playlist") {
+    if (playlist && playlist.type == "playlist") {
       const initialUrl = `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`;
       setNextUrl(initialUrl);
       setPlaylistItems([]); // Reset playlist items when a new playlist is selected
@@ -65,18 +67,18 @@ const PlaylistItemComponent = ({
   }
 
   // If no playlist is selected, show a message
-  if (!playlist ||  playlist.type !== "playlist") {
+  if (!playlist || playlist.type !== "playlist") {
     return null;
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full mb-[50px]">
       {/* Display selected playlist */}
       <div
         key={playlist.id}
         className="grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full"
       >
-        <PlaylistItem playlist={playlist} />
+        <PlaylistItem playlist={playlist} recommend={recommend} />
       </div>
 
       {/* Playlist Tracks */}
@@ -91,7 +93,7 @@ const PlaylistItemComponent = ({
               key={playlistItem.track.id}
               className=" pplaylist-itemmmm grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full cursor-pointer hover:text-main hover:bg-lightGrayBg"
             >
-              <TrackItem track={playlistItem.track} />
+              <TrackItem track={playlistItem.track} recommend={recommend} />
             </div>
           ))}
       </div>

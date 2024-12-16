@@ -14,11 +14,13 @@ import { convertDuration } from "../utils/misc";
 interface AlbumItemComponentProps {
   accessToken: string;
   album: Album | null;
+  recommend?: boolean;
 }
 
 const AlbumItemComponent = ({
   accessToken,
   album,
+  recommend = true,
 }: AlbumItemComponentProps) => {
   const { handleStartPlay } = useTrackInfo();
   const [trackItems, setTrackItems] = useState<Track[]>([]);
@@ -50,7 +52,7 @@ const AlbumItemComponent = ({
         ...track,
         album: { ...track.album, images: album?.images || [] },
       }));
-  
+
       setTrackItems((prevItems) => [...prevItems, ...tracksWithImages]);
       setNextUrl(data.next); // Update next pagination URL
       setLoadNext(false);
@@ -72,19 +74,22 @@ const AlbumItemComponent = ({
 
   console.log(trackItems);
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full mb-[50px]">
       <div
         key={album.id}
         className="grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full"
       >
-        <AlbumItem album={album} />
+        <AlbumItem album={album} recommend={recommend}/>
       </div>
 
       <h3>Album Tracks</h3>
       <div className="flex flex-col items-center py-4 gap-4">
         {trackItems.map((track) => (
           <div
-            onClick={() =>{console.log(track); handleStartPlay(track)}}
+            onClick={() => {
+              console.log(track);
+              handleStartPlay(track);
+            }}
             key={track.id}
             className="grid grid-cols-[50px_1fr_auto] md:grid-cols-[75px_1fr_auto] gap-4 w-full cursor-pointer hover:text-main hover:bg-lightGrayBg"
           >
@@ -127,7 +132,6 @@ const AlbumItemComponent = ({
               <p className="text-lightGray">
                 {convertDuration(track.duration_ms)}
               </p>
-             
             </div>
           </div>
         ))}

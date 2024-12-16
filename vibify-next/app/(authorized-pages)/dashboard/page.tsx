@@ -1,5 +1,5 @@
 import DashboardComponent from "@/app/(components)/DashboardComponent";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils/libs/auth";
 import { getSpotifyUserProfile, getUserTopWType } from "@/app/utils/spotify";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -29,7 +29,7 @@ const ProfilePage = async () => {
   );
 
   return (
-    <Suspense fallback={<Loading/>}>
+    <Suspense fallback={<Loading />}>
       <DashboardComponent
         profile={profile}
         topArtists={topArtists}

@@ -30,7 +30,6 @@ const TracksComponent = ({ accessToken }: TracksComponentProps) => {
   const trackKey = `tracks ` + trackTimeRange + " " + trackLimit;
   const {
     data: tracksData,
-    error: tracksDataError,
     isLoading: tracksDataLoading,
     mutate,
   } = useSWR(trackKey, () =>
@@ -96,7 +95,7 @@ const TracksComponent = ({ accessToken }: TracksComponentProps) => {
           <>
             {tracksData && (
               <div className="grid md:grid-cols-2 grid-cols-1 gap-4 w-full">
-                {tracksData.items.map((track: Track, _: number) => (
+                {tracksData.items.map((track: Track) => (
                   <div
                     onClick={() => {
                       handleStartPlay(track);

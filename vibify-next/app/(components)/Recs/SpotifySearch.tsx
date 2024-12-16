@@ -12,7 +12,7 @@ import RecsTrackComponent from "./RecModal/RecsTrackComponent";
 import RecsArtistComponent from "./RecModal/RecsArtistComponent";
 import RecsAlbumComponent from "./RecModal/RecsAlbumComponent";
 import RecsPlaylistComponent from "./RecModal/RecsPlaylistComponent";
-import {  useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import LoadingBars from "../LoadingBars";
 import { useRecommendItem } from "../Providers/RecommendItemProvider";
@@ -22,27 +22,22 @@ interface SpotifySearchProps {
 }
 
 const SpotifySearch = ({ recommendType }: SpotifySearchProps) => {
-  const { selectItem, selectedItem } = useRecommendItem();
-  const { data: session, status } = useSession();
+  const { selectItem } = useRecommendItem();
+  const { data: session } = useSession();
 
-  if (!session) {
-    return null;
-  }
   const [searchInput, setSearchInput] = useState<string>("");
-  const [limit, setLimit] = useState<number>(10);
+
 
   const searchKey = `search ` + searchInput + " " + recommendType;
-  console.log(searchKey);
   const {
     data: SearchData,
-    error: SearchDataError,
     isLoading: SearchDataLoading,
   } = useSWR(searchInput ? searchKey : null, () =>
     getSearchResultWType(
       session?.user.accessToken as string,
       recommendType,
       searchInput,
-      limit
+      10
     )
   );
 
@@ -64,7 +59,7 @@ const SpotifySearch = ({ recommendType }: SpotifySearchProps) => {
     if (recommendType === "track") {
       return (
         <ul className="flex flex-col gap-4 mt-4">
-          {searchResult.items.map((item, index) => {
+          {searchResult.items.map((item) => {
             const track = item as Track;
             return (
               <RecsTrackComponent
@@ -126,6 +121,9 @@ const SpotifySearch = ({ recommendType }: SpotifySearchProps) => {
       return null;
     }
   };
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="w-full box-border">

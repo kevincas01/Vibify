@@ -149,7 +149,7 @@ const Loading = () => {
         </div>
         <div className="w-full flex flex-col">
           {exampleRecFeed.map((item, index: number) => (
-            <div className="flex flex-col gap-2 w-full py-6 border-b-[0.5px] border-b-gray-500">
+            <div className="flex flex-col gap-2 w-full py-6 border-b-[0.5px] border-b-gray-500" key={index}>
               <div className="flex gap-4 w-full">
                 <div className="profile-image">
                   <Skeleton variant="circular" width={25} height={25} />

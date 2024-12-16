@@ -38,7 +38,7 @@ interface TrackProviderProps {
 
 // The provider component that wraps the app and provides state and actions
 export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [currentPositionMs, setCurrentPositionMs] = useState(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -67,16 +67,15 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
         return null;
       }
 
-      await startResumeTrackPlayback(
-        accessToken,
-        undefined,
-        [track.uri],
-        undefined
-      );
+      await startResumeTrackPlayback(accessToken, undefined, [track.uri]);
       setCurrentTrack(track);
       setIsPlaying(true);
-    } catch (error: any) {
-      showToast("error", error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unexpected error occurred.");
+      }
     }
   };
 
@@ -94,18 +93,17 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
 
       if (!playbackState.is_playing) {
         play();
-        await startResumeTrackPlayback(
-          accessToken,
-          undefined,
-          undefined,
-          undefined
-        );
+        await startResumeTrackPlayback(accessToken, undefined, undefined);
       } else {
         pause();
         await pausePlayback(accessToken);
       }
-    } catch (error: any) {
-      showToast("error", error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unexpected error occurred.");
+      }
     }
   };
 
@@ -115,18 +113,24 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
         showToast("warning", "You need to log in.");
         return;
       }
-  
+
       const playbackState = await handleGetPlaybackState();
       if (!playbackState) {
-        showToast("warning", "No active playback. Play a song to connect a device.");
+        showToast(
+          "warning",
+          "No active playback. Play a song to connect a device."
+        );
         return;
       }
-  
+
       await skipNextPlayback(accessToken);
       await handleGetPlaybackState(); // Sync state after skipping
-    } catch (error: any) {
-      showToast("error", "Failed to skip to the next track.");
-      console.error(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unexpected error occurred.");
+      }
     }
   };
 
@@ -141,8 +145,14 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
         return null;
       }
       await skipPreviousPlayback(accessToken);
-      await handleGetPlaybackState(); 
-    } catch (error) {}
+      await handleGetPlaybackState();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unexpected error occurred.");
+      }
+    }
   };
 
   const handleGetPlaybackState = async () => {
@@ -155,7 +165,6 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
         return null;
       }
 
-      console.log(playbackState)
       setIsPlaying(playbackState.is_playing);
       setCurrentTrack(playbackState.item);
       setCurrentPositionMs(playbackState.progress_ms);
@@ -176,8 +185,12 @@ export const TrackProvider: React.FC<TrackProviderProps> = ({ children }) => {
         if (!playbackState) {
           return null;
         }
-      } catch (error: any) {
-        console.error("Failed to fetch playback state", error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          showToast("error", error.message);
+        } else {
+          showToast("error", "An unexpected error occurred.");
+        }
       }
     };
 

@@ -14,7 +14,7 @@ const TrackItem = ({ track, recommend = true }: TrackItemProps) => {
 
   const handleTrackSelect = async (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent event bubbling
-    console.log("track.iutemmmmm");
+
     selectItem(track.id, track);
   };
   return (

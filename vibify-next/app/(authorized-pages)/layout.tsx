@@ -5,11 +5,12 @@ import ClientThemeWrapper from "../styles/ClientThemeProvider";
 import { TrackProvider } from "../context/player";
 import SpotifyPlayer from "../(components)/SpotifyPlayer";
 import ToastProvider from "../(components)/Providers/ToastProvider";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+
+import { authOptions } from "@/app/utils/libs/auth";
 import SessionProvider from "../(components)/Providers/SessionProvider";
 import { RecommendItemProvider } from "../(components)/Providers/RecommendItemProvider";
 import RecItemModal from "../(components)/RecItemModal";
+import { getServerSession } from 'next-auth';
 export default async function Layout({ children }: PropsWithChildren<unknown>) {
   const session = await getServerSession(authOptions);
   return (

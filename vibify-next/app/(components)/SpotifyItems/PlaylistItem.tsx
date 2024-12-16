@@ -13,7 +13,7 @@ const PlaylistItem = ({ playlist, recommend = true }: PlaylistItemProps) => {
 
   const handlePlaylistSelect = async (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent event bubbling
-    console.log("track.iutemmmmm");
+
     selectItem(playlist.id, playlist);
   };
   return (

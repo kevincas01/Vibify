@@ -1,4 +1,3 @@
-import { getProviders } from "next-auth/react";
 import LoginScreen from "./(components)/LoginScreen";
 
 export default async function Home() {

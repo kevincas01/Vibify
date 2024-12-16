@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { Album, Artist, Track } from "../types/spotify";
-import TrackItem from "./SpotifyItems/TrackItem";
 import AlbumItem from "./SpotifyItems/AlbumItem";
 import DarkButton from "./Buttons/DarkButton";
 import LoadingBars from "./LoadingBars";
@@ -72,7 +71,6 @@ const AlbumItemComponent = ({
     return null; // Ensure type safety for album rendering
   }
 
-  console.log(trackItems);
   return (
     <div className="flex flex-col gap-4 w-full mb-[50px]">
       <div
@@ -87,7 +85,6 @@ const AlbumItemComponent = ({
         {trackItems.map((track) => (
           <div
             onClick={() => {
-              console.log(track);
               handleStartPlay(track);
             }}
             key={track.id}

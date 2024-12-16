@@ -1,12 +1,11 @@
 import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "../../Buttons/Button";
 import { Playlist } from "@/app/types/spotify";
 import useSWR from "swr";
 import {
   fetchNextPageOfItems,
-  getCurrentUserPlaylists,
 } from "@/app/utils/spotify";
 
 interface DrawerItemProps {
@@ -16,18 +15,14 @@ interface DrawerItemProps {
 }
 
 const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
-  if (!session) {
-    return null;
-  }
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+
   const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<string[]>([]); // State for selected playlists (multiple)
 
   const playlistKey = `playlist`;
   const {
     data: playlistInitialData,
-    error: playlistInitialDataError,
     isLoading: playlistInitialDataLoading,
   } = useSWR(playlistKey, () =>
     fetchNextPageOfItems(session.user.accessToken as string, "https://api.spotify.com/v1/me/playlists")
@@ -83,7 +78,6 @@ const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
 
       // Wait for all requests to complete
       await Promise.all(promises);
-      console.log(`Song ${id} added to selected playlists`);
 
       // Optionally, you can give feedback to the user here (e.g., success message)
     } catch (error) {
@@ -93,7 +87,9 @@ const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
       onClose();
     }
   };
-
+  if (!session) {
+    return null;
+  }
   return (
     <div className="h-[75vh]">
       <div className="text-center sticky top-0 bg-black w-full">

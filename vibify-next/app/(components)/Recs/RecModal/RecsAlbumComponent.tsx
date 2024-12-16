@@ -1,6 +1,5 @@
 import React from "react";
 import { Album, Artist, Playlist, Track } from "@/app/types/spotify";
-import Image from "next/image";
 import AlbumItem from "../../SpotifyItems/AlbumItem";
 import { useRecommendItem } from "../../Providers/RecommendItemProvider";
 

@@ -4,18 +4,12 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  useEffect,
   Dispatch,
   SetStateAction,
 } from "react";
 import { Album, Artist, Playlist, Track } from "../../types/spotify";
-import { getSession, useSession } from "next-auth/react";
-import {
-  getPlaybackState,
-  pausePlayback,
-  startResumeTrackPlayback,
-} from "../../utils/spotify";
-import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
+
 import { showToast } from "./ToastProvider";
 import { createRecommendation } from "../../utils/supabase";
 
@@ -42,8 +36,7 @@ interface RecommendItemProviderProps {
 export const RecommendItemProvider: React.FC<RecommendItemProviderProps> = ({
   children,
 }) => {
-  const { data: session, status } = useSession();
-  const accessToken = session?.user?.accessToken as string;
+  const { data: session } = useSession();
   const [selectedId, setSelectedId] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<
     Artist | Track | Album | Playlist | null

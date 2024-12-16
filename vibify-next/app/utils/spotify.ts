@@ -2,15 +2,11 @@
 
 import { PLAYBACKNOTACTIVESTATUS } from "../types/errors";
 import {
-  Album,
   AlbumResponse,
-  Artist,
-  PlaybackStateResponse,
   Playlist,
   PlaylistResponse,
   PlaylistsResponse,
   SpotifySearchResponse,
-  Track,
 } from "../types/spotify";
 
 export async function getSpotifyUserProfile(accessToken: string) {
@@ -143,7 +139,10 @@ export async function fetchNextPlaylistItems(accessToken: string, url: string) {
   return data;
 }
 
-export async function fetchNextAlbumTracks(accessToken: string, url: string):Promise<AlbumResponse> {
+export async function fetchNextAlbumTracks(
+  accessToken: string,
+  url: string
+): Promise<AlbumResponse> {
   const response = await fetch(url, {
     headers: {
       Authorization: "Bearer " + accessToken,
@@ -214,10 +213,13 @@ export async function getAvailableDevices(accessToken: string) {
 export async function startResumeTrackPlayback(
   accessToken: string,
   contextUri?: string,
-  uris?: string[],
-  deviceId?: string
+  uris?: string[]
 ) {
-  const body: any = {};
+  const body: {
+    context_uri?: string;
+    uris?: string[];
+    transfer_playback?: boolean;
+  } = {};
   if (contextUri) {
     body.context_uri = contextUri;
   }
@@ -242,16 +244,13 @@ export async function startResumeTrackPlayback(
   }
 }
 
-export async function pausePlayback(accessToken: string, deviceId?: string) {
-  const body: any = {};
-
+export async function pausePlayback(accessToken: string) {
   const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
     method: "PUT",
     headers: {
       Authorization: "Bearer " + accessToken,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -260,16 +259,13 @@ export async function pausePlayback(accessToken: string, deviceId?: string) {
   }
 }
 
-export async function skipNextPlayback(accessToken: string, deviceId?: string) {
-  const body: any = {};
-
+export async function skipNextPlayback(accessToken: string) {
   const response = await fetch(`https://api.spotify.com/v1/me/player/next`, {
     method: "POST",
     headers: {
       Authorization: "Bearer " + accessToken,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -277,12 +273,7 @@ export async function skipNextPlayback(accessToken: string, deviceId?: string) {
     throw new Error(`Error starting playback: ${errorData.error.message}`);
   }
 }
-export async function skipPreviousPlayback(
-  accessToken: string,
-  deviceId?: string
-) {
-  const body: any = {};
-
+export async function skipPreviousPlayback(accessToken: string) {
   const response = await fetch(
     `https://api.spotify.com/v1/me/player/previous`,
     {
@@ -291,7 +282,6 @@ export async function skipPreviousPlayback(
         Authorization: "Bearer " + accessToken,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
     }
   );
 

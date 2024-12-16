@@ -8,11 +8,9 @@ import {
   TopTracksResponse,
   Track,
 } from "@/app/types/spotify";
-import { convertDuration } from "@/app/utils/misc";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
-import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import { useTrackInfo } from "../context/player";
 import TrackItem from "./SpotifyItems/TrackItem";
 interface DashboardComponentProps {
@@ -30,9 +28,6 @@ const DashboardComponent = ({
   const handleLogout = async () => {
     await signOut();
     redirect("/");
-  };
-  const handleTrackPlay = async (track: Track) => {
-    handleStartPlay(track);
   };
   return (
     <>
@@ -60,7 +55,7 @@ const DashboardComponent = ({
           <div className="flex w-full flex-col">
             <h3>Top Artists of all Time</h3>
             <ul className="flex flex-col gap-4 mt-4">
-              {topArtists.items.map((artist: Artist, _: number) => (
+              {topArtists.items.map((artist: Artist) => (
                 <li key={artist.id} className="flex items-center gap-4">
                   <div>
                     <Image
@@ -81,7 +76,7 @@ const DashboardComponent = ({
           <div className="flex w-full flex-col">
             <h3>Top Songs of all Time</h3>
             <ul className="flex flex-col gap-4 mt-4">
-              {topTracks.items.map((track: Track, _: number) => (
+              {topTracks.items.map((track: Track) => (
                 <li
                 onClick={() => {
                   handleStartPlay(track);

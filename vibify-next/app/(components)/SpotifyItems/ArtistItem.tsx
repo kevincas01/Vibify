@@ -1,4 +1,4 @@
-import { Album, Artist } from "@/app/types/spotify";
+import {Artist } from "@/app/types/spotify";
 import Image from "next/image";
 import React from "react";
 interface ArtistItemProps {

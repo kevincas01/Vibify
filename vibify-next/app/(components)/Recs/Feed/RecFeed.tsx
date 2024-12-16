@@ -9,11 +9,6 @@ import { useState } from "react";
 
 import Image from "next/image";
 
-import {
-  defaultFeedType,
-  recommendationsFeedFilters,
-} from "@/app/types/filters";
-
 import { useTrackInfo } from "@/app/context/player";
 import { Drawer } from "@mui/material";
 import FeedArtistComponent from "./FeedArtistComponent";
@@ -41,27 +36,19 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
   const [itemSelected, setItemSelected] = useState<
     Playlist | Artist | Album | null
   >(null);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
-  if (!session) {
-    return null;
-  }
-  const userId = session.user.userId as string;
-
-  const [feedType, setFeedType] = useState<string>(defaultFeedType);
+  // const [feedType, setFeedType] = useState<string>(defaultFeedType);
 
   const { handleStartPlay } = useTrackInfo();
 
   const [addDrawerSelectedID, setAddDrawerSelectedID] = useState("");
   const [isOpenAddDrawer, setIsOpenAddDrawer] = useState(false);
 
-  const feedKey = `feed ` + feedType;
-  const {
-    data: recommendationsData,
-    error: recommendationsDataError,
-    isLoading: recommendationsDataLoading,
-    mutate,
-  } = useSWR(feedKey, () => getRecommendations(feedType));
+  const feedKey = `feed `;
+  const { data: recommendationsData } = useSWR(feedKey, () =>
+    getRecommendations()
+  );
 
   const handleAddDrawerToggle = () => {
     setIsOpenAddDrawer(!isOpenAddDrawer);
@@ -69,14 +56,14 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
 
   const handleFollowToggle = (item: Album | Artist | Playlist) => {
     // Your logic to follow the item goes here
-    console.log("Following", item);
     showToast("success", "Followed the " + item.type);
   };
 
-  function isTrack(item: any): item is Track {
+  function isTrack(item: Album | Artist | Track | Playlist): item is Track {
     return item && item.type === "track";
   }
 
+  // Main function
   const handleAddClick = async (item: Album | Artist | Track | Playlist) => {
     if (isTrack(item)) {
       handleAddDrawerToggle();
@@ -85,7 +72,9 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
       handleFollowToggle(item);
     }
   };
-  const handleViewClick = (item: any) => {
+
+  // View handler
+  const handleViewClick = (item: Album | Artist | Track | Playlist) => {
     setItemSelected(item);
   };
 
@@ -115,6 +104,10 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
   const closeSelectedPlaylist = () => {
     setItemSelected(null);
   };
+  if (!session) {
+    return null;
+  }
+  const userId = session.user.userId as string;
   return (
     <>
       {itemSelected && (

@@ -13,9 +13,8 @@ import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import { Drawer } from "@mui/material";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-interface SpotifyPlayerMobileProps {}
 
-const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
+const SpotifyPlayerMobile = () => {
   const { selectItem } = useRecommendItem();
   // const [deviceId, setDeviceId] = useState("");
   const { currentTrack, isPlaying, handlePlayPause } = useTrackInfo();

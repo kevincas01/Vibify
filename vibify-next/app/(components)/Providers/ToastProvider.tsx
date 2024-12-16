@@ -60,19 +60,14 @@ export const showToast = (
 
   switch (type) {
     case "success":
-      console.log("success");
       return toast.success(content, optionsToApply);
     case "error":
-      console.log("error");
       return toast.error(content, optionsToApply);
     case "info":
-      console.log("info");
       return toast.info(content, optionsToApply);
     case "warning":
-      console.log("warning");
       return toast.warn(content, optionsToApply);
     case "default":
-      console.log("default");
       return toast(content, optionsToApply);
     default:
       return toast(content, optionsToApply);

@@ -4,7 +4,6 @@ import React, { ReactElement } from "react";
 import { usePathname } from "next/navigation";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
-import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import MusicNoteOutlinedIcon from "@mui/icons-material/MusicNoteOutlined";
 import GroupsIcon from '@mui/icons-material/Groups';

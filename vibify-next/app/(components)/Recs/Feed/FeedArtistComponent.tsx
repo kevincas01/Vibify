@@ -7,19 +7,17 @@ interface FeedArtistComponentProps {
   artist: Artist;
 }
 const FeedArtistComponent = ({ artist }: FeedArtistComponentProps) => {
-  const handleClick = () => {
-    console.log("sfdsd");
-  };
+
   return (
     <div
       key={artist.id}
-      className={`flex flex-col items-center w-2/5 md:w-1/4 cursor-pointer relative`}
-      onClick={handleClick}
+      className={`flex flex-col items-center w-2/5 md:w-1/4 relative`}
+
       style={{
         transition: "background-color 0.3s ease", // Smooth transition for highlight
       }}
     >
-      <ArtistItem artist={artist}/>
+      <ArtistItem artist={artist} />
     </div>
   );
 };

@@ -1,11 +1,10 @@
-'use server'
+"use server";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getSpotifyUserProfile, getUserTopWType } from "@/app/utils/spotify";
+import { authOptions } from "@/app/utils/libs/auth";
+import { getUserTopWType } from "@/app/utils/spotify";
 import RecsComponent from "@/app/(components)/Recs/RecsComponent";
 import { Suspense } from "react";
-import { getRecommendations } from "@/app/utils/supabase";
 import Loading from "./loading";
 
 const RecsPage = async () => {
@@ -15,7 +14,7 @@ const RecsPage = async () => {
   }
 
   const accessToken = session.user.accessToken as string;
-  const userId=session.user.userId as string
+  const userId = session.user.userId as string;
   const topArtists = await getUserTopWType(
     accessToken,
     "artists",
@@ -30,7 +29,7 @@ const RecsPage = async () => {
   );
 
   return (
-    <Suspense fallback={<Loading/>}>
+    <Suspense fallback={<Loading />}>
       <RecsComponent
         userId={userId}
         topArtists={topArtists}

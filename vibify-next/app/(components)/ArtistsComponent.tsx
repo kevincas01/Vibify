@@ -1,9 +1,8 @@
 "use client";
 
-import { Artist, TopArtistsResponse } from "@/app/types/spotify";
+import { Artist } from "@/app/types/spotify";
 import { getUserTopWType } from "@/app/utils/spotify";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   limitElements,
   timeRangeElements,
@@ -25,7 +24,6 @@ const Artists = ({ accessToken }: ArtistsComponentProps) => {
   const artistKey = `artists ` + artistTimeRange + " " + artistLimit;
   const {
     data: artistsData,
-    error: artistsDataError,
     isLoading: artistsDataLoading,
     mutate,
   } = useSWR(artistKey, () =>

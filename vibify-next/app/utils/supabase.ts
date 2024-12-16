@@ -52,15 +52,14 @@ export async function createRecommendation(
   }
   return { data: data, error: null };
 }
-export async function getRecommendations(feedType: string): Promise<Recommendations[]> {
-  console.log(feedType);
-  try {
-    let query = supabase
-      .from("recommendations")
-      .select("*, users(*)")
-      .order("created_at", { ascending: false });
+export async function getRecommendations(): Promise<Recommendations[]> {
 
-    const { data, error } = await query;
+  try {
+   
+    const { data, error } = await supabase
+    .from("recommendations")
+    .select("*, users(*)")
+    .order("created_at", { ascending: false });
 
     if (error) {
       throw new Error(error.message);

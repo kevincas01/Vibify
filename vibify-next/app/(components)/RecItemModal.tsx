@@ -6,8 +6,6 @@ import RecsArtistComponent from "./Recs/RecModal/RecsArtistComponent";
 import RecsTrackComponent from "./Recs/RecModal/RecsTrackComponent";
 import RecsAlbumComponent from "./Recs/RecModal/RecsAlbumComponent";
 import RecsPlaylistComponent from "./Recs/RecModal/RecsPlaylistComponent";
-
-import dynamic from "next/dynamic";
 import { useRecommendItem } from "./Providers/RecommendItemProvider";
 import Button from "./Buttons/Button";
 // const CloseIcon = dynamic(() => import("@mui/icons-material/Close"), {

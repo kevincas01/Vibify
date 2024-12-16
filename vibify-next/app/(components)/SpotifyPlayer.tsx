@@ -1,10 +1,10 @@
 "use client";
-import React, {useState } from "react";
+import React from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
-import { Artist, Track } from "../types/spotify";
+import { Artist } from "../types/spotify";
 import Image from "next/image";
 
 import { useTrackInfo } from "../context/player";
@@ -13,9 +13,7 @@ import { useRecommendItem } from "./Providers/RecommendItemProvider";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import SpotifyPlayerMobile from "./SpotifyPlayerMobile";
 
-interface SpotifyPlayerProps {}
-
-const SpotifyPlayer = ({}: SpotifyPlayerProps) => {
+const SpotifyPlayer = () => {
   const { selectItem } = useRecommendItem();
   // const [deviceId, setDeviceId] = useState("");
   const {
@@ -26,17 +24,13 @@ const SpotifyPlayer = ({}: SpotifyPlayerProps) => {
     handleSkipPrevious,
   } = useTrackInfo();
 
-  const [playerToggled, setPlayerToggled] = useState(false);
-  const handlePlayerToggle = () => {
-    setPlayerToggled((prev) => !prev);
-  };
   if (currentTrack === null) return null;
   return (
     <>
       <div className="hidden md:block w-full  bg-black fixed bottom-0 left-0 m-auto z-30 h-[80px] ">
         <div
           className="md:hidden fixed bottom-[60px] right-[0px]"
-          onClick={handlePlayerToggle}
+         
         >
           <CloseFullscreenIcon />
         </div>

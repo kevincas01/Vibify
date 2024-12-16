@@ -1,5 +1,5 @@
 import PlaylistsComponent from "@/app/(components)/PlaylistsComponent";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils/libs/auth";
 import { getUserPlaylists } from "@/app/utils/spotify";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -17,10 +17,12 @@ const PlaylistsPage = async () => {
 
   const userPlaylistsResponse = await getUserPlaylists(accessToken, userId);
 
-  console.log(userPlaylistsResponse);
   return (
     <Suspense fallback={<Loading />}>
-      <PlaylistsComponent accessToken={accessToken} playlists={userPlaylistsResponse.items} />
+      <PlaylistsComponent
+        accessToken={accessToken}
+        playlists={userPlaylistsResponse.items}
+      />
     </Suspense>
   );
 };

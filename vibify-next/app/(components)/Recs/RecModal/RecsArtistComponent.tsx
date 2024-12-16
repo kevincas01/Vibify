@@ -1,6 +1,5 @@
 import React from "react";
 import { Album, Artist, Playlist, Track } from "@/app/types/spotify";
-
 import ArtistItem from "../../SpotifyItems/ArtistItem";
 import { useRecommendItem } from "../../Providers/RecommendItemProvider";
 

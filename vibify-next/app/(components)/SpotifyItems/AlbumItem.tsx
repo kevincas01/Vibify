@@ -13,7 +13,6 @@ const AlbumItem = ({ album, recommend = true }: AlbumItemProps) => {
 
   const handleAlbumSelect = async (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent event bubbling
-    console.log("track.iutemmmmm");
     selectItem(album.id, album);
   };
   return (

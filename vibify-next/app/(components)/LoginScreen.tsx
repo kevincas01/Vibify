@@ -9,7 +9,7 @@ const LoginScreen = () => {
   'http://localhost:3000/';
 
   const handleLoginClick = async () => {
-    await signIn("spotify", { callbackUrl: `${loginUrl}/dashboard` });
+    await signIn("spotify");
 
   };
 

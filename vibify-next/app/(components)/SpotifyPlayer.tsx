@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
@@ -8,11 +8,10 @@ import { Artist, Track } from "../types/spotify";
 import Image from "next/image";
 
 import { useTrackInfo } from "../context/player";
-import RecommendIcon from "@mui/icons-material/Recommend";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useRecommendItem } from "./Providers/RecommendItemProvider";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import SpotifyPlayerMobile from "./SpotifyPlayerMobile";
-import Slider from "./Slider";
 
 interface SpotifyPlayerProps {}
 
@@ -21,7 +20,6 @@ const SpotifyPlayer = ({}: SpotifyPlayerProps) => {
   // const [deviceId, setDeviceId] = useState("");
   const {
     currentTrack,
-    currentPositionMs,
     isPlaying,
     handlePlayPause,
     handleSkipNext,
@@ -108,22 +106,22 @@ const SpotifyPlayer = ({}: SpotifyPlayerProps) => {
                 <SkipNextIcon fontSize="inherit" />
               </span>
             </div>
-            <div className="flex  text-xs justify-center items-center">
+            {/* <div className="flex  text-xs justify-center items-center">
               <Slider
                 maxMs={currentTrack.duration_ms}
                 currentMs={currentPositionMs}
               />
-            </div>
+            </div> */}
           </div>
-          <div>
-            <div
+          <div className="flex justify-end cursor-pointer">
+            <span
               className="cursor-pointer"
               onClick={() => {
                 selectItem(currentTrack.id, currentTrack);
               }}
             >
-              <RecommendIcon />
-            </div>
+             <GroupAddIcon />
+            </span>
           </div>
         </div>
       </div>

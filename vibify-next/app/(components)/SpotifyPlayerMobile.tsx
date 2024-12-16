@@ -1,19 +1,18 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
-import { Artist, Track } from "../types/spotify";
+import { Artist } from "../types/spotify";
 import Image from "next/image";
 
 import { useTrackInfo } from "../context/player";
-import RecommendIcon from "@mui/icons-material/Recommend";
 import { useRecommendItem } from "./Providers/RecommendItemProvider";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import { Drawer } from "@mui/material";
-
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 interface SpotifyPlayerMobileProps {}
 
 const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
@@ -31,7 +30,10 @@ const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
   return (
     <>
       <div className="w-full bg-black fixed bottom-[75px]  left-0 m-auto z-30 h-[50px] ">
-        <div className="grid items-center grid-cols-[auto_1fr_auto]  gap-4 px-4 justify-center h-full">
+        <div
+          className="grid items-center grid-cols-[auto_1fr_auto]  gap-4 px-4 justify-center h-full cursor-pointer"
+          onClick={handlePlayerToggle}
+        >
           <div className="relative w-[35px] h-[35px]">
             {currentTrack.album.images &&
             currentTrack.album.images.length > 0 ? (
@@ -69,12 +71,14 @@ const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
             </div>
           </div>
           <div className="flex gap-4 text-2xl">
-            <span onClick={handlePlayerToggle}>
+            <span className=" cursor-pointer">
               <OpenInFullIcon fontSize="inherit" />
             </span>
             {!isPlaying ? (
               <span
-                onClick={() => {
+                className=" cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
                   handlePlayPause();
                 }}
               >
@@ -82,7 +86,9 @@ const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
               </span>
             ) : (
               <span
-                onClick={() => {
+                className=" cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
                   handlePlayPause();
                 }}
               >
@@ -102,10 +108,13 @@ const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
               transition: "background-color 0.3s ease", // Smooth transition
             }}
           >
-            <span onClick={handlePlayerToggle} className="text-2xl">
+            <span
+              onClick={handlePlayerToggle}
+              className="text-2xl cursor-pointer"
+            >
               <CloseFullscreenIcon fontSize="inherit" />
             </span>
-            <div className="flex flex-1 w-full h-[60vh] ">
+            <div className="flex flex-1 w-full h-[70vh] ">
               <div className="relative w-full aspect-square rounded-lg overflow-hidden m-auto max-w-[500px]">
                 <Image
                   src={currentTrack.album.images[0].url}
@@ -134,25 +143,38 @@ const SpotifyPlayerMobile = ({}: SpotifyPlayerMobileProps) => {
               <SkipPreviousIcon fontSize="inherit" />
 
               {!isPlaying ? (
-                <span className=" cursor-pointer">
+                <span className="cursor-pointer">
                   <PlayArrowIcon
                     fontSize="inherit"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent parent div click
                       handlePlayPause();
                     }}
                   />
                 </span>
               ) : (
-                <span className=" cursor-pointer">
+                <span className="cursor-pointer">
                   <PauseIcon
                     fontSize="inherit"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent parent div click
                       handlePlayPause();
                     }}
                   />
                 </span>
               )}
               <SkipNextIcon fontSize="inherit" />
+            </div>
+            <div className="flex w-full justify-around text-4xl">
+              <span
+                className="cursor-pointer"
+                
+                onClick={() => {
+                  selectItem(currentTrack.id, currentTrack);
+                }}
+              >
+                <GroupAddIcon fontSize="inherit"/>
+              </span>
             </div>
           </div>
         </Drawer>

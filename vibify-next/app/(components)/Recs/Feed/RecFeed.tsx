@@ -34,7 +34,7 @@ interface RecFeedProps {
 }
 const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
   const [itemSelected, setItemSelected] = useState<
-    Playlist | Artist | Album | null
+    Track | Playlist | Artist | Album | null
   >(null);
   const { data: session } = useSession();
 

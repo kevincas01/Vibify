@@ -4,9 +4,7 @@ import React, { useState } from "react";
 import Button from "../../Buttons/Button";
 import { Playlist } from "@/app/types/spotify";
 import useSWR from "swr";
-import {
-  fetchNextPageOfItems,
-} from "@/app/utils/spotify";
+import { fetchNextPageOfItems } from "@/app/utils/spotify";
 
 interface DrawerItemProps {
   id: string; // The song ID you want to add to a playlist
@@ -17,16 +15,16 @@ interface DrawerItemProps {
 const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
   const { data: session } = useSession();
 
-
   const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<string[]>([]); // State for selected playlists (multiple)
 
   const playlistKey = `playlist`;
-  const {
-    data: playlistInitialData,
-    isLoading: playlistInitialDataLoading,
-  } = useSWR(playlistKey, () =>
-    fetchNextPageOfItems(session.user.accessToken as string, "https://api.spotify.com/v1/me/playlists")
-  );
+  const { data: playlistInitialData, isLoading: playlistInitialDataLoading } =
+    useSWR(playlistKey, () =>
+      fetchNextPageOfItems(
+        accessToken as string,
+        "https://api.spotify.com/v1/me/playlists"
+      )
+    );
 
   // Filter playlists based on the given criteria
   const filteredPlaylists = React.useMemo(() => {
@@ -90,6 +88,7 @@ const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
   if (!session) {
     return null;
   }
+  const accessToken = session.user.accessToken;
   return (
     <div className="h-[75vh]">
       <div className="text-center sticky top-0 bg-black w-full">

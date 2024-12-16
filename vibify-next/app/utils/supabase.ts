@@ -8,6 +8,7 @@ export async function createOrUpdateUser(profile: SpotifyUser) {
 
   const imageUrl = images && images.length > 0 ? images[0].url : null;
 
+  // Ensure you pass an object to upsert
   const { data, error } = await supabase
     .from("users")
     .upsert(
@@ -16,7 +17,9 @@ export async function createOrUpdateUser(profile: SpotifyUser) {
         spotify_id: id,
         image_url: imageUrl,
       },
-      { onConflict: ["spotify_id"] }
+      {
+        onConflict: "spotify_id", 
+      }
     )
     .select()
     .single();
@@ -25,6 +28,7 @@ export async function createOrUpdateUser(profile: SpotifyUser) {
     console.error("Error inserting user into Supabase:", error);
     return { data: null, error: error };
   }
+
   return { data: data, error: null };
 }
 
@@ -53,13 +57,11 @@ export async function createRecommendation(
   return { data: data, error: null };
 }
 export async function getRecommendations(): Promise<Recommendations[]> {
-
   try {
-   
     const { data, error } = await supabase
-    .from("recommendations")
-    .select("*, users(*)")
-    .order("created_at", { ascending: false });
+      .from("recommendations")
+      .select("*, users(*)")
+      .order("created_at", { ascending: false });
 
     if (error) {
       throw new Error(error.message);
@@ -71,4 +73,3 @@ export async function getRecommendations(): Promise<Recommendations[]> {
     throw error;
   }
 }
-

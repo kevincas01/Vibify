@@ -66,12 +66,12 @@ export const authOptions:AuthOptions = {
       if (account && user) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
-        token.accessTokenExpires = account.expires_at * 1000;
+        token.accessTokenExpires = (account.expires_at as number) * 1000;
         token.userId = user.id;
         return token;
       }
 
-      if (Date.now() < token.accessTokenExpires) {
+      if (Date.now() < (token.accessTokenExpires as number)) {
         return token; // Access token still valid
       }
 
@@ -81,9 +81,9 @@ export const authOptions:AuthOptions = {
     async session({ session, token }) {
       session.user = {
         ...session.user,
-        accessToken: token.accessToken,
-        refreshToken: token.refreshToken,
-        userId: token.userId,
+        accessToken: token.accessToken as string,
+        refreshToken: token.refreshToken as string,
+        userId: token.userId as string,
       };
       return session;
     },

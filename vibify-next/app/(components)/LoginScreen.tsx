@@ -10,7 +10,6 @@ const LoginScreen = () => {
 
   const handleLoginClick = async () => {
     await signIn("spotify");
-
   };
 
   return (

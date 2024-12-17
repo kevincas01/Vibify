@@ -68,6 +68,10 @@ const RecItemModal = () => {
             <Button onClick={() => handleCreateRecommendation()}>
               Recommend
             </Button>
+            <p className="flex text-center text-lightGray">
+              By recommending this item, its Spotify ID and your public Spotify
+              ID will be stored to save and display your recommendation.
+            </p>
           </div>
         </div>
       </div>

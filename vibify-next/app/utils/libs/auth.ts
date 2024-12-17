@@ -6,7 +6,7 @@ import { createOrUpdateUser } from "../supabase";
 
 // Scope for Spotify API permissions
 const scope =
-  "user-read-currently-playing streaming user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-top-read user-read-recently-played user-library-modify user-library-read user-read-playback-state user-modify-playback-state";
+  "user-read-currently-playing streaming  user-follow-read user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-top-read user-read-recently-played user-library-modify user-library-read user-read-playback-state user-modify-playback-state";
 
 const queryParamString = new URLSearchParams({ scope }).toString();
 

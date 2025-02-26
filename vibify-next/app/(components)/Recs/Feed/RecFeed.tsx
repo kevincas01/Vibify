@@ -15,7 +15,7 @@ import FeedArtistComponent from "./FeedArtistComponent";
 import FeedTrackComponent from "./FeedTrackComponent";
 import FeedAlbumComponent from "./FeedAlbumComponent";
 import FeedPlaylistComponent from "./FeedPlaylistComponent";
-import DrawerItem from "../Drawer/DrawerItem";
+import DrawerItem from "../Drawer/PlaylistDrawerItem";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { getRecommendations } from "@/app/utils/supabase";
@@ -288,17 +288,14 @@ const RecFeed = ({ handleModalToggle }: RecFeedProps) => {
                   )
                 )}
               {isOpenAddDrawer && (
-                <Drawer
-                  anchor={"bottom"}
-                  open={isOpenAddDrawer}
-                  onClose={handleAddDrawerToggle}
-                >
+                
                   <DrawerItem
                     id={addDrawerSelectedID}
                     userId={userId}
+                    isOpen={isOpenAddDrawer}
                     onClose={handleAddDrawerToggle}
                   />
-                </Drawer>
+               
               )}
             </div>
           </div>

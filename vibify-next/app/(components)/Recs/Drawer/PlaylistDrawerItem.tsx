@@ -1,6 +1,6 @@
 import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../Buttons/Button";
 import { Playlist } from "@/app/types/spotify";
 import useSWR from "swr";
@@ -9,10 +9,12 @@ import { fetchNextPageOfItems } from "@/app/utils/spotify";
 interface DrawerItemProps {
   id: string; // The song ID you want to add to a playlist
   userId: string;
+  isOpen: boolean;
   onClose: () => void;
 }
 
-const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
+const DrawerItem = ({ id, userId, isOpen, onClose }: DrawerItemProps) => {
+  const drawerRef = useRef<HTMLDivElement | null>(null);
   const { data: session } = useSession();
 
   const [selectedPlaylistIds, setSelectedPlaylistIds] = useState<string[]>([]); // State for selected playlists (multiple)
@@ -85,21 +87,42 @@ const DrawerItem = ({ id, userId, onClose }: DrawerItemProps) => {
       onClose();
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        drawerRef.current &&
+        !drawerRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   if (!session) {
     return null;
   }
   const accessToken = session.user.accessToken;
   return (
-    <div className="h-[75vh]">
-      <div className="text-center sticky top-0 bg-black w-full">
-        <h2 className="text-white">Add to Playlist</h2>
+    <div
+      ref={drawerRef}
+      className={`z-40 bg-black rounded-t-2xl fixed bottom-0 left-0 w-full box-border transition-height duration-200 overflow-auto no-scrollbar ${
+        isOpen ? "h-[75vh]" : "h-0"
+      }`}
+    >
+      <div className="z-20 text-center sticky top-0 bg-black w-screen pt-3">
+        <h2 className=" text-white w-screen bg-black">Add to Playlist </h2>
       </div>
-      <div className="p-6 flex-1 overflow-auto">
+      <div className="p-6 flex-1  bg-black">
         {playlistInitialDataLoading ? (
           <p>Loading playlists...</p>
         ) : (
           <div>
-            <div className="flex flex-col gap-4 mb-20">
+            <div className="z-10 flex flex-col gap-4 mb-20">
               {filteredPlaylists.map((playlist: Playlist) => (
                 <div
                   key={playlist.id}

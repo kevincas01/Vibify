@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import CircleButton from "./Buttons/CircleButton";
 import { Album, Artist, Playlist, Track } from "@/app/types/spotify";
 import RecsArtistComponent from "./Recs/RecModal/RecsArtistComponent";
@@ -14,6 +14,7 @@ import Button from "./Buttons/Button";
 import CloseIcon from "@mui/icons-material/Close";
 
 const RecItemModal = () => {
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const {
     deselectItem,
     selectedItem,
@@ -43,9 +44,26 @@ const RecItemModal = () => {
     deselectItem();
     handleRecommendation();
   };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        deselectItem();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   if (!selectedItem) return null;
   return (
-    <div className="w-full md:pl-[100px] pb-[80px] md:pb-0 bg-grayBg min-h-screen fixed top-0 box-border">
+    <div
+      ref={modalRef}
+      className="w-full md:pl-[100px] pb-[80px] md:pb-0 bg-grayBg min-h-screen fixed top-0 box-border"
+    >
       <div className="fixed top-[20px] right-[20px]">
         <CircleButton onClick={deselectItem} size={40} dark={true}>
           <CloseIcon />

@@ -113,6 +113,14 @@ input[type="text"] :hover {
   border: 1px solid #777;
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
 /* .Toastify__toast-container {
   position: fixed;
   top: "60px";

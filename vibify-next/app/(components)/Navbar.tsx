@@ -59,9 +59,9 @@ const Navbar = () => {
           {navbarElements.map((element: NavbarElementProp) => (
             <li
               key={element.value}
-              className={`flex box py-4 md:py-2 justify-center flex-1 text-sm flex-col items-center ${
+              className={`flex box-border py-4 md:py-2 justify-center flex-1 text-sm flex-col items-center border-4 border-transparent ${
                 currentPage === element.value
-                  ? " border-t-4 md:border-t-0 md:border-l-4 border-main bg-grayBg"
+                  ? "border-t-main md:border-l-main bg-grayBg md:border-t-transparent"
                   : ""
               }`}
             >

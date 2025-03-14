@@ -129,7 +129,7 @@ const Loading = () => {
     <div className="h-full relative">
       <h3 className="text-center mb-4">Recommendations</h3>
       <div className="flex flex-col items-center mb-[80px] max-w-[500px] mx-auto ">
-        <div className="text-center w-full">
+        {/* <div className="text-center w-full">
           <div className="flex gap-4 justify-around">
             {recommendationsFeedFilters.map((element) => (
               <div key={element.value}>
@@ -146,7 +146,7 @@ const Loading = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="w-full flex flex-col">
           {exampleRecFeed.map((item, index: number) => (
             <div className="flex flex-col gap-2 w-full py-6 border-b-[0.5px] border-b-gray-500" key={index}>

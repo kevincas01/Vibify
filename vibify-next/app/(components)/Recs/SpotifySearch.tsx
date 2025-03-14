@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import LoadingBars from "../LoadingBars";
 import { useRecommendItem } from "../Providers/RecommendItemProvider";
+import { useDebounce } from "../Hooks/debounce";
 
 interface SpotifySearchProps {
   recommendType: string;
@@ -26,17 +27,18 @@ const SpotifySearch = ({ recommendType }: SpotifySearchProps) => {
   const { data: session } = useSession();
 
   const [searchInput, setSearchInput] = useState<string>("");
+  const debouncedInput=useDebounce(searchInput)
 
 
-  const searchKey = `search ` + searchInput + " " + recommendType;
+  const searchKey = `search ` + debouncedInput + " " + recommendType;
   const {
     data: SearchData,
     isLoading: SearchDataLoading,
-  } = useSWR(searchInput ? searchKey : null, () =>
+  } = useSWR(debouncedInput ? searchKey : null, () =>
     getSearchResultWType(
       session?.user.accessToken as string,
       recommendType,
-      searchInput,
+      debouncedInput,
       10
     )
   );
@@ -136,7 +138,7 @@ const SpotifySearch = ({ recommendType }: SpotifySearchProps) => {
         placeholder={`Search for your favorite`}
       />
       <h3 className="text-main">Search for {recommendType}</h3>
-      {searchInput && <div>{renderSearchResults()}</div>}
+      {debouncedInput && <div>{renderSearchResults()}</div>}
     </div>
   );
 };
